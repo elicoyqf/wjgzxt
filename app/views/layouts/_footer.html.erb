@@ -1,0 +1,58 @@
+<footer class="black-gradient">
+  <a class="brand pull-right" href="index.html">
+    <span class="rad">Rad</span>min
+  </a>
+
+  <div class="square-turtle pull-left">
+    <p>
+      2012 &copy; All rights reserved -
+      <a href="http://www.squareturtle.com.au" target="_blank">square turtle studios</a>
+    </p>
+  </div>
+</footer>
+
+
+<script type="text/javascript">
+
+  /**
+   * Jquery Load Event
+   *
+   */
+  jQuery(function ($) {
+// format date inputs
+    $("a[rel=popover]").popover();
+
+    $('#user-popover').popover();
+    /**
+     * Sets active and expands menu items based on id of body tag of current page
+     * e.g. <body id="body-index-page"> will result in the menu item with the id="navigation-index-page" having the
+     * class 'active' added, subsequently it will look for a child div with a class of collapse and add the class 'in'
+     * and set the height to auto
+     */
+    var body_id = $('body').attr('id');
+    if (body_id != null) {
+      var nav_element = $('#navigation-' + body_id.replace('body-', ''));
+      nav_element.addClass('active');
+      if (nav_element.has('div.collapse')) {
+        var child_nav = nav_element.find('div.collapse');
+        child_nav.addClass('in');
+        child_nav.css('height: auto;');
+      }
+    }
+//hide the top-stats when the arrow is clicked
+    var item = $('.top-stats');
+    var target = $('#hide-top-stats');
+    if (item.length > 0 && target.length > 0) {
+      target.on('click', function () {
+        item.css('position', 'relative');
+        item.animate({
+          left: '-=1200'
+        }, 1000, function () {
+// Animation complete.
+          item.hide('slow');
+        });
+      });
+    }
+
+  });
+</script>

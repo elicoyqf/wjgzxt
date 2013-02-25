@@ -2,13 +2,26 @@
 <html>
 <head>
   <title>Wjgzxt</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body id="body-<%= yield(:body_id) %>">
+<%= render 'layouts/header' %>
 
-<%= yield %>
+<div class="container-fluid main-container">
+  <div class="row-fluid">
+    <div class="span12">
 
+      <%= render 'layouts/navslide' %>
+      <%= yield %>
+      <div class="row-fluid">
+        <div class="span12">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'layouts/footer' %>
 </body>
 </html>

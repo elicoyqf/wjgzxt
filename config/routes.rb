@@ -1,4 +1,10 @@
 Wjgzxt::Application.routes.draw do
+  get "reports/time_report"
+
+  get "reports/day_report"
+
+  get "reports/week_report"
+
   get "welcome/index"
 
   # The priority is based upon order of creation:

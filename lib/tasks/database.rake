@@ -1,10 +1,18 @@
 #encoding: utf-8
 require_relative '../share/csv_db'
+require_relative '../../app/models/http_test_data'
 namespace :database do
+  BACKBONE = '广东铁通6-gddx(bgp)联通出口'
   desc '定时执行将csv原始文件导入至数据库中'
   task :csv2db => :environment do
     update_db = CsvDb::CsvProcedure.new
     update_db.csv_to_db
+  end
+
+  desc '按次出报表'
+  task :time_report do
+    te = CsvDb::CsvProcedure.new
+    te.testrake
   end
 
   desc '定时清除60天以前的数据'

@@ -1,36 +1,36 @@
 class CreateHttpTestData < ActiveRecord::Migration
   def change
     create_table :http_test_data do |t|
-      t.datetime :TestTime
-      t.string :SourceNodeName
-      t.string :SourceIPAddress
-      t.string :SourceGroup
-      t.string :DestNodeName
-      t.string :DestURL
-      t.string :DestGroup
-      t.string :ResolutionTime
-      t.string :ConnectionTime
-      t.string :TimeToFirstByte
-      t.string :TimeToIndex
-      t.string :PageDownloadTime
-      t.string :PageLoadingTime
-      t.string :TotalTime
-      t.string :ThroughputTime
-      t.string :OverallQuality
-      t.string :ResolutionSR
-      t.string :ConnectionSR
-      t.string :IndexPageLoadingSR
-      t.string :PageLoadingR
-      t.string :LoadingSR
-      t.string :DestIPAddress
-      t.string :DestNationality
-      t.string :DestProvince
-      t.string :DestLocale
-      t.string :DownloadSize
-      t.string :ContentsSize
-      t.string :ReturnCode
-      t.string :AddOns
-      t.string :ElementNumber
+      t.datetime :test_time
+      t.string :source_node_name
+      t.string :source_ip_address
+      t.string :source_group
+      t.string :dest_node_name
+      t.string :dest_url
+      t.string :dest_group
+      t.string :resolution_time
+      t.string :connection_time
+      t.string :time_to_first_byte
+      t.string :time_to_index
+      t.string :page_download_time
+      t.string :page_loading_time
+      t.string :total_time
+      t.string :throughput_time
+      t.string :overall_quality
+      t.string :resolution_sr
+      t.string :connection_sr
+      t.string :index_page_loading_sr
+      t.string :page_loading_r
+      t.string :loading_sr
+      t.string :dest_ip_address
+      t.string :dest_nationality
+      t.string :dest_province
+      t.string :dest_locale
+      t.string :download_size
+      t.string :contents_size
+      t.string :return_code
+      t.string :add_ons
+      t.string :element_number
 
 
       t.timestamps

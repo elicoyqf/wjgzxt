@@ -1,5 +1,4 @@
-require 'csv'
-class HttpTestData < ActiveRecord::Base
+class HttpTestScore < ActiveRecord::Base
   attr_accessible :test_time,
                   :source_node_name,
                   :source_ip_address,
@@ -29,5 +28,12 @@ class HttpTestData < ActiveRecord::Base
                   :contents_size,
                   :return_code,
                   :add_ons,
-                  :element_number
+                  :element_number,
+                  :positive_items,
+                  :negative_items,
+                  :equal_items,
+                  :positive_items_scores,
+                  :negative_items_scores,
+                  :equal_items_scores,
+                  :total_scores
 end

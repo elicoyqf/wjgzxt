@@ -13,15 +13,9 @@
 
 
 <script type="text/javascript">
-
-  /**
-   * Jquery Load Event
-   *
-   */
   jQuery(function ($) {
 // format date inputs
     $("a[rel=popover]").popover();
-
     $('#user-popover').popover();
     /**
      * Sets active and expands menu items based on id of body tag of current page
@@ -53,6 +47,48 @@
         });
       });
     }
+
+    var pscitems = $(':button[id^="psc"]').each(function () {
+//      worse = $('#worse-1').val();
+      $(this).click(function () {
+        var vv = $(this).attr('id');
+
+        var psc_id = vv.replace('psc-', '');
+
+        var worse = vv.replace('psc', 'worse');
+        var worse_val = $('#' + worse).val();
+
+        var bad = vv.replace('psc', 'bad');
+        var bad_val = $('#' + bad).val();
+
+        var good = vv.replace('psc', 'good');
+        var good_val = $('#' + good).val();
+
+        var better = vv.replace('psc', 'better');
+        var better_val = $('#' + better).val();
+
+        var normal = vv.replace('psc', 'normal');
+        var normal_val = $('#' + normal).val();
+
+        alert(worse_val);
+        alert(bad_val);
+        alert(normal_val);
+        alert(good_val);
+        alert(better_val);
+
+        $.post(
+                'mod_http_sc',
+                {id: psc_id, worse: worse_val, bad: bad_val, good: good_val, better: better_val, normal: normal_val},
+                function (result) {
+                  if (data.length == 2) {
+//说明失败了
+                  } else {
+//说明成功了
+                  }
+                }
+        );
+      });
+    });
 
   });
 </script>

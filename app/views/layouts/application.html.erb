@@ -5,18 +5,21 @@
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <%= render 'layouts/shim' %>
 </head>
 <body id="body-<%= yield(:body_id) %>">
 <%= render 'layouts/header' %>
 
-<div class="container-fluid main-container">
-  <div class="row-fluid">
-    <div class="span12">
+<div class="container" style="width: 1200px">
+  <div class="container-fluid main-container">
+    <div class="row-fluid">
+      <div class="span12">
 
-      <%= render 'layouts/navslide' %>
-      <%= yield %>
-      <div class="row-fluid">
-        <div class="span12">&nbsp;</div>
+        <%= render 'layouts/navslide' %>
+        <%= yield %>
+        <div class="row-fluid">
+          <div class="span12">&nbsp;</div>
+        </div>
       </div>
     </div>
   </div>

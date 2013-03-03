@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130301163616) do
+ActiveRecord::Schema.define(:version => 20130303093245) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -88,6 +88,28 @@ ActiveRecord::Schema.define(:version => 20130301163616) do
     t.integer  "total_scores"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+  end
+
+  create_table "param_rule_configs", :force => true do |t|
+    t.string   "param_name"
+    t.string   "param_type"
+    t.integer  "item_type"
+    t.float    "lower_limit"
+    t.float    "upper_limit"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "param_score_configs", :force => true do |t|
+    t.string   "param_name"
+    t.string   "param_type"
+    t.integer  "normal"
+    t.integer  "good"
+    t.integer  "better"
+    t.integer  "bad"
+    t.integer  "worse"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

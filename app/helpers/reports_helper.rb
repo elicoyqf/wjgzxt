@@ -51,10 +51,10 @@ module ReportsHelper
 
   def data_to_csv(data, option={})
     CSV.generate(option) do |csv|
-      csv << %w(TestTime SourceNodeName SourceIPAddress  SourceGroup DestNodeName DestURL DestGroup ResolutionTime ConnectionTime TimeToFirstByte
-              TimeToIndex PageDownloadTime PageLoadingTime TotalTime ThroughputTime OverallQuality ResolutionSR ConnectionSR  IndexPageLoadingSR PageLoadingR
-              LoadingSR DestIPAddress DestNationality DestProvince DestLocale DownloadSize ContentsSize ReturnCode AddOns ElementNumber
-              positive_items negative_items equal_items positiveItems_scores negativeItems_scores equalItems_scores total_scores)
+      csv << %w(结果时间 源节点名称 源测试地址  源信息:分组名 目的节点名称 目的测试地址 目的信息:分组名 解析时间 连接时间 首字节时间
+              首屏打开时间 下载时间 页面加载时间 总时间 吞吐率 综合质量 解析成功率 连接成功率  首页加载成功率 加载比例
+              成功率 结果IP地址 结果国家名称 结果省名称 结果归属地 下载大小 内容大小 返回码 附加项 元素数量
+              正分项数量 负分项数量 相等项数量 正项总分 负项总分 相等项总分 所有项总分)
       data.each do |tdata|
         csv << [tdata.test_time, tdata.source_node_name, tdata.source_ip_address, tdata.source_group, tdata.dest_node_name, tdata.dest_url,
                 tdata.dest_group, tdata.resolution_time, tdata.connection_time, tdata.time_to_first_byte, tdata.time_to_index,
@@ -85,19 +85,6 @@ module ReportsHelper
       end
     end
     t_score
-=begin
-    if t_score > 0
-      positive_items    += 1
-      positive_i_scores += t_score
-    elsif t_score == 0
-      equal_items        += 1
-      equal_items_scores += t_score
-    else
-      negative_items    += 1
-      negative_i_scores += t_score
-    end
-=end
-    #%w(t_score,positive_items,positive_items_scores,equal_items,equal_items_scores,negative_items,negative_items_scores)
   end
 
   def statis_score(arr)

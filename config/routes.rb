@@ -1,4 +1,12 @@
 Wjgzxt::Application.routes.draw do
+  get "param_setting/http"
+
+  get "param_setting/ping"
+
+  get "param_setting/route"
+
+  get "param_setting/video"
+
   get "reports/time_report"
 
   get "reports/day_report"

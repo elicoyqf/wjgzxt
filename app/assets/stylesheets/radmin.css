@@ -386,7 +386,7 @@ div.container-fluid.content-wrapper {
 	-moz-border-radius: 0 4px 4px 4px;
 	border-radius: 0 4px 4px 4px;
     float: left;
-    min-height: 800px;
+    min-height: 600px;
     width: 81%;
 }
 

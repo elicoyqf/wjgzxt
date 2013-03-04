@@ -8,6 +8,11 @@ class CreateParamScoreConfigs < ActiveRecord::Migration
       t.integer :better
       t.integer :bad
       t.integer :worse
+      t.integer :weight
+      t.integer :item_type
+      t.float :lower_limit
+      t.float :upper_limit
+      t.string :alias
 
       t.timestamps
     end

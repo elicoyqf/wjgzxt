@@ -1,4 +1,6 @@
 #encoding : utf-8
+
+require 'csv'
 module ReportsHelper
   BACKBONE  = '广东铁通6-gddx(bgp)联通出口'
   #骨干为null，自租出口非null
@@ -49,20 +51,64 @@ module ReportsHelper
     new_data
   end
 
-  def data_to_csv(data, option={})
+  def data_to_csv(title, key, data, option={})
+    puts '-'*30+key.to_s
     CSV.generate(option) do |csv|
-      csv << %w(结果时间 源节点名称 源测试地址  源信息:分组名 目的节点名称 目的测试地址 目的信息:分组名 解析时间 连接时间 首字节时间
-              首屏打开时间 下载时间 页面加载时间 总时间 吞吐率 综合质量 解析成功率 连接成功率  首页加载成功率 加载比例
-              成功率 结果IP地址 结果国家名称 结果省名称 结果归属地 下载大小 内容大小 返回码 附加项 元素数量
-              正分项数量 负分项数量 相等项数量 正项总分 负项总分 相等项总分 所有项总分)
+      #csv << %w(结果时间 源节点名称 源测试地址  源信息:分组名 目的节点名称 目的测试地址 目的信息:分组名 解析时间 连接时间 首字节时间
+      #        首屏打开时间 下载时间 页面加载时间 总时间 吞吐率 综合质量 解析成功率 连接成功率  首页加载成功率 加载比例
+      #        成功率 结果IP地址 结果国家名称 结果省名称 结果归属地 下载大小 内容大小 返回码 附加项 元素数量
+      #        正分项数量 负分项数量 相等项数量 正项总分 负项总分 相等项总分 所有项总分)
+      csv << %w(结果时间 源节点名称 源测试地址  源信息:分组名 目的节点名称 目的测试地址 目的信息:分组名) + title + %w(结果IP地址 结果国家名称 结果省名称 结果归属地 正分项数量 负分项数量 相等项数量 正项总分 负项总分 相等项总分 所有项总分)
       data.each do |tdata|
-        csv << [tdata.test_time, tdata.source_node_name, tdata.source_ip_address, tdata.source_group, tdata.dest_node_name, tdata.dest_url,
-                tdata.dest_group, tdata.resolution_time, tdata.connection_time, tdata.time_to_first_byte, tdata.time_to_index,
-                tdata.page_download_time, tdata.page_loading_time, tdata.total_time, tdata.throughput_time, tdata.overall_quality,
-                tdata.resolution_sr, tdata.connection_sr, tdata.index_page_loading_sr, tdata.page_loading_r, tdata.loading_sr,
-                tdata.dest_ip_address, tdata.dest_nationality, tdata.dest_province, tdata.dest_locale, tdata.download_size, tdata.contents_size,
-                tdata.return_code, tdata.add_ons, tdata.element_number, tdata.positive_items, tdata.negative_items, tdata.equal_items,
-                tdata.positiveItems_scores, tdata.negativeItems_scores, tdata.equalItems_scores, tdata.total_scores]
+        tmp1 = [tdata.test_time, tdata.source_node_name, tdata.source_ip_address, tdata.source_group, tdata.dest_node_name, tdata.dest_url,
+                tdata.dest_group]
+        tmp2 = [tdata.dest_ip_address, tdata.dest_nationality, tdata.dest_province, tdata.dest_locale, tdata.positive_items, tdata.negative_items,
+                tdata.equal_items, tdata.positive_items_scores, tdata.negative_items_scores, tdata.equal_items_scores, tdata.total_scores]
+        tmp3 = []
+        key.each do |k|
+          case k
+            when 'resolution_time'
+              tmp3 << tdata.resolution_time
+            when 'connection_time'
+              tmp3 << tdata.connection_time
+            when 'time_to_first_byte'
+              tmp3 << tdata.time_to_first_byte
+            when 'time_to_index'
+              puts 'time_to_index'
+              tmp3 << tdata.time_to_index
+            when 'page_download_time'
+              tmp3 << tdata.page_download_time
+            when 'page_loading_time'
+              tmp3 << tdata.page_loading_time
+            when 'total_time'
+              tmp3 << tdata.total_time
+            when 'throughput_time'
+              tmp3 << tdata.throughput_time
+            when 'overall_quality'
+              tmp3 << tdata.overall_quality
+            when 'resolution_sr'
+              tmp3 << tdata.resolution_sr
+            when 'connection_sr'
+              tmp3 << tdata.connection_sr
+            when 'index_page_loading_sr'
+              tmp3 << tdata.index_page_loading_sr
+            when 'page_loading_r'
+              tmp3 << tdata.page_loading_r
+            when 'loading_sr'
+              tmp3 << tdata.loading_sr
+            else
+          end
+        end
+        tmp = tmp1 + tmp3 + tmp2
+
+        csv << tmp
+        #csv << [tdata.test_time, tdata.source_node_name, tdata.source_ip_address, tdata.source_group, tdata.dest_node_name, tdata.dest_url,
+        #        tdata.dest_group, tdata.resolution_time, tdata.connection_time, tdata.time_to_first_byte, tdata.time_to_index,
+        #        tdata.page_download_time, tdata.page_loading_time, tdata.total_time, tdata.throughput_time, tdata.overall_quality,
+        #        tdata.resolution_sr, tdata.connection_sr, tdata.index_page_loading_sr, tdata.page_loading_r, tdata.loading_sr,
+        #        tdata.dest_ip_address, tdata.dest_nationality, tdata.dest_province, tdata.dest_locale, tdata.download_size, tdata.contents_size,
+        #        tdata.return_code, tdata.add_ons, tdata.element_number, tdata.positive_items, tdata.negative_items, tdata.equal_items,
+        #        tdata.positive_items_scores, tdata.negative_items_scores, tdata.equal_items_scores, tdata.total_scores]
       end
     end
   end

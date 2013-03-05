@@ -1,5 +1,9 @@
 #encoding : utf-8
 class ReportsController < ApplicationController
+  def index
+
+  end
+
   def time_report
     #todo:需要考虑不同的类型的数据报表，此处未实现
     psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)

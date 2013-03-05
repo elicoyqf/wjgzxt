@@ -1,32 +1,26 @@
 <%= provide(:body_id, 'index') %>
-<%= provide(:result, '系统说明') %>
+<%= provide(:result, '报表查看') %>
 
 <div class="container-fluid content-wrapper">
   <div class="row-fluid">
     <div class="span12">
       <div class="hero-unit">
         <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
-        <h1>系统说明</h1>
-
+        <h1>报表查看</h1>
         <p>
-          本系统自动提取相关测试数据进行分析，通过与标杆数据进行对比，从而进行评分，测试数据因各种不可预料的因素可能与实际情况存在一定的偏差，
-          但通过提取平均值尽量减少偏差，使测试数据与各出口实际数据达到较好的平衡，如对结果有异议，可申请进行核对。
+          本系统报表可以按次、日、周进行报表查看，可以指定日期进行下载相关报表，报表评估数据根据相关评分标准生成。
+          如修改了相应的评分标准，不影响已生成的报表数据，只对往后的报表数据有影响，如对结果有异议，可申请核对。
         </p>
-
+        <br/>
         <p class="hidden-phone">
           <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
         </p>
       </div>
     </div>
   </div>
-  <div class="row-fluid">
-    <div class="span12">
-      <h3 class="welcome">
-        欢迎回来,亲爱的
-        <span class="text-info">易其锋先生</span>
-      </h3>
-    </div>
-  </div>
+  <a href="reports/time_report.csv" class="btn btn-primary btn-large">次报表</a>
+  <a href="reports/day_report.csv" class="btn btn-primary btn-large">日报表</a>
+  <a href="reports/week_report.csv" class="btn btn-primary btn-large">周报表</a>
 
   <div class="row-fluid">
     <div class="span12">
@@ -35,6 +29,7 @@
       <div class="squiggly-border"></div>
     </div>
   </div>
+
   <div class="row-fluid">
     <div class="span10">
       <blockquote>
@@ -53,6 +48,7 @@
     </div>
   </div>
 </div>
+
 
 
 

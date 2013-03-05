@@ -15,6 +15,8 @@ Wjgzxt::Application.routes.draw do
 
   get "welcome/index"
 
+  match 'reports/' => 'reports#index'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

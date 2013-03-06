@@ -13,6 +13,12 @@ Wjgzxt::Application.routes.draw do
 
   get "reports/week_report"
 
+  get 'reports/export_ranking'
+
+  get 'reports/website_ranking'
+
+  get 'reports/locale_ranking'
+
   get "welcome/index"
 
   match 'reports/' => 'reports#index'

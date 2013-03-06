@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130304075359) do
+ActiveRecord::Schema.define(:version => 20130306172328) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -88,6 +88,13 @@ ActiveRecord::Schema.define(:version => 20130304075359) do
     t.integer  "total_scores"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+  end
+
+  create_table "locale_data", :force => true do |t|
+    t.string   "locale_name"
+    t.integer  "locale_number"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "param_score_configs", :force => true do |t|
@@ -168,6 +175,13 @@ ActiveRecord::Schema.define(:version => 20130304075359) do
     t.integer  "total_scores"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+  end
+
+  create_table "test_dest_nodes", :force => true do |t|
+    t.string   "dest_node_name"
+    t.string   "dest_url"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "video_test_data", :force => true do |t|

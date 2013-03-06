@@ -15,7 +15,9 @@ Wjgzxt::Application.routes.draw do
 
   get 'reports/export_ranking'
 
-  get 'reports/website_ranking'
+  post 'reports/website_ranking'
+
+  get 'reports/website_select'
 
   get 'reports/locale_ranking'
 

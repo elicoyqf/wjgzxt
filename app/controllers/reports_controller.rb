@@ -32,18 +32,51 @@ class ReportsController < ApplicationController
 
   end
 
+  def website_select
+    @tdn = TestDestNode.all
+
+  end
+
   def website_ranking
-    #todo:此处还需要进行过滤出口名单
-    @hts      = HttpTestScore.first
-    #export = Set.new
-    #hts.each do |line|
-    #  export.add line.dest_url
-    #end
-    #@name = export.first
-    @url_test = HttpTestScore.where('dest_url = ?', @hts.dest_url).order('total_scores DESC')
+    @ws       = params[:dest_node_name]
+    @url_test = HttpTestScore.where('dest_url = ?', @ws).order('total_scores DESC')
   end
 
   def locale_ranking
+    #todo:此处不能选择全部，正式应用后应该在每次自动更新数据库表数据。并且此处未去重复数据。
+    hts = HttpTestData.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, Time.parse('2013-03-1 21:00:00'),
+                             Time.parse('2013-03-1 22:00:00'))
+    ld  = LocaleData.all
+    if ld.blank?
+      dx    = 0
+      lt    = 0
+      yd    = 0
+      tt    = 0
+      other = 0
+      hts.each do |h|
+        sname = h.dest_locale.to_s.strip
+        puts '-'*50+sname
+        case sname
+          when '电信'
+            dx += 1
+          when '联通'
+            lt += 1
+          when '移动'
+            yd += 1
+          when '铁通'
+            tt += 1
+          else
+            other += 1
+        end
+      end
+      LocaleData.create(locale_name: '电信',locale_number: dx)
+      LocaleData.create(locale_name: '联通',locale_number: lt)
+      LocaleData.create(locale_name: '移动',locale_number: yd)
+      LocaleData.create(locale_name: '铁通',locale_number: tt)
+      LocaleData.create(locale_name: '其它',locale_number: other)
+    end
+    @ldata = LocaleData.all
+
 
   end
 

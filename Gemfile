@@ -7,7 +7,9 @@ gem 'rails', '3.2.11'
 
 gem 'sqlite3'
 gem 'mysql2'
+gem 'whenever'
 gem 'bootstrap-sass'
+gem 'bootstrap-will_paginate'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

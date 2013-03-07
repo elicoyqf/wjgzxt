@@ -5,11 +5,18 @@ namespace :database do
   desc '定时执行将csv原始文件导入至数据库中'
   task :csv2db => :environment do
     #todo:此处的文件位置还需要再调整，可以直接通过绝对路径指向目录
-    #dir = '/home/wgdata/'
-    #time = Time.now.at_beginning_of_hour - 1.hour
-    #c_name = 'HTTP_'+ time.strftime('%Y%m%d%H%M')+'.csv'
-    #filename =  "HTTP_201303022100.csv"
-    filename = '/home/wgdata/HTTP_201303022100.csv'
+    time                 = Time.now.at_beginning_of_hour - 1.hour
+    postfix              = time.strftime('%Y%m%d%H%M') + '.csv'
+    http_filename        = '/home/wgdata/HTTP_' + postfix
+    trace_route_filename = '/home/wgdata/TRACE ROUTE_' + postfix
+    video_filename       = '/home/wgdata/Video_' + postfix
+    ping_filename        = '/home/wgdata/PING_' + postfix
+    filename = []
+    filename << http_filename
+    filename << trace_route_filename
+    filename << video_filename
+    filename << ping_filename
+
     update_db = CsvDb::CsvProcedure.new
     update_db.csv_to_db filename
   end

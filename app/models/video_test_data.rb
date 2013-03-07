@@ -16,7 +16,7 @@ class VideoTestData < ActiveRecord::Base
                   :buffering_count,
                   :playback_duration,
                   :download_time,
-                  :throuthput_time,
+                  :throughput_time,
                   :playback_rate,
                   :resolution_sr,
                   :rebuffering_rate,

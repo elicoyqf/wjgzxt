@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130306172328) do
+ActiveRecord::Schema.define(:version => 20130307100310) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(:version => 20130306172328) do
     t.string   "buffering_count"
     t.string   "playback_duration"
     t.string   "download_time"
-    t.string   "throuthput_time"
+    t.string   "throughput_time"
     t.string   "playback_rate"
     t.string   "resolution_sr"
     t.string   "rebuffering_rate"
@@ -238,7 +238,7 @@ ActiveRecord::Schema.define(:version => 20130306172328) do
     t.integer  "buffering_count"
     t.integer  "playback_duration"
     t.integer  "download_time"
-    t.integer  "throuthput_time"
+    t.integer  "throughput_time"
     t.integer  "playback_rate"
     t.integer  "resolution_sr"
     t.integer  "rebuffering_rate"

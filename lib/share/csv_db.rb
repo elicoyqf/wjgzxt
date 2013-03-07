@@ -9,18 +9,51 @@ module CsvDb
     end
 
     def csv_to_db(filename)
-      file = Rails.root.join('public', 'HTTP_201303012100.csv')
-      i    = 1
-      CSV.foreach(file, encoding: 'GB2312:UTF-8', headers: true) do |row|
-        HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
-                            dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
-                            time_to_index:   row[10], page_download_time: row[11], page_loading_time: row[12], total_time: row[13], throughput_time: row[14],
-                            overall_quality: row[15], resolution_sr: row[16], connection_sr: row[17], index_page_loading_sr: row[18],
-                            page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
-                            dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
-                            element_number:  row[29])
-        puts i
-        i += 1
+      #file = Rails.root.join('public', 'HTTP_201303012100.csv')
+
+      filename.each do |fname|
+        case fname
+          when /HTTP/
+            i = 1
+            CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
+              HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
+                                  dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
+                                  time_to_index:   row[10], page_download_time: row[11], page_loading_time: row[12], total_time: row[13], throughput_time: row[14],
+                                  overall_quality: row[15], resolution_sr: row[16], connection_sr: row[17], index_page_loading_sr: row[18],
+                                  page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
+                                  dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
+                                  element_number:  row[29])
+              puts i
+              i += 1
+            end
+          when /Video/
+            i = 1
+            CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
+              VideoTestData.create(test_time:            row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3],
+                                   dest_node_name:       row[4], dest_url: row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8],
+                                   time_to_first_byte:   row[9], time_to_first_frame: row[10], total_buffer_time: row[11],
+                                   time_to_first_buffer: row[12], avg_buffer_rate: row[13], buffering_count: row[14], playback_duration: row[15],
+                                   download_time:        row[16], throughput_time: row[17], playback: row[18], resolution_sr: row[19],
+                                   rebuffering_rate:     row[20], connection_sr: row[21], total_sr: row[22], dest_ip_address: row[23],
+                                   dest_nationality:     row[24], dest_province: row[25], dest_locale: row[26], download_size: row[27],
+                                   contents_size:        row[28], return_code: row[29], add_ons: row[30])
+              puts i
+              i += 1
+            end
+          when /PING/
+            i = 1
+            CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
+              PingTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
+                                  dest_url:        row[5], dest_group: row[6], resolution_time: row[7], lost_packets: row[8],
+                                  send_packets: row[9], lost_packets_no: row[10], delay: row[11], max_delay: row[12], min_delay: row[13],
+                                  std_delay: row[14], jitter: row[15], max_jitter: row[16], min_jitter: row[17], std_jitter: row[18],
+                                   dest_ip_address: row[19], dest_nationality: row[20], dest_province: row[21], dest_locale: row[22])
+              puts i
+              i += 1
+            end
+          else
+
+        end
       end
     end
 

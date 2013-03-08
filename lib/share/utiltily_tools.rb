@@ -1,3 +1,4 @@
+#encoding : utf-8
 module UtiltilyTools
   BACKBONE  = '广东铁通6-gddx(bgp)联通出口'
   #骨干为null，自租出口非null

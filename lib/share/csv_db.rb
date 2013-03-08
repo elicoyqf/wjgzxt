@@ -25,7 +25,7 @@ module CsvDb
                                   element_number:  row[29])
               i += 1
             end
-            puts 'http_data_file have ------>' + i.to_s + 'lines.'
+            puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
           when /Video/
             i = 1
             CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
@@ -39,7 +39,7 @@ module CsvDb
                                    contents_size:        row[28], return_code: row[29], add_ons: row[30])
               i += 1
             end
-            puts 'video_data_file have ------>' + i.to_s + 'lines.'
+            puts "video_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
           when /PING/
             i = 1
             CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
@@ -50,7 +50,7 @@ module CsvDb
                                   dest_ip_address: row[19], dest_nationality: row[20], dest_province: row[21], dest_locale: row[22])
               i += 1
             end
-            puts 'ping_data_file have ------>' + i.to_s + 'lines.'
+            puts "ping_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
           else
 
         end

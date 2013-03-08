@@ -167,9 +167,9 @@ module CsvDb
           hts[:total_scores] = hts[:positive_items_scores] + hts[:negative_items_scores]
           hts_record         = HttpTestScore.new(hts)
           if hts_record.save
-            puts '-'*100+'保存成功.'
+            puts '-'*50+'save success.'
           else
-            puts '-'*100+'保存失败.'
+            puts '-'*20+'save failure.'
           end
         end
       end

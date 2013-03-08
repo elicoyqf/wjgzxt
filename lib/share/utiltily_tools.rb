@@ -1,9 +1,9 @@
 module UtiltilyTools
   BACKBONE  = '广东铁通6-gddx(bgp)联通出口'
   #骨干为null，自租出口非null
-  ZZNOTNULL = 2
+  ZZNOTNULL = 1
   #骨干不为null,而自租出口为null
-  ZZNULL    = -2
+  ZZNULL    = -1
 
   #骨干出口有效数据
   def blackbone_data_valid(time_begin, time_end)
@@ -24,7 +24,7 @@ module UtiltilyTools
         puts 'blackbone'+'-'*100+bline.id.to_s
       end
     end
-    backbone_data
+    new_backbone_data
   end
 
   #对自租出口提取有效数据
@@ -48,8 +48,13 @@ module UtiltilyTools
     new_data
   end
 
-  def cal_score(cons_data, odata)
+  def cal_score(cons_data, odata, pc)
     t_score = 0
+    weight  = pc.weight
+    type    = pc.item_type
+    ll      = pc.lower_limit
+    ul      = pc.upper_limit
+
     if cons_data == 'NULL'
       if odata != 'NULL'
         t_score = ZZNOTNULL
@@ -57,15 +62,43 @@ module UtiltilyTools
     else
       if odata == 'NULL'
         t_score = ZZNULL
-      elsif odata.to_s.to_f < cons_data.to_s.to_f
-        t_score += 1
-      elsif cons_data.to_s.to_f <= odata.to_s.to_f && odata.to_s.to_f <= cons_data.to_s.to_f * 2
-        t_score += 0
-      elsif cons_data.to_s.to_f*2 < odata.to_s.to_f
-        t_score += -1
+      else
+        case type
+          when 1
+            #越大越好
+            t_score = cal_method_1(cons_data, odata, ll, ul)
+          when 2
+            #越小越好
+            t_score = cal_method_2(cons_data, odata, ll, ul)
+          else
+        end
       end
     end
-    t_score
+    t_score * weight
+  end
+
+  def cal_method_1(cons_data, odata, ll, ul)
+    sc = 0
+    if odata.to_s.to_f > cons_data.to_s.to_f * ll
+      sc = 1
+    elsif cons_data.to_s.to_f * ll <= odata.to_s.to_f && odata.to_s.to_f <= cons_data.to_s.to_f * ul
+      sc = 0
+    elsif odata.to_s.to_f < cons_data.to_s.to_f * ll
+      sc = -1
+    end
+    sc
+  end
+
+  def cal_method_2(cons_data, odata, ll, ul)
+    sc = 0
+    if odata.to_s.to_f < cons_data.to_s.to_f * ll
+      sc = 1
+    elsif cons_data.to_s.to_f * ll <= odata.to_s.to_f && odata.to_s.to_f <= cons_data.to_s.to_f * ul
+      sc = 0
+    elsif cons_data.to_s.to_f * ul < odata.to_s.to_f
+      sc = -1
+    end
+    sc
   end
 
   def statis_score(arr)

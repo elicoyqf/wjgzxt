@@ -23,9 +23,9 @@ module CsvDb
                                   page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
                                   dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
                                   element_number:  row[29])
-              puts i
               i += 1
             end
+            puts 'http_data_file have ------>' + i.to_s + 'lines.'
           when /Video/
             i = 1
             CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
@@ -37,26 +37,27 @@ module CsvDb
                                    rebuffering_rate:     row[20], connection_sr: row[21], total_sr: row[22], dest_ip_address: row[23],
                                    dest_nationality:     row[24], dest_province: row[25], dest_locale: row[26], download_size: row[27],
                                    contents_size:        row[28], return_code: row[29], add_ons: row[30])
-              puts i
               i += 1
             end
+            puts 'video_data_file have ------>' + i.to_s + 'lines.'
           when /PING/
             i = 1
             CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
               PingTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
                                   dest_url:        row[5], dest_group: row[6], resolution_time: row[7], lost_packets: row[8],
-                                  send_packets: row[9], lost_packets_no: row[10], delay: row[11], max_delay: row[12], min_delay: row[13],
-                                  std_delay: row[14], jitter: row[15], max_jitter: row[16], min_jitter: row[17], std_jitter: row[18],
-                                   dest_ip_address: row[19], dest_nationality: row[20], dest_province: row[21], dest_locale: row[22])
-              puts i
+                                  send_packets:    row[9], lost_packets_no: row[10], delay: row[11], max_delay: row[12], min_delay: row[13],
+                                  std_delay:       row[14], jitter: row[15], max_jitter: row[16], min_jitter: row[17], std_jitter: row[18],
+                                  dest_ip_address: row[19], dest_nationality: row[20], dest_province: row[21], dest_locale: row[22])
               i += 1
             end
+            puts 'ping_data_file have ------>' + i.to_s + 'lines.'
           else
 
         end
       end
     end
 
+    #目前只对http数据分析
     def analyse_data_to_db(time_begin, time_end)
       t_b            = time_begin
       t_e            = time_end
@@ -98,61 +99,68 @@ module CsvDb
           hts[:equal_items_scores]    = 0
           scores                      = []
 
-          hts[:resolution_time] = cal_score(cons_data.resolution_time, odata.resolution_time)
-          scores << hts[:resolution_time]
+          psc = ParamScoreConfig.where('param_type = ? and weight > ?', 'htd', 0)
+          psc.each do |pc|
+            case pc.param_name
+              when 'resolution_time'
+                hts[:resolution_time] = cal_score(cons_data.resolution_time, odata.resolution_time, pc)
+                scores << hts[:resolution_time]
+              when 'connection_time'
+                hts[:connection_time] = cal_score(cons_data.connection_time, odata.connection_time, pc)
+                scores << hts[:connection_time]
+              when 'time_to_first_byte'
+                hts[:time_to_first_byte] = cal_score(cons_data.time_to_first_byte, odata.time_to_first_byte, pc)
+                scores << hts[:time_to_first_byte]
+              when 'time_to_index'
+                hts[:time_to_index] = cal_score(cons_data.time_to_index, odata.time_to_index, pc)
+                scores << hts[:time_to_index]
+              when 'page_download_time'
+                hts[:page_download_time] = cal_score(cons_data.page_download_time, odata.page_download_time, pc)
+                scores << hts[:page_download_time]
+              when 'page_loading_time'
+                hts[:page_loading_time] = cal_score(cons_data.page_loading_time, odata.page_loading_time, pc)
+                scores << hts[:page_loading_time]
+              when 'total_time'
+                hts[:total_time] = cal_score(cons_data.total_time, odata.total_time, pc)
+                scores << hts[:total_time]
+              when 'throughput_time'
+                hts[:throughput_time] = cal_score(cons_data.throughput_time, odata.throughput_time, pc)
+                scores << hts[:throughput_time]
+              when 'overall_quality'
+                hts[:overall_quality] = cal_score(cons_data.overall_quality, odata.overall_quality, pc)
+                scores << hts[:overall_quality]
+              when 'resolution_sr'
+                hts[:resolution_sr] = cal_score(cons_data.resolution_sr, odata.resolution_sr, pc)
+                scores << hts[:resolution_sr]
+              when 'connection_sr'
+                hts[:connection_sr] = cal_score(cons_data.connection_sr, odata.connection_sr, pc)
+                scores << hts[:connection_sr]
+              when 'index_page_loading_sr'
+                hts[:index_page_loading_sr] = cal_score(cons_data.index_page_loading_sr, odata.index_page_loading_sr, pc)
+                scores << hts[:index_page_loading_sr]
+              when 'page_loading_r'
+                hts[:page_loading_r] = cal_score(cons_data.page_loading_r, odata.page_loading_r, pc)
+                scores << hts[:page_loading_r]
+              when 'loading_sr'
+                hts[:loading_sr] = cal_score(cons_data.loading_sr, odata.loading_sr, pc)
+                scores << hts[:loading_sr]
+              when 'download_size'
+                hts[:download_size] = cal_score(cons_data.download_size, odata.download_size, pc)
+                scores << hts[:download_size]
+              when 'contents_size'
+                hts[:contents_size] = cal_score(cons_data.contents_size, odata.contents_size, pc)
+                scores << hts[:contents_size]
+              when 'add_ons'
+                hts[:add_ons] = cal_score(cons_data.add_ons, odata.add_ons, pc)
+                scores << hts[:add_ons]
+              when 'element_number'
+                hts[:element_number] = cal_score(cons_data.element_number, odata.element_number, pc)
+                scores << hts[:element_number]
+              else
+                puts 'null.'
+            end
+          end
 
-          hts[:connection_time] = cal_score(cons_data.connection_time, odata.connection_time)
-          scores << hts[:connection_time]
-
-          hts[:time_to_first_byte] = cal_score(cons_data.time_to_first_byte, odata.time_to_first_byte)
-          scores << hts[:time_to_first_byte]
-
-          hts[:time_to_index] = cal_score(cons_data.time_to_index, odata.time_to_index)
-          scores << hts[:time_to_index]
-
-          hts[:page_download_time] = cal_score(cons_data.page_download_time, odata.page_download_time)
-          scores << hts[:page_download_time]
-
-          hts[:page_loading_time] = cal_score(cons_data.page_loading_time, odata.page_loading_time)
-          scores << hts[:page_loading_time]
-
-          hts[:total_time] = cal_score(cons_data.total_time, odata.total_time)
-          scores << hts[:total_time]
-
-          hts[:throughput_time] = cal_score(cons_data.throughput_time, odata.throughput_time)
-          scores << hts[:throughput_time]
-
-          hts[:overall_quality] = cal_score(cons_data.overall_quality, odata.overall_quality)
-          scores << hts[:overall_quality]
-
-          hts[:resolution_sr] = cal_score(cons_data.resolution_sr, odata.resolution_sr)
-          scores << hts[:resolution_sr]
-
-          hts[:connection_sr] = cal_score(cons_data.connection_sr, odata.connection_sr)
-          scores << hts[:connection_sr]
-
-          hts[:index_page_loading_sr] = cal_score(cons_data.index_page_loading_sr, odata.index_page_loading_sr)
-          scores << hts[:index_page_loading_sr]
-
-          hts[:page_loading_r] = cal_score(cons_data.page_loading_r, odata.page_loading_r)
-          scores << hts[:page_loading_r]
-
-          hts[:loading_sr] = cal_score(cons_data.loading_sr, odata.loading_sr)
-          scores << hts[:loading_sr]
-
-          hts[:download_size] = cal_score(cons_data.download_size, odata.download_size)
-          scores << hts[:download_size]
-
-          hts[:contents_size] = cal_score(cons_data.contents_size, odata.contents_size)
-          scores << hts[:contents_size]
-
-          hts[:add_ons] = cal_score(cons_data.add_ons, odata.add_ons)
-          scores << hts[:add_ons]
-
-          hts[:element_number] = cal_score(cons_data.element_number, odata.element_number)
-          scores << hts[:element_number]
-
-          puts scores.inspect
           hts[:positive_items], hts[:positive_items_scores], hts[:negative_items], hts[:negative_items_scores], hts[:equal_items],
               hts[:equal_items_scores] =statis_score scores
 
@@ -166,6 +174,5 @@ module CsvDb
         end
       end
     end
-
   end
 end

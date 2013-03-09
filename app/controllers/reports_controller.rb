@@ -48,10 +48,13 @@ class ReportsController < ApplicationController
     @match_no  = []
     @dx        = 0
     @lt        = 0
+    match      = Set.new
+
     @export.each do |e|
       nega_val  = 0
       total_val = 0
       negano    = 0
+      match.clear
       export_s  = HttpTestScore.find_all_by_source_node_name(e)
       export_s.each do |es|
         total_val += es.total_scores
@@ -59,6 +62,7 @@ class ReportsController < ApplicationController
           nega_val += es.total_scores
           negano   += 1
         end
+        match << es.dest_url
       end
 
       ename = e[-4..-3]
@@ -73,7 +77,7 @@ class ReportsController < ApplicationController
       @nega_no << negano
       @nega_arr << nega_val
       @total_arr << total_val
-      @match_no << export_s.size
+      @match_no << match.size
     end
 
 

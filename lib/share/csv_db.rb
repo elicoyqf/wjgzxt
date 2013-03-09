@@ -84,19 +84,19 @@ module CsvDb
         case tmp.locale_name
           when '电信'
             puts 'dx is -----=>' + dx.to_s
-            tmp.update_attribute(locale_number: dx)
+            tmp.update_attribute(:locale_number, dx)
           when '联通'
             puts 'lt is -----=>' + lt.to_s
-            tmp.update_attribute(locale_number: lt)
+            tmp.update_attribute(:locale_number, lt)
           when '移动'
             puts 'yd is -----=>' + yd.to_s
-            tmp.update_attribute(locale_number: yd)
+            tmp.update_attribute(:locale_number, yd)
           when '铁通'
             puts 'tt is -----=>' + tt.to_s
-            tmp.update_attribute(locale_number: tt)
+            tmp.update_attribute(:locale_number, tt)
           else
             puts 'other is -----=>' + other.to_s
-            tmp.update_attribute(locale_number: other)
+            tmp.update_attribute(:locale_number, other)
         end
       end
     end

@@ -81,7 +81,7 @@ module CsvDb
       end
 
       ld.each do |tmp|
-        case tmp.local_name
+        case tmp.locale_name
           when '电信'
             puts 'dx is -----=>' + dx.to_s
             tmp.update_attribute(locale_number: dx)

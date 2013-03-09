@@ -80,7 +80,7 @@ module UtiltilyTools
 
   def cal_method_1(cons_data, odata, ll, ul)
     sc = 0
-    if odata.to_s.to_f >= cons_data.to_s.to_f * ll
+    if odata.to_s.to_f >= cons_data.to_s.to_f
       sc = 1
     elsif cons_data.to_s.to_f * ll < odata.to_s.to_f && odata.to_s.to_f < cons_data.to_s.to_f * ul
       sc = 0
@@ -92,7 +92,7 @@ module UtiltilyTools
 
   def cal_method_2(cons_data, odata, ll, ul)
     sc = 0
-    if odata.to_s.to_f <= cons_data.to_s.to_f * ll
+    if odata.to_s.to_f <= cons_data.to_s.to_f
       sc = 1
     elsif cons_data.to_s.to_f * ll < odata.to_s.to_f && odata.to_s.to_f < cons_data.to_s.to_f * ul
       sc = 0

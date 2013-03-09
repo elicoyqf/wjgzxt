@@ -14,15 +14,15 @@ class ReportsController < ApplicationController
   end
 
   def date2time_report
-    d_str      = params[:date]
-    ds         = params[:ds]
-    time_str   = d_str + ' ' + ds
-    time_begin = Time.parse(time_str)
-    time_end   = time_begin + 1.hour
-    psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
+    d_str       = params[:date]
+    ds          = params[:ds]
+    time_str    = d_str + ' ' + ds
+    time_begin  = Time.parse(time_str)
+    time_end    = time_begin + 1.hour
+    psc         = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
     @title_name = []
-    key1       = %w( source_node_name dest_node_name)
-    key2       =%w(positive_items_scores negative_items_scores total_scores)
+    key1        = %w( source_node_name dest_node_name)
+    key2        =%w(positive_items_scores negative_items_scores total_scores)
 
     key3 = []
     psc.each do |config|
@@ -54,10 +54,10 @@ class ReportsController < ApplicationController
       negano    = 0
       export_s  = HttpTestScore.find_all_by_source_node_name(e)
       export_s.each do |es|
-        nega_val  += es.negative_items_scores
         total_val += es.total_scores
         if es.total_scores < 0
-          negano += 1
+          nega_val += es.total_scores
+          negano   += 1
         end
       end
 

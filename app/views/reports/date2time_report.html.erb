@@ -6,11 +6,10 @@
     <div class="span12">
       <div class="hero-unit">
         <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
-        <h1>出口得分排名表（月统计）</h1>
+        <h1>时刻点所对应的得分排名表</h1>
 
         <p>
-          本排名表根据出口对各个测试网站的评分进行统计，主要统计负分、总分两项指标，如对结果有异议，可申请核对。<br/>
-          目前本系统中含电信方向出口共 <%= @dx %> 个,联通方向出口共 <%= @lt %> 个，其它方向出口暂未纳入评分。
+          本排名表提取指定时刻的评分数据而生成，各项评分均根据其所对应的评分规则进行处理，如对结果有异议，可申请核对。
         </p>
         <br/>
 
@@ -31,21 +30,29 @@
           <table class="table table-striped table-bordered table-radmin">
             <thead>
             <tr>
-              <th style="text-align:center;">出口名称</th>
-              <th style="text-align:center;">负值</th>
+              <th style="text-align:center;">源结节名称</th>
+              <th style="text-align:center;">目的节点名称</th>
+              <% @title_name.each do |tn| %>
+                <th style="text-align:center;"><%= tn %></th>
+              <% end %>
+              <th style="text-align:center;">总正分</th>
+              <th style="text-align:center;">总负分</th>
               <th style="text-align:center;">总分</th>
-              <th style="text-align:center;">负分的网站次数</th>
-              <th style="text-align:center;">有效比对的网站数</th>
             </tr>
             </thead>
             <tbody>
-            <% @export.each_with_index do |line, i| %>
+            <% @odata.each do |line| %>
               <tr>
-                <td style="text-align:center;"><%= line %></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @nega_arr[i] %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @total_arr[i] %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
+                <td style="text-align:center;"><%= line.source_node_name %></td>
+                <td style="text-align:center;"><%= line.dest_node_name %></td>
+                <td style="text-align:center;"><%= line.time_to_index %></td>
+                <td style="text-align:center;"><%= line.total_time %></td>
+                <td style="text-align:center;"><%= line.throughput_time %></td>
+                <td style="text-align:center;"><%= line.connection_sr %></td>
+                <td style="text-align:center;"><%= line.index_page_loading_sr %></td>
+                <td style="text-align:center;"><%= line.positive_items_scores %></td>
+                <td style="text-align:center;"><%= line.negative_items_scores %></td>
+                <td style="text-align:center;"><span class="label label-info"><%= line.total_scores %></span></td>
               </tr>
             <% end %>
             </tbody>

@@ -9,6 +9,10 @@ Wjgzxt::Application.routes.draw do
 
   get "reports/time_report"
 
+  get "reports/select_date_report"
+
+  post "reports/date2time_report"
+
   get "reports/day_report"
 
   get "reports/week_report"

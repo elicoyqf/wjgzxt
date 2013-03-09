@@ -6,28 +6,34 @@
     <div class="span12">
       <div class="hero-unit">
         <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
-        <h1>报表查看</h1>
+        <h1>选择查询日期</h1>
+
         <p>
           本系统报表可以按次、日、周进行报表查看，可以指定日期进行下载相关报表，报表评估数据根据相关评分标准生成。
           如修改了相应的评分标准，不影响已生成的报表数据，只对往后的报表数据有影响，如对结果有异议，可申请核对。
         </p>
-        <br/>
-        <p class="hidden-phone">
-          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
-        </p>
       </div>
     </div>
   </div>
-  <a href="reports/time_report.csv" class="btn btn-info btn-large">次报表</a>
-  <a href="reports/select_date_report" class="btn btn-danger btn-large">次报表(网页版)</a>
-  <a href="reports/day_report.csv" class="btn btn-info btn-large">日报表</a>
-  <a href="reports/week_report.csv" class="btn btn-info btn-large">周报表</a>
-  <a href="reports/export_ranking" class="btn btn-info btn-large">出口得分排名表</a>
-  <a href="reports/website_select" class="btn btn-info btn-large">网站得分排名表</a>
-  <a href="reports/locale_ranking" class="btn btn-info btn-large">归属地统计</a>
+
+
   <p></p>
+  <%= form_tag('date2time_report', :method => 'post', class: 'well form-horizontal') do %>
+    <div class="control-group pull-left">
+      <label class="control-label" for="dp1"></label>
 
-
+      <div class="controls">
+        <div class="input-prepend input-append">
+          <span class="add-on">日 期</span>
+          <input id="dp1" class="span7" type="text" size="16" name="date" >
+          <span class="add-on"><i class="icon-calendar"></i></span>
+        </div>
+      </div>
+    </div>
+    点数
+    <%= select_tag :ds, options_from_collection_for_select(@ds,:first,:last), class: 'span2' -%>
+    <%= submit_tag('查 询', class: 'btn btn-info span2') %>
+  <% end %>
   <div class="row-fluid">
     <div class="span12">
       <h4 class="title">名言警句</h4>

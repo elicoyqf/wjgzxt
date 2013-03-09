@@ -23,11 +23,16 @@ env :PATH, ENV['PATH']
 #添加环境变量,否则找不到bundle命令。
 set :output, "#{path}/log/whenever.log" #设置日志输出文件
 
-#每天的正常上班时间内，一个小时内做4次，每次15分钟
-#every '9,25,41,57 8-22 * * *' do
-#  rake 'database:woprocess'
-#end
+#每个小时的第5分钟开始导入数据
+every '5 * * * *' do
+  rake 'database:csv2db'
+end
 
+#每个小时的第10分钟开始分析数据
+#目前只对http数据分析
+every '10 * * * *' do
+  rake 'database:analyse_data'
+end
 #每天的晚班时间内做检查，从2点开始做到5点
 #every '20 2-6 * * *' do
 #  rake 'database:wocheck'

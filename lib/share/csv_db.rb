@@ -10,7 +10,12 @@ module CsvDb
 
     def csv_to_db(filename)
       #file = Rails.root.join('public', 'HTTP_201303012100.csv')
-
+      ld    = LocaleData.all
+      dx    = 0
+      lt    = 0
+      yd    = 0
+      tt    = 0
+      other = 0
       filename.each do |fname|
         case fname
           when /HTTP/
@@ -23,6 +28,25 @@ module CsvDb
                                   page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
                                   dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
                                   element_number:  row[29])
+
+              #更新归属地数据和测试网站相关信息
+              sname = row[24].to_s.strip
+              case sname
+                when '电信'
+                  dx += 1
+                when '联通'
+                  lt += 1
+                when '移动'
+                  yd += 1
+                when '铁通'
+                  tt += 1
+                else
+                  other += 1
+              end
+
+              #直接将数据插入数据库即可，model进行限制去重。
+              TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip)
+
               i += 1
             end
             puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
@@ -55,6 +79,26 @@ module CsvDb
 
         end
       end
+
+      ld.each do |tmp|
+        case tmp.local_name
+          when '电信'
+            puts 'dx is -----=>' + dx.to_s
+            tmp.update_attribute(locale_number: dx)
+          when '联通'
+            puts 'lt is -----=>' + lt.to_s
+            tmp.update_attribute(locale_number: lt)
+          when '移动'
+            puts 'yd is -----=>' + yd.to_s
+            tmp.update_attribute(locale_number: yd)
+          when '铁通'
+            puts 'tt is -----=>' + tt.to_s
+            tmp.update_attribute(locale_number: tt)
+          else
+            puts 'other is -----=>' + other.to_s
+            tmp.update_attribute(locale_number: other)
+        end
+      end
     end
 
     #目前只对http数据分析
@@ -74,7 +118,6 @@ module CsvDb
         #此处只取第一条对比数据出来进行对比
         cons_data = flag_data.first
 
-        #todo:此处对比未考虑权重因素，后期需要加上。
         unless cons_data.blank?
           hts                         = {}
           hts[:test_time]             = odata.test_time

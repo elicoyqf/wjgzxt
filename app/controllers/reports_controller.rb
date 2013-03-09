@@ -6,27 +6,74 @@ class ReportsController < ApplicationController
 
   end
 
+  def select_date_report
+    @ds = []
+    (0..23).each do |n|
+      @ds << [n, n]
+    end
+  end
+
+  def date2time_report
+    d_str      = params[:date]
+    ds         = params[:ds]
+    time_str   = d_str + ' ' + ds
+    time_begin = Time.parse(time_str)
+    time_end   = time_begin + 1.hour
+    psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
+    @title_name = []
+    key1       = %w( source_node_name dest_node_name)
+    key2       =%w(positive_items_scores negative_items_scores total_scores)
+
+    key3 = []
+    psc.each do |config|
+      @title_name << config.alias
+      key3 << config.param_name
+    end
+    key = key1 + key3 + key2
+
+    @odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC')
+
+  end
+
   def export_ranking
-    #todo:此处还需要进行过滤出口名单
-    hts     = HttpTestScore.all
+    #查询当月的月表数据
+    hts     = HttpTestScore.where('test_time >= ? and test_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
     @export = Set.new
     hts.each do |line|
       @export.add line.source_node_name
     end
     @nega_arr  = []
+    @nega_no   = []
     @total_arr = []
-
+    @match_no  = []
+    @dx        = 0
+    @lt        = 0
     @export.each do |e|
       nega_val  = 0
       total_val = 0
-      export_s  = HttpTestScore.where('source_node_name = ?', e)
+      negano    = 0
+      export_s  = HttpTestScore.find_all_by_source_node_name(e)
       export_s.each do |es|
         nega_val  += es.negative_items_scores
         total_val += es.total_scores
+        if es.total_scores < 0
+          negano += 1
+        end
       end
+
+      ename = e[-4..-3]
+      case ename
+        when '电信'
+          @dx += 1
+        when '联通'
+          @lt += 1
+        else
+      end
+
+      @nega_no << negano
       @nega_arr << nega_val
       @total_arr << total_val
-
+      @match_no << export_s.size
     end
 
 
@@ -43,41 +90,7 @@ class ReportsController < ApplicationController
   end
 
   def locale_ranking
-    #todo:此处不能选择全部，正式应用后应该在每次自动更新数据库表数据。并且此处未去重复数据。
-    hts = HttpTestData.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, Time.parse('2013-03-1 21:00:00'),
-                             Time.parse('2013-03-1 22:00:00'))
-    ld  = LocaleData.all
-    if ld.blank?
-      dx    = 0
-      lt    = 0
-      yd    = 0
-      tt    = 0
-      other = 0
-      hts.each do |h|
-        sname = h.dest_locale.to_s.strip
-        puts '-'*50+sname
-        case sname
-          when '电信'
-            dx += 1
-          when '联通'
-            lt += 1
-          when '移动'
-            yd += 1
-          when '铁通'
-            tt += 1
-          else
-            other += 1
-        end
-      end
-      LocaleData.create(locale_name: '电信',locale_number: dx)
-      LocaleData.create(locale_name: '联通',locale_number: lt)
-      LocaleData.create(locale_name: '移动',locale_number: yd)
-      LocaleData.create(locale_name: '铁通',locale_number: tt)
-      LocaleData.create(locale_name: '其它',locale_number: other)
-    end
     @ldata = LocaleData.all
-
-
   end
 
   def time_report

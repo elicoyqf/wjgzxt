@@ -67,15 +67,39 @@ module UtiltilyTools
         case type
           when 1
             #越大越好
-            t_score = cal_method_1(cons_data, odata, ll, ul)
+            t_score = cal_method_3(cons_data, odata, ll, ul)
           when 2
             #越小越好
-            t_score = cal_method_2(cons_data, odata, ll, ul)
+            t_score = cal_method_3(cons_data, odata, ll, ul)
           else
         end
       end
     end
     t_score * weight
+  end
+
+  def cal_method_3(cons_data, odata, ll, ul)
+    sc = 0
+    if odata.to_s.to_f > cons_data.to_s.to_f
+      sc = 1
+    elsif odata.to_s.to_f == cons_data.to_s.to_f
+      sc = 0
+    elsif odata.to_s.to_f < cons_data.to_s.to_f
+      sc = -1
+    end
+    sc
+  end
+
+  def cal_method_4(cons_data, odata, ll, ul)
+    sc = 0
+    if odata.to_s.to_f < cons_data.to_s.to_f
+      sc = 1
+    elsif odata.to_s.to_f == cons_data.to_s.to_f
+      sc = 0
+    elsif odata.to_s.to_f > cons_data.to_s.to_f
+      sc = -1
+    end
+    sc
   end
 
   def cal_method_1(cons_data, odata, ll, ul)

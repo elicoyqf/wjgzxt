@@ -35,10 +35,10 @@
             </tr>
             </thead>
             <tbody>
-            <% @ldata.each do |line| %>
+            <% @locale.each do |key,value| %>
               <tr>
-                <td style="text-align:center;"><%= line.locale_name %></td>
-                <td style="text-align:center;"><span class="label label-info"><%= line.locale_number %></span></td>
+                <td style="text-align:center;"><%= key %></td>
+                <td style="text-align:center;"><span class="label label-info"><%= value %></span></td>
               </tr>
             <% end %>
             </tbody>

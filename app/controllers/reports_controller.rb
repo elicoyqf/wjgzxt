@@ -94,7 +94,17 @@ class ReportsController < ApplicationController
   end
 
   def locale_ranking
-    @ldata = LocaleData.all
+    dx = TestDestNode.find_all_by_locale('电信').size
+    lt = TestDestNode.find_all_by_locale('联通').size
+    yd = TestDestNode.find_all_by_locale('移动').size
+    tt = TestDestNode.find_all_by_locale('铁通').size
+    other = TestDestNode.all.size - dx - lt - yd -tt
+    @locale = {}
+    @locale['电信'] = dx
+    @locale['联通'] = lt
+    @locale['移动'] = yd
+    @locale['铁通'] = tt
+    @locale['其它'] = other
   end
 
   def time_report

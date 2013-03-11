@@ -10,12 +10,7 @@ module CsvDb
 
     def csv_to_db(filename)
       #file = Rails.root.join('public', 'HTTP_201303012100.csv')
-      ld    = LocaleData.all
-      dx    = 0
-      lt    = 0
-      yd    = 0
-      tt    = 0
-      other = 0
+
       filename.each do |fname|
         case fname
           when /HTTP/
@@ -30,22 +25,8 @@ module CsvDb
                                   element_number:  row[29])
 
               #更新归属地数据和测试网站相关信息
-              sname = row[24].to_s.strip
-              case sname
-                when '电信'
-                  dx += 1
-                when '联通'
-                  lt += 1
-                when '移动'
-                  yd += 1
-                when '铁通'
-                  tt += 1
-                else
-                  other += 1
-              end
-
               #直接将数据插入数据库即可，model进行限制去重。
-              TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip)
+              TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip,locale:row[24].to_s.strip)
 
               i += 1
             end
@@ -76,27 +57,6 @@ module CsvDb
             end
             puts "ping_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
           else
-
-        end
-      end
-
-      ld.each do |tmp|
-        case tmp.locale_name
-          when '电信'
-            puts 'dx is -----=>' + dx.to_s
-            tmp.update_attribute(:locale_number, dx)
-          when '联通'
-            puts 'lt is -----=>' + lt.to_s
-            tmp.update_attribute(:locale_number, lt)
-          when '移动'
-            puts 'yd is -----=>' + yd.to_s
-            tmp.update_attribute(:locale_number, yd)
-          when '铁通'
-            puts 'tt is -----=>' + tt.to_s
-            tmp.update_attribute(:locale_number, tt)
-          else
-            puts 'other is -----=>' + other.to_s
-            tmp.update_attribute(:locale_number, other)
         end
       end
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130307100310) do
+ActiveRecord::Schema.define(:version => 20130311165408) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20130307100310) do
     t.string   "dest_url"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "locale"
   end
 
   create_table "video_test_data", :force => true do |t|

@@ -56,7 +56,7 @@ class ReportsController < ApplicationController
       tmp = HttpTestScore.select(:dest_url).where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_month,
                                                   Time.now.at_beginning_of_month + 1.month, ename)
       tmp.each do |t|
-        match_web << tmp.dest_url
+        match_web << t.dest_url
       end
       ii = hts.where('export_name = ? ', ename).count(:negative_statis)
       jj = hts.where('export_name = ? ', ename).count(:total_static)

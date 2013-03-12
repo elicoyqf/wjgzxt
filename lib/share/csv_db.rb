@@ -82,6 +82,7 @@ module CsvDb
             nega_val += es.total_scores
             negano   += 1
           end
+          match << es.dest_url
         end
         negative_statis = nega_val.to_f / match.to_f
         total_statis    = total_val.to_f / match.to_f

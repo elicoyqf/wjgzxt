@@ -84,8 +84,8 @@ module CsvDb
           end
           match << es.dest_url
         end
-        negative_statis = nega_val.to_f / match.to_f
-        total_statis    = total_val.to_f / match.to_f
+        negative_statis = nega_val.to_f / match.size.to_f
+        total_statis    = total_val.to_f / match.size.to_f
         HttpTestStatis.create(export_name:  e_name, start_time: time_begin, end_time: time_end, negative_statis: negative_statis,
                               total_statis: total_statis, negative_web: negano)
       end

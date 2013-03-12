@@ -58,9 +58,9 @@ class ReportsController < ApplicationController
       tmp.each do |t|
         match_web << t.dest_url
       end
-      ii = hts.where('export_name = ? ', ename).count(:negative_statis)
-      jj = hts.where('export_name = ? ', ename).count(:total_statis)
-      kk = hts.where('export_name = ? ', ename).count(:negative_web)
+      ii = hts.where('export_name = ? ', ename).sum(:negative_statis)
+      jj = hts.where('export_name = ? ', ename).sum(:total_statis)
+      kk = hts.where('export_name = ? ', ename).sum(:negative_web)
       @nega_arr << ii
       @total_arr << jj
       @nega_no << kk

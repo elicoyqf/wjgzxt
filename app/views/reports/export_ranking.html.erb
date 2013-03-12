@@ -42,8 +42,8 @@
             <% @e_name.each_with_index do |line, i| %>
               <tr>
                 <td style="text-align:center;"><%= line %></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @nega_arr[i].to_s.to_f %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @total_arr[i].to_s.to_f %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span></td>
                 <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
                 <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
               </tr>

@@ -10,7 +10,7 @@
 
         <p>
           本排名表根据出口对各个测试网站的评分进行统计，主要统计负分、总分两项指标，如对结果有异议，可申请核对。<br/>
-          目前本系统中含电信方向出口共 <%= @dx %> 个,联通方向出口共 <%= @lt %> 个，其它方向出口暂未纳入评分。
+          目前本系统中含电信方向出口共 <%= @dx %> 个,联通方向出口共 <%= @lt %> 个，其它方向出口共 <%= @oe %> 暂未纳入评分。
         </p>
         <br/>
 
@@ -42,8 +42,20 @@
             <% @e_name.each_with_index do |line, i| %>
               <tr>
                 <td style="text-align:center;"><%= line %></td>
-                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span></td>
+                <td style="text-align:center;">
+                  <% if @nega_arr[i].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                  <% else %>
+                    <span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                  <% end %>
+                </td>
+                <td style="text-align:center;">
+                  <% if @total_arr[i].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                  <% else %>
+                    <span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                  <% end %>
+                </td>
                 <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
                 <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
               </tr>

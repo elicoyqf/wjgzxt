@@ -43,6 +43,9 @@ class ReportsController < ApplicationController
       @e_name << line.export_name
     end
 
+    @dx        = TestDestNode.where('locale = ?', '电信').count
+    @lt        = TestDestNode.where('locale = ?', '联通').count
+    @oe        = TestDestNode.all.count - @dx - @lt
     @nega_arr  = []
     @total_arr = []
     @nega_no   = []
@@ -81,12 +84,12 @@ class ReportsController < ApplicationController
   end
 
   def locale_ranking
-    dx = TestDestNode.find_all_by_locale('电信').size
-    lt = TestDestNode.find_all_by_locale('联通').size
-    yd = TestDestNode.find_all_by_locale('移动').size
-    tt = TestDestNode.find_all_by_locale('铁通').size
-    other = TestDestNode.all.size - dx - lt - yd -tt
-    @locale = {}
+    dx            = TestDestNode.find_all_by_locale('电信').size
+    lt            = TestDestNode.find_all_by_locale('联通').size
+    yd            = TestDestNode.find_all_by_locale('移动').size
+    tt            = TestDestNode.find_all_by_locale('铁通').size
+    other         = TestDestNode.all.size - dx - lt - yd -tt
+    @locale       = {}
     @locale['电信'] = dx
     @locale['联通'] = lt
     @locale['移动'] = yd

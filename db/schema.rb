@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130312054710) do
+ActiveRecord::Schema.define(:version => 20130311165408) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -88,17 +88,6 @@ ActiveRecord::Schema.define(:version => 20130312054710) do
     t.integer  "total_scores"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
-  end
-
-  create_table "http_test_statis", :force => true do |t|
-    t.string   "export_name"
-    t.datetime "start_time"
-    t.datetime "end_time"
-    t.float    "negative_statis"
-    t.float    "total_statis"
-    t.integer  "negative_web"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
   end
 
   create_table "locale_data", :force => true do |t|
@@ -193,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20130312054710) do
     t.string   "dest_url"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.string   "locale"
   end
 
   create_table "video_test_data", :force => true do |t|

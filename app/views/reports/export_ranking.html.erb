@@ -9,14 +9,12 @@
         <h1>出口得分排名表（月统计）</h1>
 
         <p>
-          本排名表根据出口对各个测试网站的评分进行统计，主要统计负分、总分两项指标，如对结果有异议，可申请核对。<br/>
-          目前本系统中含电信方向出口共 <%= @dx %> 个,联通方向出口共 <%= @lt %> 个，其它方向出口共 <%= @oe %> 暂未纳入评分。
+          本排名表根据出口对各个测试网站的评分进行统计，主要统计负分、总分两项指标。<br/>
+          计算方法是：出口得分 / 有效匹配网站数，从而得出平均值。因为每个出口所匹配的有效数不一致，只能取其平均值。<br/>
+          目前本系统中含电信方向出口共 ><%= @dx %>个,联通方向出口共 <%= @lt %> 个，其它方向出口共 <%= @oe %> 个暂未纳入评分。如对结果有异议，可申请核对。
         </p>
-        <br/>
-
-        <p class="hidden-phone">
-          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
-        </p>
+        本月统计数据如下示：
+        总分是正分的有 <%= @total_pos %> 个，总分是负分的有 <%= @total_neg %>个,总分为0分的有 <%= @total_eql %> 个。
       </div>
     </div>
   </div>
@@ -24,8 +22,8 @@
   <div class="row-fluid">
     <div class="span12">
       <div class="row-fluid hidden-desktop hidden-phone">
-        <div class="span12">
-          <h4 class="title">出口得分排名表如下示：</h4>
+        <div class="span6">
+          <h4 class="title">电信出口得分排名表如下示：</h4>
 
           <div class="squiggly-border"></div>
           <table class="table table-striped table-bordered table-radmin">
@@ -63,6 +61,45 @@
             </tbody>
           </table>
         </div>
+        <div class="span6">
+                  <h4 class="title">联通出口得分排名表如下示：</h4>
+
+                  <div class="squiggly-border"></div>
+                  <table class="table table-striped table-bordered table-radmin">
+                    <thead>
+                    <tr>
+                      <th style="text-align:center;">出口名称</th>
+                      <th style="text-align:center;">负值</th>
+                      <th style="text-align:center;">总分</th>
+                      <th style="text-align:center;">负分的网站次数</th>
+                      <th style="text-align:center;">有效比对的网站数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% @e_name.each_with_index do |line, i| %>
+                      <tr>
+                        <td style="text-align:center;"><%= line %></td>
+                        <td style="text-align:center;">
+                          <% if @nega_arr[i].to_s.to_f < 0 %>
+                            <span class="label label-important"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                          <% else %>
+                            <span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                          <% end %>
+                        </td>
+                        <td style="text-align:center;">
+                          <% if @total_arr[i].to_s.to_f < 0 %>
+                            <span class="label label-important"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                          <% else %>
+                            <span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                          <% end %>
+                        </td>
+                        <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
+                        <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
+                      </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+                </div>
       </div>
     </div>
   </div>

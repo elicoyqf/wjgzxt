@@ -50,6 +50,9 @@ class ReportsController < ApplicationController
     @total_arr = []
     @nega_no   = []
     @match_no  = []
+    @total_pos = 0
+    @total_neg = 0
+    @total_eql = 0
     match_web  = Set.new
     @e_name.each do |ename|
       ii = 0
@@ -64,6 +67,13 @@ class ReportsController < ApplicationController
       ii = hts.where('export_name = ? ', ename).sum(:negative_statis)
       jj = hts.where('export_name = ? ', ename).sum(:total_statis)
       kk = hts.where('export_name = ? ', ename).sum(:negative_web)
+      if jj > 0
+        @total_pos += 1
+      elsif jj < 0
+        @total_neg += 1
+      else
+        @total_eql += 1
+      end
       @nega_arr << ii
       @total_arr << jj
       @nega_no << kk

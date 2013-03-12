@@ -59,7 +59,7 @@ class ReportsController < ApplicationController
         match_web << t.dest_url
       end
       ii = hts.where('export_name = ? ', ename).count(:negative_statis)
-      jj = hts.where('export_name = ? ', ename).count(:total_static)
+      jj = hts.where('export_name = ? ', ename).count(:total_statis)
       kk = hts.where('export_name = ? ', ename).count(:negative_web)
       @nega_arr << ii
       @total_arr << jj

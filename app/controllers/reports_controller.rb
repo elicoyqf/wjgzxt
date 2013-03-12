@@ -37,47 +37,34 @@ class ReportsController < ApplicationController
 
   def export_ranking
     #查询当月的月表数据
-    hts     = HttpTestScore.where('test_time >= ? and test_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
-    @export = Set.new
+    hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
+    @e_name = Set.new
     hts.each do |line|
-      @export.add line.source_node_name
+      @e_name << line.export_name
     end
+
     @nega_arr  = []
-    @nega_no   = []
     @total_arr = []
+    @nega_no   = []
     @match_no  = []
-    @dx        = 0
-    @lt        = 0
-    match      = Set.new
-
-    @export.each do |e|
-      nega_val  = 0
-      total_val = 0
-      negano    = 0
-      match.clear
-      export_s  = HttpTestScore.find_all_by_source_node_name(e)
-      export_s.each do |es|
-        total_val += es.total_scores
-        if es.total_scores < 0
-          nega_val += es.total_scores
-          negano   += 1
-        end
-        match << es.dest_url
+    match_web  = Set.new
+    @e_name.each do |ename|
+      ii = 0
+      jj = 0
+      kk = 0
+      match_web.clear
+      tmp = HttpTestScore.select(:dest_url).where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_month,
+                                                  Time.now.at_beginning_of_month + 1.month, ename)
+      tmp.each do |t|
+        match_web << tmp.dest_url
       end
-
-      ename = e[-4..-3]
-      case ename
-        when '电信'
-          @dx += 1
-        when '联通'
-          @lt += 1
-        else
-      end
-
-      @nega_no << negano
-      @nega_arr << nega_val
-      @total_arr << total_val
-      @match_no << match.size
+      ii = hts.where('export_name = ? ', ename).count(:negative_statis)
+      jj = hts.where('export_name = ? ', ename).count(:total_static)
+      kk = hts.where('export_name = ? ', ename).count(:negative_web)
+      @nega_arr << ii
+      @total_arr << jj
+      @nega_no << kk
+      @match_no << match_web.size
     end
 
 

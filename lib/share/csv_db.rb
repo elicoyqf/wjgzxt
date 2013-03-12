@@ -1,5 +1,6 @@
 #encoding : utf-8
 require 'csv'
+require 'set'
 include UtiltilyTools
 
 module CsvDb
@@ -98,6 +99,34 @@ module CsvDb
             puts 'other is -----=>' + other.to_s
             tmp.update_attribute(:locale_number, other)
         end
+      end
+    end
+
+    #统计单次的http数据
+    def statis_data_to_db(time_begin, time_end)
+      hts    = HttpTestData.where('test_time >= ? and test_time < ?', time_begin, time_end)
+      export = Set.new
+      match  = Set.new
+      hts.each do |line|
+        export.add line.source_node_name
+      end
+
+      export.each do |e_name|
+        nega_val  = 0
+        total_val = 0
+        negano    = 0
+        export_s  = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ?', e_name, time_begin, time_end)
+        export_s.each do |es|
+          total_val += es.total_scores
+          if es.total_scores < 0
+            nega_val += es.total_scores
+            negano   += 1
+          end
+        end
+        negative_statis = nega_val.to_f / match.to_f
+        total_statis    = total_val.to_f / match.to_f
+        HttpTestStatis.create(export_name:  e_name, start_time: time_begin, end_time: time_end, negative_statis: negative_statis,
+                              total_statis: total_statis, negative_web: negano)
       end
     end
 

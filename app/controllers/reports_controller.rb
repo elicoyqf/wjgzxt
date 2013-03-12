@@ -46,18 +46,20 @@ class ReportsController < ApplicationController
     @dx        = TestDestNode.where('locale = ?', '电信').count
     @lt        = TestDestNode.where('locale = ?', '联通').count
     @oe        = TestDestNode.all.count - @dx - @lt
-    @nega_arr  = []
-    @total_arr = []
-    @nega_no   = []
-    @match_no  = []
+
     @total_pos = 0
     @total_neg = 0
     @total_eql = 0
     match_web  = Set.new
+    @dx_array   = []
+    @lt_array   = []
     @e_name.each do |ename|
-      ii = 0
-      jj = 0
-      kk = 0
+      ii      = 0
+      jj      = 0
+      kk      = 0
+      #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
+      t_array = []
+      t_array << ename
       match_web.clear
       tmp = HttpTestScore.select(:dest_url).where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_month,
                                                   Time.now.at_beginning_of_month + 1.month, ename)
@@ -74,13 +76,18 @@ class ReportsController < ApplicationController
       else
         @total_eql += 1
       end
-      @nega_arr << ii
-      @total_arr << jj
-      @nega_no << kk
-      @match_no << match_web.size
+      t_array << ii
+      t_array << jj
+      t_array << kk
+      t_array << match_web.size
+      if t_array[0][-4..-3] == '电信'
+        @dx_array << t_array
+      else
+        @lt_array << t_array
+      end
     end
-
-
+    @dx_array.sort_by!{|x| x[1]}
+    @lt_array.sort_by!{|x| x[1]}
   end
 
   def website_select

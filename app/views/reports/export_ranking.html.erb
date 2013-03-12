@@ -37,25 +37,25 @@
             </tr>
             </thead>
             <tbody>
-            <% @e_name.each_with_index do |line, i| %>
+            <% @dx_array.each_with_index do |line, i| %>
               <tr>
-                <td style="text-align:center;"><%= line %></td>
+                <td style="text-align:center;"><%= line[0] %></td>
                 <td style="text-align:center;">
-                  <% if @nega_arr[i].to_s.to_f < 0 %>
-                    <span class="label label-important"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                  <% if line[1].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision line[1].to_s.to_f %></span>
                   <% else %>
-                    <span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                    <span class="label label-info"><%= number_with_precision line[1].to_s.to_f %></span>
                   <% end %>
                 </td>
                 <td style="text-align:center;">
-                  <% if @total_arr[i].to_s.to_f < 0 %>
-                    <span class="label label-important"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                  <% if line[2].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision line[2].to_s.to_f %></span>
                   <% else %>
-                    <span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                    <span class="label label-info"><%= number_with_precision line[2].to_s.to_f %></span>
                   <% end %>
                 </td>
-                <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= line[3] %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= line[4] %></span></td>
               </tr>
             <% end %>
             </tbody>
@@ -76,25 +76,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% @e_name.each_with_index do |line, i| %>
+                    <% @lt_array.each_with_index do |line, i| %>
                       <tr>
-                        <td style="text-align:center;"><%= line %></td>
+                        <td style="text-align:center;"><%= line[0] %></td>
                         <td style="text-align:center;">
-                          <% if @nega_arr[i].to_s.to_f < 0 %>
-                            <span class="label label-important"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                          <% if line[1].to_s.to_f < 0 %>
+                            <span class="label label-important"><%= number_with_precision line[1].to_s.to_f %></span>
                           <% else %>
-                            <span class="label label-info"><%= number_with_precision @nega_arr[i].to_s.to_f %></span>
+                            <span class="label label-info"><%= number_with_precision line[1].to_s.to_f %></span>
                           <% end %>
                         </td>
                         <td style="text-align:center;">
-                          <% if @total_arr[i].to_s.to_f < 0 %>
-                            <span class="label label-important"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                          <% if line[2].to_s.to_f < 0 %>
+                            <span class="label label-important"><%= number_with_precision line[2].to_s.to_f %></span>
                           <% else %>
-                            <span class="label label-info"><%= number_with_precision @total_arr[i].to_s.to_f %></span>
+                            <span class="label label-info"><%= number_with_precision line[2].to_s.to_f %></span>
                           <% end %>
                         </td>
-                        <td style="text-align:center;"><span class="label label-info"><%= @nega_no[i] %></span></td>
-                        <td style="text-align:center;"><span class="label label-info"><%= @match_no[i] %></span></td>
+                        <td style="text-align:center;"><span class="label label-info"><%= line[3] %></span></td>
+                        <td style="text-align:center;"><span class="label label-info"><%= line[4] %></span></td>
                       </tr>
                     <% end %>
                     </tbody>

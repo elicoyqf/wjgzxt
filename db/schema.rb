@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130312054710) do
+ActiveRecord::Schema.define(:version => 20130313150343) do
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -96,7 +96,6 @@ ActiveRecord::Schema.define(:version => 20130312054710) do
     t.datetime "end_time"
     t.float    "negative_statis"
     t.float    "total_statis"
-    t.integer  "negative_web"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end

@@ -68,26 +68,25 @@ module CsvDb
       export = Set.new
       match  = Set.new
       hts.each do |line|
+
         export.add line.source_node_name
       end
 
       export.each do |e_name|
         nega_val  = 0
         total_val = 0
-        negano    = 0
         export_s  = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ?', e_name, time_begin, time_end)
         export_s.each do |es|
           total_val += es.total_scores
           if es.total_scores < 0
             nega_val += es.total_scores
-            negano   += 1
           end
           match << es.dest_url
         end
         negative_statis = nega_val.to_f / match.size.to_f
         total_statis    = total_val.to_f / match.size.to_f
         HttpTestStatis.create(export_name:  e_name, start_time: time_begin, end_time: time_end, negative_statis: negative_statis,
-                              total_statis: total_statis, negative_web: negano)
+                              total_statis: total_statis)
       end
     end
 

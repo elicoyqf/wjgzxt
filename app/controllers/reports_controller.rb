@@ -1,6 +1,6 @@
 #encoding : utf-8
 require 'set'
-
+#
 class ReportsController < ApplicationController
   def index
 

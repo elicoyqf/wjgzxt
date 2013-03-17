@@ -2,4 +2,29 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  will_paginate:
+    previous_label: "&#8592; 前一页"
+    next_label: "下一页 &#8594;"
+    page_gap: "&hellip;"
+
+    page_entries_info:
+      single_page:
+        zero:  "No %{model} found"
+        one:   "Displaying 1 %{model}"
+        other: "Displaying all %{count} %{model}"
+      single_page_html:
+        zero:  "No %{model} found"
+        one:   "Displaying <b>1</b> %{model}"
+        other: "Displaying <b>all&nbsp;%{count}</b> %{model}"
+
+      multi_page: "Displaying %{model} %{from} - %{to} of %{count} in total"
+      multi_page_html: "Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b> in total"
+
+  date:
+    formats:
+      default: "%日/%月/%年"
+
+    day_names: [星期天, 星期一, 星期二, 星期三, 星期四, 星期五, 星期六]
+    abbr_day_names: [周末, 周一, 周二, 周三, 周四, 周五, 周六]
+    month_names: [~, 一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]
+    abbr_month_names: [~, 一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]

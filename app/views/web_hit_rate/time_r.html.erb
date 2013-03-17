@@ -31,6 +31,7 @@
             <thead>
             <tr>
               <th style="text-align:center;">网站名称</th>
+              <th style="text-align:center;">测试时间</th>
               <th style="text-align:center;">电信命中率</th>
               <th style="text-align:center;">联通命中率</th>
             </tr>
@@ -39,8 +40,9 @@
             <% @whrs.each do |line| %>
               <tr>
                 <td style="text-align:center;"><%= line.url %></td>
-                <td style="text-align:center;"><span class="label label-info"><%= line.dx_hit_rate %></span></td>
-                <td style="text-align:center;"><span class="label label-info"><%= line.lt_hit_rate %></span></td>
+                <td style="text-align:center;"><%= line.time_begin.strftime('%Y年%m月%d日 %H:%M:%S') %></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_to_percentage line.dx_hit_rate*100 %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_to_percentage line.lt_hit_rate*100 %></span></td>
               </tr>
             <% end %>
             </tbody>
@@ -51,6 +53,25 @@
   </div>
 
   <p></p>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="well center">
+        <div class="pagination pagination-small center offset3">
+          <%= will_paginate @whrs, :inner_window => 2 %>
+        </div>
+        <div class="offset4">
+          统计信息：一共有 <%= @whrs.total_entries %>  条,当前第 <%= @whrs.current_page %> 页, 共
+          <% if (@whrs.total_entries % @whrs.per_page) ==0 %>
+            <%= (@whrs.total_entries / @whrs.per_page) %> 页.
+          <% else %>
+            <%= (@whrs.total_entries / @whrs.per_page) +1 %> 页
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <div class="row-fluid">
     <div class="span12">

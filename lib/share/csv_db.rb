@@ -64,6 +64,7 @@ module CsvDb
       end
     end
 
+    #统计网站命中率函数
     def statis_web_hit_rate(time_begin, time_end)
       dx_web = TestDestNode.where('locale = ?', '电信')
       lt_web = TestDestNode.where('locale = ?', '联通')

@@ -15,23 +15,25 @@ module CsvDb
       filename.each do |fname|
         case fname
           when /HTTP/
-            i = 1
-            CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
-              HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
-                                  dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
-                                  time_to_index:   row[10], page_download_time: row[11], page_loading_time: row[12], total_time: row[13], throughput_time: row[14],
-                                  overall_quality: row[15], resolution_sr: row[16], connection_sr: row[17], index_page_loading_sr: row[18],
-                                  page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
-                                  dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
-                                  element_number:  row[29])
+            if File.exist? fname
+              i = 1
+              CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
+                HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
+                                    dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
+                                    time_to_index:   row[10], page_download_time: row[11], page_loading_time: row[12], total_time: row[13], throughput_time: row[14],
+                                    overall_quality: row[15], resolution_sr: row[16], connection_sr: row[17], index_page_loading_sr: row[18],
+                                    page_loading_r:  row[19], loading_sr: row[20], dest_ip_address: row[21], dest_nationality: row[22], dest_province: row[23],
+                                    dest_locale:     row[24], download_size: row[25], contents_size: row[26], return_code: row[27], add_ons: row[28],
+                                    element_number:  row[29])
 
-              #更新归属地数据和测试网站相关信息
-              #直接将数据插入数据库即可，model进行限制去重。
-              TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip,locale:row[24].to_s.strip)
+                #更新归属地数据和测试网站相关信息
+                #直接将数据插入数据库即可，model进行限制去重。
+                TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip, locale: row[24].to_s.strip)
 
-              i += 1
+                i += 1
+              end
+              puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
             end
-            puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
           when /Video/
             i = 1
             CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
@@ -62,13 +64,49 @@ module CsvDb
       end
     end
 
+    def statis_web_hit_rate(time_begin, time_end)
+      dx_web = TestDestNode.where('locale = ?', '电信')
+      lt_web = TestDestNode.where('locale = ?', '联通')
+
+      dx_web.each do |dx_line|
+        dx     = 0
+        lt     = 0
+        dx_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, dx_line.dest_url)
+        dx_tmp.each do |dt|
+          if dt.source_node_name[-4..-3] == '电信'
+            dx += 1
+          elsif dt.source_node_name[-4..-3] =='联通'
+            lt += 1
+          end
+        end
+        dx_r = dx.to_s.to_f / dx_web.size.to_f
+        lt_r = lt.to_s.to_f / lt_web.size.to_f
+        WebHitRateStatis.create(time_begin: time_begin, url: dx_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
+      end
+
+      lt_web.each do |lt_line|
+        dx     = 0
+        lt     = 0
+        lt_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, lt_line.dest_url)
+        lt_tmp.each do |ltmp|
+          if ltmp.source_node_name[-4..-3] == '电信'
+            dx += 1
+          elsif ltmp.source_node_name[-4..-3] == '联通'
+            lt += 1
+          end
+        end
+        dx_r = dx.to_s.to_f / dx_web.size.to_f
+        lt_r = lt.to_s.to_f / lt_web.size.to_f
+        WebHitRateStatis.create(time_begin: time_begin, url: lt_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
+      end
+    end
+
     #统计单次的http数据
     def statis_data_to_db(time_begin, time_end)
       hts    = HttpTestData.where('test_time >= ? and test_time < ?', time_begin, time_end)
       export = Set.new
       match  = Set.new
       hts.each do |line|
-
         export.add line.source_node_name
       end
 

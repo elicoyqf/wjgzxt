@@ -1,21 +1,31 @@
 Wjgzxt::Application.routes.draw do
-  get "param_setting/http"
+  get 'web_hit_rate/time_r'
 
-  get "param_setting/ping"
+  get 'web_hit_rate/day_r'
 
-  get "param_setting/route"
+  get 'web_hit_rate/month_r'
 
-  get "param_setting/video"
+  get 'web_hit_rate/index'
 
-  get "reports/time_report"
+  match 'whr/' => 'web_hit_rate#index'
 
-  get "reports/select_date_report"
+  get 'param_setting/http'
 
-  post "reports/date2time_report"
+  get 'param_setting/ping'
 
-  get "reports/day_report"
+  get 'param_setting/route'
 
-  get "reports/week_report"
+  get 'param_setting/video'
+
+  get 'reports/time_report'
+
+  get 'reports/select_date_report'
+
+  post 'reports/date2time_report'
+
+  get 'reports/day_report'
+
+  get 'reports/week_report'
 
   get 'reports/export_ranking'
 
@@ -25,7 +35,7 @@ Wjgzxt::Application.routes.draw do
 
   get 'reports/locale_ranking'
 
-  get "welcome/index"
+  get 'welcome/index'
 
   match 'reports/' => 'reports#index'
 

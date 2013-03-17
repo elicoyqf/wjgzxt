@@ -22,7 +22,7 @@ module UtiltilyTools
       #目前只监测联通和电信出口
       if  !host_locale.blank? && host_locale == '联通' || host_locale == '电信'
         new_backbone_data << bline
-        puts 'blackbone'+'-'*100+bline.id.to_s
+        #puts 'blackbone'+'-'*100+bline.id.to_s
       end
     end
     new_backbone_data
@@ -43,7 +43,7 @@ module UtiltilyTools
       #出口与归属地必须要一致才有效
       if !source_node_arr.blank? && !host_locale.blank? && (source_node_arr == host_locale)
         new_data << line
-        puts 'other'+'-'*100+line.id.to_s
+        #puts 'other'+'-'*100+line.id.to_s
       end
     end
     new_data

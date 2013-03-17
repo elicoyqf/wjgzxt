@@ -1,0 +1,2 @@
+module WebHitRateHelper
+end

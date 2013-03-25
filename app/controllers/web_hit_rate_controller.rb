@@ -11,7 +11,7 @@ class WebHitRateController < ApplicationController
   end
 
   def list_day
-    @url         = params[:url]
+    @url        = params[:url]
     mon         = params[:month]
     ntime       = Time.now
     year        = ntime.year.to_s
@@ -20,17 +20,12 @@ class WebHitRateController < ApplicationController
     f_day       = date_begin.at_beginning_of_month.day
     l_day       = date_begin.at_end_of_month.day
     url_data    = WebHitRateStatis.where('url = ?  and time_begin >= ? and time_begin < ?', @url, date_begin, date_begin+1.month)
-    tmp         = []
     @all_in_one = []
     (f_day..l_day).each do |d|
-      dx = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('dx_hit_rate')
-      lt = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('lt_hit_rate')
+      tmp = []
+      dx  = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('dx_hit_rate')
+      lt  = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('lt_hit_rate')
       tmp << date_begin << dx << lt
-      puts '-'*50
-      puts date_begin
-      puts dx
-      puts lt
-      puts '-'*50
       date_begin += 1.day
       @all_in_one << tmp
     end

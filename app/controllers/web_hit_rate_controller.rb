@@ -26,6 +26,11 @@ class WebHitRateController < ApplicationController
       dx = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('dx_hit_rate')
       lt = url_data.where('time_begin >= ? and time_begin < ?', date_begin, date_begin + 1.day).average('lt_hit_rate')
       tmp << date_begin << dx << lt
+      puts '-'*50
+      puts date_begin
+      puts dx
+      puts lt
+      puts '-'*50
       date_begin += 1.day
       @all_in_one << tmp
     end

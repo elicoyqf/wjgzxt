@@ -1,4 +1,5 @@
 require 'set'
+require 'will_paginate/array'
 class WebHitRateController < ApplicationController
   def time_r
     @whrs = WebHitRateStatis.paginate page: params[:page], per_page: 20
@@ -13,7 +14,7 @@ class WebHitRateController < ApplicationController
     @day_out    = day
     url_data    = WebHitRateStatis.where('time_begin >= ? and time_begin < ?', day, day + 1.day)
     url_name    = Set.new
-    @all_in_one = []
+    in_one = []
     url_data.each do |line|
       url_name << line.url
     end
@@ -23,8 +24,9 @@ class WebHitRateController < ApplicationController
       dx  = url_data.where('url = ?', name).average('dx_hit_rate')
       lt  = url_data.where('url = ?', name).average('lt_hit_rate')
       tmp << name << dx << lt
-      @all_in_one << tmp
+      in_one << tmp
     end
+    @all_in_one = in_one.paginate page:params[:page],per_page:20
 
   end
 

@@ -32,7 +32,25 @@ class WebHitRateController < ApplicationController
   end
 
   def list_time
-
+    @url        = params[:url]
+    @day        = params[:day]
+    date_begin  = Time.parse(@day).at_beginning_of_day
+    url_data    = WebHitRateStatis.where('url = ?  and time_begin >= ? and time_begin < ?', @url, date_begin, date_begin+1.day)
+    @all_in_one = []
+    (0..23).each do |time|
+      tmp     = []
+      dx      = 0
+      lt      = 0
+      dx_data = url_data.where('time_begin = ? ', date_begin)
+      lt_data = url_data.where('time_begin = ? ', date_begin)
+      dx = dx_data.average('dx_hit_rate') unless dx_data.blank?
+      lt = lt_data.average('dx_hit_rate') unless lt_data.blank?
+      puts time.to_s+'-'*80 + dx.to_s
+      puts time.to_s+'-'*80 + lt.to_s
+      tmp << time.to_s + '点' << dx << lt
+      date_begin += 1.hour
+      @all_in_one << tmp
+    end
   end
 
   #显示今年的月份

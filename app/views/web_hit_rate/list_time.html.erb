@@ -1,12 +1,12 @@
 <%= provide(:body_id, 'index') %>
-<%= provide(:result, '网站日命中率') %>
+<%= provide(:result, '网站次命中率') %>
 
 <div class="container-fluid content-wrapper">
   <div class="row-fluid">
     <div class="span12">
       <div class="hero-unit">
         <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
-        <h1>网站日命中率数据报表</h1>
+        <h1>网站次命中率数据报表</h1>
 
         <p>
           本排名表根据同一网站根据DNS解析的归属地进行统计，如对结果有异议，可申请核对。
@@ -30,7 +30,7 @@
           <table class="table table-striped table-bordered table-radmin">
             <thead>
             <tr>
-              <th style="text-align:center;">日期</th>
+              <th style="text-align:center;">时间点</th>
               <th style="text-align:center;">电信命中率</th>
               <th style="text-align:center;">联通命中率</th>
             </tr>
@@ -39,7 +39,8 @@
             <% @all_in_one.each do |line| %>
               <tr>
                 <td style="text-align:center;">
-                  <%= link_to line[0].strftime('%Y年%m月%d日'), action: 'list_time', url: @url ,day: line[0].strftime('%Y-%m-%d') %>
+                  <!--<%# link_to line[0].strftime('%Y年%m月%d日'), action: 'list_time', url: @url ,day: line[0].strftime('%Y-%m-%d') %>-->
+                  <%=  line[0] %>
                 </td>
                 <td style="text-align:center;"><span class="label label-info">
                   <% unless line[1].blank? %>

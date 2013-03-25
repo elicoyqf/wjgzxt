@@ -1,7 +1,8 @@
 Wjgzxt::Application.routes.draw do
   get 'web_hit_rate/time_r'
+  get 'web_hit_rate/select_day_report'
 
-  get 'web_hit_rate/day_r'
+  post 'web_hit_rate/day_r'
 
   get 'web_hit_rate/month_r'
 

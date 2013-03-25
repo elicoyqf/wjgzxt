@@ -1,5 +1,4 @@
 require 'set'
-require 'will_paginate/array'
 class WebHitRateController < ApplicationController
   def time_r
     @whrs = WebHitRateStatis.paginate page: params[:page], per_page: 20
@@ -26,7 +25,7 @@ class WebHitRateController < ApplicationController
       tmp << name << dx << lt
       in_one << tmp
     end
-    @all_in_one = in_one.paginate page:params[:page],per_page:20
+    @all_in_one = in_one
 
   end
 

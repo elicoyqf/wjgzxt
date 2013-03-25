@@ -1,14 +1,22 @@
 Wjgzxt::Application.routes.draw do
-  get 'web_hit_rate/time_r'
-  get 'web_hit_rate/select_day_report'
-  get 'web_hit_rate/select_month_report'
+  #get 'web_hit_rate/time_r'
+  #get 'web_hit_rate/select_day_report'
+  #get 'web_hit_rate/select_month_report'
+  #
+  #post 'web_hit_rate/day_r'
+  #get 'web_hit_rate/day_r'
+  #
+  #post 'web_hit_rate/month_r'
+  #get 'web_hit_rate/month_r'
+  #
+  #get 'web_hit_rate/index'
 
-  post 'web_hit_rate/day_r'
-  get 'web_hit_rate/day_r'
-
-  post 'web_hit_rate/month_r'
-
-  get 'web_hit_rate/index'
+  resources :web_hit_rate, only: [] do
+    collection do
+      get 'time_r','select_day_report','select_month_report','index','day_r','month_r','list_day','list_time'
+      post 'day_r','month_r'
+    end
+  end
 
   match 'whr/' => 'web_hit_rate#index'
 

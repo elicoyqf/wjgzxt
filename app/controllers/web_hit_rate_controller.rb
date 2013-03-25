@@ -10,6 +10,31 @@ class WebHitRateController < ApplicationController
 
   end
 
+  def list_day
+    url         = params[:url]
+    mon         = params[:month]
+    ntime       = Time.now
+    year        = ntime.year.to_s
+    d_str       = year +'-'+ mon + '-1'
+    date_begin  = Time.parse(d_str)
+    f_day       = date_begin.at_beginning_of_month.day
+    l_day       = date_begin.at_end_of_month.day
+    url_data    = WebHitRateStatis.where('url = ?  and time_begin >= ? and time_end < ?', url, date_begin, date_begin+1.month)
+    tmp         = []
+    @all_in_one = []
+    (f_day..l_day).each do |d|
+      dx = url_data.where('time_begin >= ? and time_end < ?', date_begin, date_begin + 1.day).average('dx_hit_rate')
+      lt = url_data.where('time_begin >= ? and time_end < ?', date_begin, date_begin + 1.day).average('lt_hit_rate')
+      tmp << date_begin << dx << lt
+      date_begin += 1.day
+      @all_in_one << tmp
+    end
+  end
+
+  def list_time
+
+  end
+
   #显示今年的月份
   def select_month_report
     @month = []

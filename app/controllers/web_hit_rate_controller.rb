@@ -1,4 +1,6 @@
+#encoding : utf-8
 require 'set'
+require 'will_paginate/array'
 class WebHitRateController < ApplicationController
   def time_r
     @whrs = WebHitRateStatis.paginate page: params[:page], per_page: 20
@@ -8,28 +10,58 @@ class WebHitRateController < ApplicationController
 
   end
 
-  def day_r
-    day         = Time.parse params[:date]
-    @day_out    = day
-    url_data    = WebHitRateStatis.where('time_begin >= ? and time_begin < ?', day, day + 1.day)
-    url_name    = Set.new
-    in_one = []
-    url_data.each do |line|
-      url_name << line.url
-    end
-
-    url_name.each do |name|
+  #显示今年的月份
+  def select_month_report
+    @month = []
+    (1..12).each do |mon|
       tmp = []
-      dx  = url_data.where('url = ?', name).average('dx_hit_rate')
-      lt  = url_data.where('url = ?', name).average('lt_hit_rate')
-      tmp << name << dx << lt
-      in_one << tmp
+      tmp << mon << mon.to_s + '月'
+      @month << tmp
     end
-    @all_in_one = in_one
-
   end
 
+  def day_r
+    if params[:date].blank?
+      if session[:whr_day].blank?
+        redirect_to root_url
+      else
+        day         = session[:whr_day]
+        @day_out    = day
+        in_one      = avg_whrs(day, day + 1.day)
+        @all_in_one = in_one.paginate page: params[:page], per_page: 20
+      end
+    else
+      day               = Time.parse params[:date]
+      session[:whr_day] = day
+      @day_out          = day
+      in_one            = avg_whrs(day, day + 1.day)
+      @all_in_one       = in_one.paginate page: params[:page], per_page: 20
+    end
+  end
+
+
   def month_r
+    if params[:month].blank?
+      if session[:whr_month].blank?
+        redirect_to root_url
+      else
+        mon         = session[:whr_month]
+        @mon_out    = mon
+        in_one      = avg_whrs(mon, mon + 1.month)
+        @all_in_one = in_one.paginate page: params[:page], per_page: 20
+      end
+    else
+      mon                 = params[:month]
+      @mon_out            = mon
+      ntime               = Time.now
+      year                = ntime.year.to_s
+      d_str               = year +'-'+ mon + '-1'
+      date_begin          = Time.parse(d_str)
+      date_end            = date_begin + 1.month
+      session[:whr_month] = date_begin
+      in_one              = avg_whrs(date_begin, date_end)
+      @all_in_one         = in_one.paginate page: params[:page], per_page: 20
+    end
   end
 
   def index

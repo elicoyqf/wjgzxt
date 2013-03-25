@@ -56,7 +56,7 @@
     <div class="span12">
       <div class="well center">
         <div class="pagination pagination-small center offset3">
-          <%= will_paginate @all_in_one, :inner_window => 2 %>
+          <%= will_paginate @all_in_one, :inner_window => 2 ,date: @day_out%>
         </div>
         <div class="offset4">
           统计信息：一共有 <%= @all_in_one.total_entries %>  条,当前第 <%= @all_in_one.current_page %> 页, 共

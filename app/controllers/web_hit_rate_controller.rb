@@ -10,6 +10,19 @@ class WebHitRateController < ApplicationController
 
   end
 
+  def list_locale
+    @url       = params[:url]
+    day        = params[:day]
+    date_begin = Time.parse(day).at_beginning_of_hour
+    url_data   = HttpTestData.where('dest_url = ? and test_time >= ? and test_time < ?', @url, date_begin, date_begin+1.hour)
+    @all_in_one = []
+    url_data.each do |record|
+      tmp = []
+      tmp << record.source_node_name << record.dest_locale
+      @all_in_one << tmp
+    end
+  end
+
   def list_day
     @url        = params[:url]
     mon         = params[:month]
@@ -33,8 +46,8 @@ class WebHitRateController < ApplicationController
 
   def list_time
     @url        = params[:url]
-    @day        = params[:day]
-    date_begin  = Time.parse(@day).at_beginning_of_day
+    day         = params[:day]
+    date_begin  = Time.parse(day).at_beginning_of_day
     url_data    = WebHitRateStatis.where('url = ?  and time_begin >= ? and time_begin < ?', @url, date_begin, date_begin+1.day)
     @all_in_one = []
     (0..23).each do |time|
@@ -45,9 +58,8 @@ class WebHitRateController < ApplicationController
       lt_data = url_data.where('time_begin = ? ', date_begin)
       dx = dx_data.average('dx_hit_rate') unless dx_data.blank?
       lt = lt_data.average('dx_hit_rate') unless lt_data.blank?
-      puts time.to_s+'-'*80 + dx.to_s
-      puts time.to_s+'-'*80 + lt.to_s
-      tmp << time.to_s + '点' << dx << lt
+      date_point = Time.parse(day.to_s+' '+ time.to_s + ':00')
+      tmp << date_point << dx << lt
       date_begin += 1.hour
       @all_in_one << tmp
     end
@@ -89,7 +101,7 @@ class WebHitRateController < ApplicationController
         redirect_to root_url
       else
         mon         = session[:whr_month]
-        @mon_out    = mon
+        @mon_out    = Time.parse(mon).month
         in_one      = avg_whrs(mon, mon + 1.month)
         @all_in_one = in_one.paginate page: params[:page], per_page: 20
       end

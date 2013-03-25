@@ -13,7 +13,7 @@ Wjgzxt::Application.routes.draw do
 
   resources :web_hit_rate, only: [] do
     collection do
-      get 'time_r','select_day_report','select_month_report','index','day_r','month_r','list_day','list_time'
+      get 'time_r','select_day_report','select_month_report','index','day_r','month_r','list_day','list_time','list_locale'
       post 'day_r','month_r'
     end
   end

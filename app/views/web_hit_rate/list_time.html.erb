@@ -40,7 +40,7 @@
               <tr>
                 <td style="text-align:center;">
                   <!--<%# link_to line[0].strftime('%Y年%m月%d日'), action: 'list_time', url: @url ,day: line[0].strftime('%Y-%m-%d') %>-->
-                  <%=  line[0] %>
+                  <%= link_to line[0].strftime('%Y年%m月%d日 %H点'), action: 'list_locale', url: @url ,day: line[0]%>
                 </td>
                 <td style="text-align:center;"><span class="label label-info">
                   <% unless line[1].blank? %>

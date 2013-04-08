@@ -83,9 +83,9 @@ module CsvDb
           end
 
           if dt.dest_locale == '电信'
-            dx_hr += 1 
+            dx_hr += 1
           elsif dt.dest_locale == '联通'
-            lt_hr  += 1
+            lt_hr += 1
           end
         end
         dx_r = dx_hr.to_s.to_f / dx.to_s.to_f
@@ -96,6 +96,8 @@ module CsvDb
       lt_web.each do |lt_line|
         dx     = 0
         lt     = 0
+        dx_hr  = 0
+        lt_hr  = 0
         lt_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, lt_line.dest_url)
         lt_tmp.each do |ltmp|
           if ltmp.source_node_name[-4..-3] == '电信'
@@ -103,9 +105,15 @@ module CsvDb
           elsif ltmp.source_node_name[-4..-3] == '联通'
             lt += 1
           end
+
+          if ltmp.dest_locale == '电信'
+            dx_hr += 1
+          elsif ltmp.dest_locale == '联通'
+            lt_hr += 1
+          end
         end
-        dx_r = dx.to_s.to_f / dx_web.size.to_f
-        lt_r = lt.to_s.to_f / lt_web.size.to_f
+        dx_r = dx_hr.to_s.to_f / dx.to_s.to_f
+        lt_r = lt_hr.to_s.to_f / lt.to_s.to_f
         WebHitRateStatis.create(time_begin: time_begin, url: lt_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
       end
     end

@@ -78,18 +78,17 @@ module CsvDb
         dx_tmp.each do |dt|
           if dt.source_node_name[-4..-3] == '电信'
             dx += 1
+            dx_hr += 1 if dt.dest_locale.to_s.strip == '电信'
           elsif dt.source_node_name[-4..-3] =='联通'
             lt += 1
-          end
-
-          if dt.dest_locale == '电信'
-            dx_hr += 1
-          elsif dt.dest_locale == '联通'
-            lt_hr += 1
+            lt_hr += 1 if dt.dest_locale.to_s.strip == '联通'
           end
         end
+
         dx_r = dx_hr.to_s.to_f / dx.to_s.to_f if  dx != 0
         lt_r = lt_hr.to_s.to_f / lt.to_s.to_f if lt != 0
+        #puts "-"*100 + dx_r.to_s
+        #puts "-"*100 + lt_r.to_s
         WebHitRateStatis.create(time_begin: time_begin, url: dx_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
       end
 
@@ -102,18 +101,17 @@ module CsvDb
         lt_tmp.each do |ltmp|
           if ltmp.source_node_name[-4..-3] == '电信'
             dx += 1
+            dx_hr += 1 if ltmp.dest_locale.to_s.strip == '电信'
           elsif ltmp.source_node_name[-4..-3] == '联通'
             lt += 1
+            lt_hr += 1 if ltmp.dest_locale.to_s.strip == '联通'
           end
 
-          if ltmp.dest_locale == '电信'
-            dx_hr += 1
-          elsif ltmp.dest_locale == '联通'
-            lt_hr += 1
-          end
         end
         dx_r = dx_hr.to_s.to_f / dx.to_s.to_f if dx != 0
         lt_r = lt_hr.to_s.to_f / lt.to_s.to_f if lt != 0
+        #puts "-"*100 + dx_r.to_s
+        #puts "-"*100 + lt_r.to_s
         WebHitRateStatis.create(time_begin: time_begin, url: lt_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
       end
     end

@@ -29,8 +29,8 @@ namespace :database do
 
     #通过数据进行分析
     a_data     = CsvDb::CsvProcedure.new
-    a_data.analyse_data_to_db(time_begin, time_end)
-    a_data.statis_data_to_db(time_begin,time_end)
+    #a_data.analyse_data_to_db(time_begin, time_end)
+    #a_data.statis_data_to_db(time_begin,time_end)
     a_data.statis_web_hit_rate(time_begin,time_end)
   end
 

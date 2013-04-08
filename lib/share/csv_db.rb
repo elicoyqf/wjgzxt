@@ -83,7 +83,7 @@ module CsvDb
           end
 
           if dt.dest_locale == '电信'
-            dx_hr += 1
+            dx_hr += 1 
           elsif dt.dest_locale == '联通'
             lt_hr  += 1
           end

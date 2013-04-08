@@ -88,8 +88,8 @@ module CsvDb
             lt_hr += 1
           end
         end
-        dx_r = dx_hr.to_s.to_f / dx.to_s.to_f
-        lt_r = lt_hr.to_s.to_f / lt.to_s.to_f
+        dx_r = dx_hr.to_s.to_f / dx.to_s.to_f if  dx != 0
+        lt_r = lt_hr.to_s.to_f / lt.to_s.to_f if lt != 0
         WebHitRateStatis.create(time_begin: time_begin, url: dx_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
       end
 
@@ -112,8 +112,8 @@ module CsvDb
             lt_hr += 1
           end
         end
-        dx_r = dx_hr.to_s.to_f / dx.to_s.to_f
-        lt_r = lt_hr.to_s.to_f / lt.to_s.to_f
+        dx_r = dx_hr.to_s.to_f / dx.to_s.to_f if dx != 0
+        lt_r = lt_hr.to_s.to_f / lt.to_s.to_f if lt != 0
         WebHitRateStatis.create(time_begin: time_begin, url: lt_line.dest_url, dx_hit_rate: dx_r, lt_hit_rate: lt_r)
       end
     end

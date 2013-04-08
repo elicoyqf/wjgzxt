@@ -74,6 +74,8 @@ module CsvDb
         lt     = 0
         dx_hr  = 0
         lt_hr  = 0
+        dx_r = 0
+        lt_r = 0
         dx_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, dx_line.dest_url)
         dx_tmp.each do |dt|
           if dt.source_node_name[-4..-3] == '电信'
@@ -97,6 +99,8 @@ module CsvDb
         lt     = 0
         dx_hr  = 0
         lt_hr  = 0
+        dx_r = 0
+        lt_r = 0
         lt_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, lt_line.dest_url)
         lt_tmp.each do |ltmp|
           if ltmp.source_node_name[-4..-3] == '电信'

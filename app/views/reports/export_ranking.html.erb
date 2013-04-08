@@ -32,8 +32,9 @@
               <th style="text-align:center;">出口名称</th>
               <th style="text-align:center;">负值</th>
               <th style="text-align:center;">总分</th>
-              <th style="text-align:center;">负分的网站次数</th>
-              <th style="text-align:center;">有效比对的网站数</th>
+              <th style="text-align:center;">负分网站数</th>
+              <th style="text-align:center;">有效网站数</th>
+              <th style="text-align:center;">网站比对率</th>
             </tr>
             </thead>
             <tbody>
@@ -56,50 +57,53 @@
                 </td>
                 <td style="text-align:center;"><span class="label label-info"><%= line[3] %></span></td>
                 <td style="text-align:center;"><span class="label label-info"><%= line[4] %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision line[5], :precision => 2 %></span></td>
               </tr>
             <% end %>
             </tbody>
           </table>
         </div>
         <div class="span6">
-                  <h4 class="title">联通出口得分排名表如下示：</h4>
+          <h4 class="title">联通出口得分排名表如下示：</h4>
 
-                  <div class="squiggly-border"></div>
-                  <table class="table table-striped table-bordered table-radmin">
-                    <thead>
-                    <tr>
-                      <th style="text-align:center;">出口名称</th>
-                      <th style="text-align:center;">负值</th>
-                      <th style="text-align:center;">总分</th>
-                      <th style="text-align:center;">负分的网站次数</th>
-                      <th style="text-align:center;">有效比对的网站数</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% @lt_array.each_with_index do |line, i| %>
-                      <tr>
-                        <td style="text-align:center;"><%= line[0] %></td>
-                        <td style="text-align:center;">
-                          <% if line[1].to_s.to_f < 0 %>
-                            <span class="label label-important"><%= number_with_precision line[1].to_s.to_f %></span>
-                          <% else %>
-                            <span class="label label-info"><%= number_with_precision line[1].to_s.to_f %></span>
-                          <% end %>
-                        </td>
-                        <td style="text-align:center;">
-                          <% if line[2].to_s.to_f < 0 %>
-                            <span class="label label-important"><%= number_with_precision line[2].to_s.to_f %></span>
-                          <% else %>
-                            <span class="label label-info"><%= number_with_precision line[2].to_s.to_f %></span>
-                          <% end %>
-                        </td>
-                        <td style="text-align:center;"><span class="label label-info"><%= line[3] %></span></td>
-                        <td style="text-align:center;"><span class="label label-info"><%= line[4] %></span></td>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-                </div>
+          <div class="squiggly-border"></div>
+          <table class="table table-striped table-bordered table-radmin">
+            <thead>
+            <tr>
+              <th style="text-align:center;">出口名称</th>
+              <th style="text-align:center;">负值</th>
+              <th style="text-align:center;">总分</th>
+              <th style="text-align:center;">负分网站数</th>
+              <th style="text-align:center;">有效网站数</th>
+              <th style="text-align:center;">网站比对率</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @lt_array.each_with_index do |line, i| %>
+              <tr>
+                <td style="text-align:center;"><%= line[0] %></td>
+                <td style="text-align:center;">
+                  <% if line[1].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision line[1].to_s.to_f %></span>
+                  <% else %>
+                    <span class="label label-info"><%= number_with_precision line[1].to_s.to_f %></span>
+                  <% end %>
+                </td>
+                <td style="text-align:center;">
+                  <% if line[2].to_s.to_f < 0 %>
+                    <span class="label label-important"><%= number_with_precision line[2].to_s.to_f %></span>
+                  <% else %>
+                    <span class="label label-info"><%= number_with_precision line[2].to_s.to_f %></span>
+                  <% end %>
+                </td>
+                <td style="text-align:center;"><span class="label label-info"><%= line[3] %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= line[4] %></span></td>
+                <td style="text-align:center;"><span class="label label-info"><%= number_with_precision line[5], :precision => 2 %></span></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

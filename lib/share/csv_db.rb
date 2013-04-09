@@ -28,6 +28,7 @@ module CsvDb
 
                 #更新归属地数据和测试网站相关信息
                 #直接将数据插入数据库即可，model进行限制去重。
+                TestDestNode.delete_all
                 TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip, locale: row[24].to_s.strip)
 
                 i += 1

@@ -11,7 +11,7 @@
         <p>
           本排名表根据出口对各个测试网站的评分进行统计，主要统计负分、总分两项指标。<br/>
           计算方法是：出口得分 / 有效匹配网站数，从而得出平均值。因为每个出口所匹配的有效数不一致，只能取其平均值。<br/>
-          目前本系统中含电信方向出口共 ><%= @dx %>个,联通方向出口共 <%= @lt %> 个，其它方向出口共 <%= @oe %> 个暂未纳入评分。如对结果有异议，可申请核对。
+          目前本系统中含电信方向出口共 <%= @dx %> 个,联通方向出口共 <%= @lt %> 个，其它方向出口共 <%= @oe %> 个暂未纳入评分。如对结果有异议，可申请核对。
         </p>
         本月统计数据如下示：
         总分是正分的有 <%= @total_pos %> 个，总分是负分的有 <%= @total_neg %>个,总分为0分的有 <%= @total_eql %> 个。
@@ -34,7 +34,7 @@
               <th style="text-align:center;">总分</th>
               <th style="text-align:center;">负分网站数</th>
               <th style="text-align:center;">有效网站数</th>
-              <th style="text-align:center;">网站比对率</th>
+              <th style="text-align:center;">正分网站率</th>
             </tr>
             </thead>
             <tbody>
@@ -75,7 +75,7 @@
               <th style="text-align:center;">总分</th>
               <th style="text-align:center;">负分网站数</th>
               <th style="text-align:center;">有效网站数</th>
-              <th style="text-align:center;">网站比对率</th>
+              <th style="text-align:center;">正分网站率</th>
             </tr>
             </thead>
             <tbody>

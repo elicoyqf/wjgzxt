@@ -17,6 +17,7 @@ module CsvDb
           when /HTTP/
             if File.exist? fname
               i = 1
+              TestDestNode.delete_all
               CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
                 HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
                                     dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
@@ -28,7 +29,6 @@ module CsvDb
 
                 #更新归属地数据和测试网站相关信息
                 #直接将数据插入数据库即可，model进行限制去重。
-                TestDestNode.delete_all
                 TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip, locale: row[24].to_s.strip)
 
                 i += 1
@@ -75,8 +75,8 @@ module CsvDb
         lt     = 0
         dx_hr  = 0
         lt_hr  = 0
-        dx_r = 0
-        lt_r = 0
+        dx_r   = 0
+        lt_r   = 0
         dx_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, dx_line.dest_url)
         dx_tmp.each do |dt|
           if dt.source_node_name[-4..-3] == '电信'
@@ -100,8 +100,8 @@ module CsvDb
         lt     = 0
         dx_hr  = 0
         lt_hr  = 0
-        dx_r = 0
-        lt_r = 0
+        dx_r   = 0
+        lt_r   = 0
         lt_tmp = HttpTestData.where('test_time >= ? and test_time < ? and dest_url = ? ', time_begin, time_end, lt_line.dest_url)
         lt_tmp.each do |ltmp|
           if ltmp.source_node_name[-4..-3] == '电信'

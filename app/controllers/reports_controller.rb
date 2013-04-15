@@ -6,6 +6,13 @@ class ReportsController < ApplicationController
 
   end
 
+  def export_rep
+    @ms = []
+    (1..12).each do |n|
+      @ms << [n, n.to_s+'月']
+    end
+  end
+
   def select_date_report
     @ds = []
     (0..23).each do |n|
@@ -35,6 +42,7 @@ class ReportsController < ApplicationController
 
   end
 
+=begin
   def export_ranking
     #查询当月的月表数据
     hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
@@ -103,9 +111,31 @@ class ReportsController < ApplicationController
     @dx_array.sort_by! { |x| x[1] }
     @lt_array.sort_by! { |x| x[1] }
   end
+=end
 
   def website_select
-    @tdn = TestDestNode.all
+    @tdn    = TestDestNode.all
+    #查询当月的月表数据
+    hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
+    hdata   = HttpTestScore.where('test_time >= ? and test_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
+    #hts    = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_week, Time.now.at_beginning_of_week + 1.week)
+    @e_name = Set.new
+    hts.each do |line|
+      @e_name << line.export_name
+    end
+    #将对比标杆出口去掉
+    @e_name.delete(BACKBONE)
+    @out_data = []
+    @e_name.each do |fuck|
+      tmp_arr = []
+      tmp_arr << fuck
+      nega_scores = hdata.where('source_node_name = ?', fuck).group('dest_url').sum(:negative_items_scores)
+      puts nega_scores.inspect
+      sns = nega_scores.to_a.sort_by!{|a,b|  b}[0..4]
+      tmp_arr << sns
+      @out_data << tmp_arr
+    end
+    @out_data
 
   end
 
@@ -151,10 +181,38 @@ negative_items_scores equal_items_scores total_scores)
   end
 
   def day_report
+    #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
+    s_day       = params[:s_day]
+    @time_begin = Time.parse(s_day).at_beginning_of_day
+    @time_end   = @time_begin + 1.day
 
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    render :template => 'reports/export_ranking'
   end
 
   def week_report
+    #开始时间是从选择时间的0点开始，结束时间是从选择的时间+1天的开始。
+    #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
+    @time_begin = Time.parse(params[:day_begin]).at_beginning_of_day
+    @time_end   = Time.parse(params[:day_end]).at_beginning_of_day + 1.day
 
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    render :template => 'reports/export_ranking'
+  end
+
+  def month_report
+    #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
+    ms          = params[:ms]
+    tmp_str     = Time.now.year.to_s
+    new_str     = tmp_str + '-' + ms + '-01'
+    @time_begin = Time.parse(new_str).at_beginning_of_month
+    @time_end   = @time_begin + 1.month
+
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    render :template => 'reports/export_ranking'
+  end
+
+  def export_ranking
+    #提取原来的方法成为了辅助方法，现在只做为纯模板映射。
   end
 end

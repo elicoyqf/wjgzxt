@@ -1,0 +1,124 @@
+<%= provide(:body_id, 'index') %>
+<%= provide(:result, '出口得分排名') %>
+
+<div class="container-fluid content-wrapper">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="hero-unit">
+        <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
+        <h1>出口得分排名报表查看</h1>
+
+        <p>
+          本系统报表可以按次、日、周进行报表查看，可以指定日期进行下载相关报表，报表评估数据根据相关评分标准生成。
+          如修改了相应的评分标准，不影响已生成的报表数据，只对往后的报表数据有影响，如对结果有异议，可申请核对。
+        </p>
+        <br/>
+
+        <p class="hidden-phone">
+          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <ul class="breadcrumb">
+        <li>
+          <a href="/">
+            <i class="radmin-icon radmin-home"></i>
+            首页
+          </a>
+          <span class="divider">/</span>
+        </li>
+        <li>
+          <a href="/reports">
+            <i class="radmin-icon radmin-file"></i>
+            报表查看
+          </a>
+          <span class="divider">/</span>
+        </li>
+        <li class="active">
+          <i class="radmin-icon radmin-file"></i>
+          选择日周月报表
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <%= form_tag('day_report', :method => 'post', class: 'well form-horizontal') do %>
+      <div class="control-group span6">
+        <label class="control-label" for="export_dp1"></label>
+
+        <div class="controls">
+          <div class="input-prepend input-append">
+            <span class="add-on">选择日期</span>
+            <input id="export_dp1" class="span7" type="text" size="16" name="s_day">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <%= submit_tag('日 报 表 查 询', class: 'btn btn-info span2') %>
+    <% end %>
+  </div>
+
+  <div class="row-fluid">
+    <%= form_tag('week_report', :method => 'post', class: 'well form-horizontal') do %>
+      <div class="control-group span6 ">
+        <label class="control-label" for="export_dp2"></label>
+
+        <div class="controls">
+          <div class="input-prepend input-append">
+            <span class="add-on">开始日期</span>
+            <input id="export_dp2" class="span7" type="text" size="16" name="day_begin">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="control-group span6">
+        <label class="control-label" for="export_dp3"></label>
+
+        <div class="controls">
+          <div class="input-prepend input-append">
+            <span class="add-on">结束日期</span>
+            <input id="export_dp3" class="span7" type="text" size="16" name="day_end">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="row-fluid">
+        <%= submit_tag('周 报 表 查 询', class: 'btn btn-info span2') %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row-fluid">
+    <%= form_tag('month_report', :method => 'post', class: 'well form-horizontal') do %>
+      <span class="span4 offset2 pull-left">
+        选择月份
+        <%= select_tag :ms, options_from_collection_for_select(@ms, :first, :last), class: 'span8' -%>
+      </span>
+      <%= submit_tag('月 报 表 查 询', class: 'btn btn-info span2') %>
+    <% end %>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h4 class="title">名言警句</h4>
+
+      <div class="squiggly-border"></div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <blockquote>
+        <p>
+          Etiam varius erat in nisl egestas id auctor lacus consectetur.
+          Ut dui risus, auctor a malesuada volutpat, tempus sit amet arcu.
+        </p>
+        <small class="pull-right">Jane Doe via Mobile</small>
+      </blockquote>
+    </div>
+  </div>
+</div>

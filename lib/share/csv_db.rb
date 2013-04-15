@@ -256,11 +256,7 @@ module CsvDb
 
           hts[:total_scores] = hts[:positive_items_scores] + hts[:negative_items_scores]
           hts_record         = HttpTestScore.new(hts)
-          if hts_record.save
-            puts '-'*50+'save success.'
-          else
-            puts '-'*20+'save failure.'
-          end
+          hts_record.save
         end
       end
     end

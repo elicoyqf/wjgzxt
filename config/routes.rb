@@ -28,6 +28,13 @@ Wjgzxt::Application.routes.draw do
 
   get 'param_setting/video'
 
+  resources :reports, only: [] do
+    collection do
+      get 'export_rep'
+      post 'day_report','week_report','month_report'
+    end
+  end
+
   get 'reports/time_report'
 
   get 'reports/select_date_report'
@@ -49,6 +56,8 @@ Wjgzxt::Application.routes.draw do
   get 'welcome/index'
 
   match 'reports/' => 'reports#index'
+
+  #match 'reports/export_ranking/:id' => 'reports#export_ranking'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

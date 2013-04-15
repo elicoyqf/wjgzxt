@@ -116,8 +116,8 @@ class ReportsController < ApplicationController
   def website_select
     @tdn    = TestDestNode.all
     #查询当月的月表数据
-    hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
-    hdata   = HttpTestScore.where('test_time >= ? and test_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
+    hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_week, Time.now.at_beginning_of_week + 1.week)
+    hdata   = HttpTestScore.where('test_time >= ? and test_time < ?', Time.now.at_beginning_of_week, Time.now.at_beginning_of_week + 1.week)
     #hts    = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_week, Time.now.at_beginning_of_week + 1.week)
     @e_name = Set.new
     hts.each do |line|

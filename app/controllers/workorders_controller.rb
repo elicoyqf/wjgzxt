@@ -48,7 +48,7 @@ class WorkordersController < ApplicationController
         rl       = ReportLog.where('r_date = ? and user_id = ? ', c_b_date, user.id)
         puts '-'*50
         puts rl.inspect
-        tmp_arr  = []
+        tmp_arr = []
         tmp_arr << c_b_date << '所有关联出口日报表'
         tmp_arr << rl[0].view_date unless rl.blank?
         all_in_one << tmp_arr
@@ -74,11 +74,11 @@ class WorkordersController < ApplicationController
   def day_wo
     #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user   = User.first
-    e_name = user.export_names
+    user      = User.first
+    e_name    = user.export_names
     @dls_name = user.alias
 
-    r_date   = Time.parse params[:date]
+    r_date = Time.parse params[:date]
 
     @out_arr = []
     @out_arr = statis_d_data(e_name, r_date)
@@ -89,6 +89,7 @@ class WorkordersController < ApplicationController
     render :template => 'workorders/out_template'
   end
 
+=begin
   def day_wo1
     #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
@@ -125,19 +126,32 @@ class WorkordersController < ApplicationController
     unless t_day == 1
       c_day = t_day -1
       while c_day >= 1
-        @out_arr += statis_d_data(e_name, c_day, t_month, t_year)
+        @out_arr += statis_d_data1(e_name, c_day, t_month, t_year)
         c_day    -= 1
       end
     end
 
     #列出前一个月的数据统计
     while p_max_day >= 1
-      @out_arr  += statis_d_data(e_name, p_max_day, p_month, p_year)
+      @out_arr  += statis_d_data1(e_name, p_max_day, p_month, p_year)
       p_max_day -= 1
     end
     render :template => 'workorders/out_template'
   end
+=end
 
+
+  def export_detail
+    #现在是统计一天的数据
+    q_date    = params[:date]
+    @q_export = params[:ename]
+    b_time    = Time.parse(q_date)
+    e_time    = b_time + 1.day
+    #只查询出来那些测试为负的数据。
+    @q_data   = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ? and negative_items_scores < ?', @q_export, b_time, e_time, 0).order('negative_items_scores')
+
+
+  end
 
   def week_wo
 

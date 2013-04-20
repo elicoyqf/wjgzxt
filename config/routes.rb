@@ -3,7 +3,7 @@ Wjgzxt::Application.routes.draw do
 
   resources :workorders, only: [] do
     collection do
-      get 'index', 'day_wo', 'week_wo', 'month_wo','wo_table'
+      get 'index', 'day_wo', 'week_wo', 'month_wo','wo_table','export_detail'
     end
   end
 

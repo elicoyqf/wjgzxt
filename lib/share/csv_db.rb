@@ -18,6 +18,7 @@ module CsvDb
             if File.exist? fname
               i = 1
               TestDestNode.delete_all
+              e_name = Set.new
               CSV.foreach(fname, encoding: 'GB2312:UTF-8', headers: true) do |row|
                 HttpTestData.create(test_time:       row[0], source_node_name: row[1], source_ip_address: row[2], source_group: row[3], dest_node_name: row[4],
                                     dest_url:        row[5], dest_group: row[6], resolution_time: row[7], connection_time: row[8], time_to_first_byte: row[9],
@@ -30,8 +31,13 @@ module CsvDb
                 #更新归属地数据和测试网站相关信息
                 #直接将数据插入数据库即可，model进行限制去重。
                 TestDestNode.create(dest_node_name: row[4].to_s.strip, dest_url: row[5].to_s.strip, locale: row[24].to_s.strip)
-
+                #添加出口名称
+                e_name << row[1].to_s.strip
                 i += 1
+              end
+              #将出口名称添加到数据库中
+              e_name.each do |en|
+                ExportName.create(name: en, status: 0)
               end
               puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
             end

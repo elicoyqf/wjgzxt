@@ -1,4 +1,12 @@
 Wjgzxt::Application.routes.draw do
+  match 'workorders' => 'workorders#index'
+
+  resources :workorders, only: [] do
+    collection do
+      get 'index', 'day_wo', 'week_wo', 'month_wo','wo_table'
+    end
+  end
+
   #get 'web_hit_rate/time_r'
   #get 'web_hit_rate/select_day_report'
   #get 'web_hit_rate/select_month_report'
@@ -13,8 +21,8 @@ Wjgzxt::Application.routes.draw do
 
   resources :web_hit_rate, only: [] do
     collection do
-      get 'time_r','select_day_report','select_month_report','index','day_r','month_r','list_day','list_time','list_locale'
-      post 'day_r','month_r'
+      get 'time_r', 'select_day_report', 'select_month_report', 'index', 'day_r', 'month_r', 'list_day', 'list_time', 'list_locale'
+      post 'day_r', 'month_r'
     end
   end
 
@@ -31,7 +39,7 @@ Wjgzxt::Application.routes.draw do
   resources :reports, only: [] do
     collection do
       get 'export_rep'
-      post 'day_report','week_report','month_report'
+      post 'day_report', 'week_report', 'month_report'
     end
   end
 

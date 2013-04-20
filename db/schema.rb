@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317031306) do
+ActiveRecord::Schema.define(:version => 20130420085758) do
+
+  create_table "export_names", :force => true do |t|
+    t.string   "name"
+    t.integer  "status"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "user_id"
+  end
 
   create_table "http_test_data", :force => true do |t|
     t.datetime "test_time"
@@ -187,12 +195,29 @@ ActiveRecord::Schema.define(:version => 20130317031306) do
     t.datetime "updated_at",            :null => false
   end
 
+  create_table "report_logs", :force => true do |t|
+    t.string   "r_type"
+    t.datetime "r_date"
+    t.integer  "user_id"
+    t.datetime "view_date"
+  end
+
   create_table "test_dest_nodes", :force => true do |t|
     t.string   "dest_node_name"
     t.string   "dest_url"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.string   "locale"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "uname"
+    t.integer  "status"
+    t.integer  "level"
+    t.string   "password"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.string   "alias"
   end
 
   create_table "video_test_data", :force => true do |t|

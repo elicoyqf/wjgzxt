@@ -3,6 +3,6 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $ ->
-  myChart = new FusionCharts('/fusioncharts/scatter.swf', 'myChart2', 4000, 300)
+  myChart = new FusionCharts('/fusioncharts/Scatter.swf', 'myChart2', 4000, 300)
   myChart.setJSONUrl('/graphs/data_json.json')
   myChart.render('myFirstJson')

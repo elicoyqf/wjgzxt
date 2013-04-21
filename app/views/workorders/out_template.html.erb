@@ -83,10 +83,10 @@
                   <% end %>
                 </td>
                 <td style="text-align:center;">
-                  <%= line[3].strftime('%Y年-%m月%d日') %>
+                  <%= line[3].strftime('%Y年-%m月%d日') %> - <%= line[4].strftime('%Y年-%m月%d日') %>
                 </td>
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-info" href="<%= export_detail_workorders_path(date: line[3],ename: line[0]) %>">
+                  <a class="btn btn-small btn-info" href="<%= export_detail_workorders_path(bdate: line[3],edate:line[4],ename: line[0]) %>">
                     <i class="icon-edit icon-white"></i>
                     查看详细信息
                   </a>

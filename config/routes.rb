@@ -1,9 +1,15 @@
 Wjgzxt::Application.routes.draw do
   match 'workorders' => 'workorders#index'
-
   resources :workorders, only: [] do
     collection do
-      get 'index', 'day_wo', 'week_wo', 'month_wo','wo_table','export_detail'
+      get 'index', 'day_wo', 'week_wo', 'month_wo', 'wo_table', 'export_detail', 'week_table', 'month_table'
+    end
+  end
+
+  match 'graphs' => 'graphs#index'
+  resources :graphs, only: [] do
+    collection do
+      get 'index','data_json'
     end
   end
 

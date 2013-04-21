@@ -45,10 +45,8 @@ class WorkordersController < ApplicationController
       while c_day >= 1
         c_str    = t_year.to_s + '-' + t_month.to_s + '-' + c_day.to_s
         c_b_date = Time.parse(c_str)
-        rl       = ReportLog.where('r_date = ? and user_id = ? ', c_b_date, user.id)
-        puts '-'*50
-        puts rl.inspect
-        tmp_arr = []
+        rl       = ReportLog.where('r_date = ? and user_id = ? and r_type = "day"', c_b_date, user.id)
+        tmp_arr  = []
         tmp_arr << c_b_date << '所有关联出口日报表'
         tmp_arr << rl[0].view_date unless rl.blank?
         all_in_one << tmp_arr
@@ -60,7 +58,7 @@ class WorkordersController < ApplicationController
     while p_max_day >= 1
       p_str    = p_year.to_s + '-' + p_month.to_s + '-' + p_max_day.to_s
       p_b_date = Time.parse(p_str)
-      rl       = ReportLog.where('r_date = ? and user_id = ? ', p_b_date, user.id)
+      rl       = ReportLog.where('r_date = ? and user_id = ? and r_type = "day"', p_b_date, user.id)
       tmp_arr  = []
       tmp_arr << p_b_date << '所有关联出口日报表'
       tmp_arr << rl[0].view_date unless rl.blank?
@@ -81,11 +79,9 @@ class WorkordersController < ApplicationController
     r_date = Time.parse params[:date]
 
     @out_arr = []
-    @out_arr = statis_d_data(e_name, r_date)
+    @out_arr = statis_d_data(e_name, r_date, 1)
 
     ReportLog.create(r_type: 'day', r_date: r_date, user_id: user.id, view_date: Time.now)
-
-
     render :template => 'workorders/out_template'
   end
 
@@ -143,22 +139,128 @@ class WorkordersController < ApplicationController
 
   def export_detail
     #现在是统计一天的数据
-    q_date    = params[:date]
     @q_export = params[:ename]
-    b_time    = Time.parse(q_date)
-    e_time    = b_time + 1.day
+    b_time    = Time.parse(params[:bdate])
+    e_time    = Time.parse(params[:edate])
     #只查询出来那些测试为负的数据。
     @q_data   = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ? and negative_items_scores < ?', @q_export, b_time, e_time, 0).order('negative_items_scores')
+  end
 
+  def week_table
+    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
+    #通过用户获得其所管辖的出口
+    user      = User.first
+    e_name    = user.export_names
+    @dls_name = user.alias
 
+    #工单显示的是最近8个星期的统计数据,从周一到周末，如果为周一，则加多一个星期
+    t_year    = Time.now.year
+    t_day     = Time.now.at_beginning_of_day
+    t_wb_day  = Time.now.at_beginning_of_week
+    t_we_day  = Time.now.at_end_of_week
+    t_month   = Time.now.month
+
+    @out_arr = []
+    if t_day == t_wb_day
+      #为周1则需要加多一个星期
+      (1..8).each do |num|
+        tmp_arr = []
+        t_wb    = t_wb_day - num.week
+        t_we    = t_we_day - num.week
+        rl      = ReportLog.where('r_date = ? and user_id = ? and r_type = "week"', t_wb, user.id)
+
+        tmp_arr << t_wb << t_we << '所有关联出口周报表'
+        tmp_arr << rl[0].view_date unless rl.blank?
+        @out_arr << tmp_arr
+      end
+    else
+      #不是周1的情况则按正常排序即可
+      (0..7).each do |num|
+        tmp_arr = []
+        t_wb    = t_wb_day - num.week
+        if num == 0
+          t_we = t_day
+        else
+          t_we = t_we_day - num.week
+        end
+        rl = ReportLog.where('r_date = ? and user_id = ? and r_type = "week"', t_wb, user.id)
+
+        tmp_arr << t_wb << t_we << '所有关联出口周报表'
+        tmp_arr << rl[0].view_date unless rl.blank?
+        @out_arr << tmp_arr
+      end
+    end
   end
 
   def week_wo
+    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
+    #通过用户获得其所管辖的出口
+    user      = User.first
+    e_name    = user.export_names
+    @dls_name = user.alias
+    r_date    = Time.parse params[:date]
+    @out_arr  = statis_d_data(e_name, r_date, 2)
 
+    ReportLog.create(r_type: 'week', r_date: r_date, user_id: user.id, view_date: Time.now)
+    render :template => 'workorders/out_template'
+  end
+
+  def month_table
+    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
+    #通过用户获得其所管辖的出口
+    user      = User.first
+    e_name    = user.export_names
+    @dls_name = user.alias
+
+    #工单显示的是最近8个星期的统计数据,从周一到周末，如果为周一，则加多一个星期
+    t_year    = Time.now.year
+    t_day     = Time.now.at_beginning_of_day
+    t_wb_day  = Time.now.at_beginning_of_month
+    t_we_day  = Time.now.at_end_of_month
+    t_month   = Time.now.month
+
+    @out_arr = []
+    #判断一下是不是当月的第一天，如果是则往往推两个月。
+    if t_day.day == 1
+      (1..2).each do |num|
+        tmp_arr = []
+        t_wb    = t_wb_day - num.month
+        t_we    = t_wb.at_end_of_month
+        rl      = ReportLog.where('r_date = ? and user_id = ? and r_type = "month"', t_wb, user.id)
+
+        tmp_arr << t_wb << t_we << '所有关联出口月报表'
+        tmp_arr << rl[0].view_date unless rl.blank?
+        @out_arr << tmp_arr
+      end
+    else
+      (0..1).each do |num|
+        tmp_arr = []
+        t_wb    = t_wb_day - num.month
+        if num == 0
+          t_we = t_day
+        else
+          t_we = t_wb.at_end_of_month
+        end
+        rl   = ReportLog.where('r_date = ? and user_id = ? and r_type = "month"', t_wb, user.id)
+
+        tmp_arr << t_wb << t_we << '所有关联出口月报表'
+        tmp_arr << rl[0].view_date unless rl.blank?
+        @out_arr << tmp_arr
+      end
+    end
   end
 
   def month_wo
+    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
+    #通过用户获得其所管辖的出口
+    user      = User.first
+    e_name    = user.export_names
+    @dls_name = user.alias
+    r_date    = Time.parse params[:date]
+    @out_arr  = statis_d_data(e_name, r_date, 3)
 
+    ReportLog.create(r_type: 'week', r_date: r_date, user_id: user.id, view_date: Time.now)
+    render :template => 'workorders/out_template'
   end
 
   def out_template

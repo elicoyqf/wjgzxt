@@ -85,14 +85,14 @@ module FusionChartsHelper
     
     fcParams =Fusioncharts::FcParameters.new(chart_swf,chart_id,chart_width,chart_height,debug_mode_num,register_with_js_num,data_source,data_format,w_mode,color,scale_mode,lang,detect_flash_version,auto_install_redirect,renderer,render_at)
     fcParamsInJson = fcParams.to_json
-    concat("\t\t\t\tvar chart_"+chart_id+"=new fusioncharts("+fcParamsInJson+").render();\n")
+    concat("\t\t\t\tvar chart_"+chart_id+"=new FusionCharts("+fcParamsInJson+").render();\n")
     
     
     
     # Instantiating the chart renderer
-   # concat("\t\t\t\t//Instantiate the Chart	\n\t\t\t\tif( fusioncharts.setCurrentRenderer ) fusioncharts.setCurrentRenderer(\""+renderer+"\");\n")
+   # concat("\t\t\t\t//Instantiate the Chart	\n\t\t\t\tif( FusionCharts.setCurrentRenderer ) FusionCharts.setCurrentRenderer(\""+renderer+"\");\n")
 
-  #  concat("\t\t\t\tvar chart_"+chart_id+"=new fusioncharts('"+chart_swf+"','"+chart_id+"','"+chart_width+"','"+chart_height+"',"+debug_mode_num+","+register_with_js_num+", '"+color+"', '"+scale_mode+"', '"+lang+"', '"+detect_flash_version+"', '"+auto_install_redirect+"');\n")
+  #  concat("\t\t\t\tvar chart_"+chart_id+"=new FusionCharts('"+chart_swf+"','"+chart_id+"','"+chart_width+"','"+chart_height+"',"+debug_mode_num+","+register_with_js_num+", '"+color+"', '"+scale_mode+"', '"+lang+"', '"+detect_flash_version+"', '"+auto_install_redirect+"');\n")
     
 #    if str_data.empty?
 #      concat("\t\t\t\t<!-- Set the dataURL of the chart -->\n")
@@ -252,7 +252,7 @@ module FusionChartsHelper
   # New feature since v3.2
   def enable_FC_print_manager_js
     
-    concat("<script type='text/javascript'><!--\n fusioncharts.printManager.enabled(true);\n// -->\n</script>")
+    concat("<script type='text/javascript'><!--\n FusionCharts.printManager.enabled(true);\n// -->\n</script>")
     
   end
   

@@ -58,7 +58,7 @@ module Fusioncharts::Exporter::Generator
       pdf_bytes+=str_tmp_obj
       
       #OBJECT 1 : info (optional)
-      str_tmp_obj="1 0 obj<<\n/Author (fusioncharts)\n/Title (fusioncharts)\n/Creator (fusioncharts)\n>>\nendobj\n"
+      str_tmp_obj="1 0 obj<<\n/Author (FusionCharts)\n/Title (FusionCharts)\n/Creator (FusionCharts)\n>>\nendobj\n"
       xref_list[xref_index]=calculate_xpos(pdf_bytes.length) #refenrece to obj 1
       xref_index+=xref_index
       pdf_bytes+=str_tmp_obj

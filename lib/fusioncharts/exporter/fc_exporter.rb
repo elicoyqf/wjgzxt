@@ -1,7 +1,7 @@
-# fusioncharts Export Handler. Checks whether parameters are in order before delegating the export process to the apppropriate Export Handler resource.
+# FusionCharts Export Handler. Checks whether parameters are in order before delegating the export process to the apppropriate Export Handler resource.
 class Fusioncharts::Exporter::FcExporter 
   # Hash containing the Default values for the parameters.
-  @@default_parameter_values = {"exportfilename"=>"fusioncharts", "exportaction"=>"download", "exporttargetwindow"=>"_self", "exportformat"=>"PDF"}
+  @@default_parameter_values = {"exportfilename"=>"FusionCharts", "exportaction"=>"download", "exporttargetwindow"=>"_self", "exportformat"=>"PDF"}
   # Hash containing the mime types.
   @@mime_list = {"jpg"=>"image/jpeg", "jpeg"=>"image/jpeg", "png"=>"image/png", "pdf"=>"application/pdf"}
   # Hash containing the supported extensions.

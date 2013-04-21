@@ -3,7 +3,7 @@
   Copyright (c) 2009 Infosoft Global Private Limited
  
 =end
-# Contains properties required by the fusioncharts Export Controllers and libraries
+# Contains properties required by the FusionCharts Export Controllers and libraries
 class Fusioncharts::Exporter::Properties
     #IMPORTANT: You need to change the location of folder where 
     #     the exported chart images/PDFs will be saved on your 

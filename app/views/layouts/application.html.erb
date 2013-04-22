@@ -21,6 +21,13 @@
 
 <div class="container" style="width: 1200px">
   <div class="container-fluid main-container">
+    <div class="row span12 offset1">
+      <% flash.each do |key, value| %>
+        <div class="row">
+          <%= content_tag(:div, value, class: "alert alert-#{key}") %>
+        </div>
+      <% end %>
+    </div>
     <div class="row-fluid">
       <div class="span12">
 

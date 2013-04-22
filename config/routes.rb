@@ -34,13 +34,12 @@ Wjgzxt::Application.routes.draw do
 
   match 'whr/' => 'web_hit_rate#index'
 
-  get 'param_setting/http'
-
-  get 'param_setting/ping'
-
-  get 'param_setting/route'
-
-  get 'param_setting/video'
+  resources :param_setting, only: [] do
+      collection do
+        get 'http','ping','route','video','adduser','mng_user','interaction','view_interaction','del_interaction','p_adduser'
+        post 'p_interaction','p_adduser'
+      end
+    end
 
   resources :reports, only: [] do
     collection do

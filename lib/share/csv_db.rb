@@ -37,7 +37,7 @@ module CsvDb
               end
               #将出口名称添加到数据库中
               e_name.each do |en|
-                ExportName.create(name: en, status: 0)
+                ExportName.create(name: en, status: 0, user_id: 0)
               end
               puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
             end

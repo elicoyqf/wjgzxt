@@ -80,7 +80,9 @@ class WorkordersController < ApplicationController
 
     @out_arr = []
     @out_arr = statis_d_data(e_name, r_date, 1)
-
+    puts '-'*100
+    puts r_date
+    puts '-'*100
     ReportLog.create(r_type: 'day', r_date: r_date, user_id: user.id, view_date: Time.now)
     render :template => 'workorders/out_template'
   end
@@ -241,7 +243,7 @@ class WorkordersController < ApplicationController
         else
           t_we = t_wb.at_end_of_month
         end
-        rl   = ReportLog.where('r_date = ? and user_id = ? and r_type = "month"', t_wb, user.id)
+        rl = ReportLog.where('r_date = ? and user_id = ? and r_type = "month"', t_wb, user.id)
 
         tmp_arr << t_wb << t_we << '所有关联出口月报表'
         tmp_arr << rl[0].view_date unless rl.blank?
@@ -259,7 +261,7 @@ class WorkordersController < ApplicationController
     r_date    = Time.parse params[:date]
     @out_arr  = statis_d_data(e_name, r_date, 3)
 
-    ReportLog.create(r_type: 'week', r_date: r_date, user_id: user.id, view_date: Time.now)
+    ReportLog.create(r_type: 'month', r_date: r_date, user_id: user.id, view_date: Time.now)
     render :template => 'workorders/out_template'
   end
 

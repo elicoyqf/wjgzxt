@@ -1,0 +1,98 @@
+<%= provide(:body_id, 'param-setting') %>
+<%= provide(:result, '系统说明') %>
+
+<div class="container-fluid content-wrapper">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="hero-unit">
+        <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
+        <h1>查看关联信息</h1>
+
+        <div class="row-fluid hidden-desktop hidden-phone">
+          <div class="span12">
+            <p>
+              可以查看所以已关联的出口的用户信息，也可以进行删除等操作。<br/>
+            </p>
+          </div>
+        </div>
+        <p></p>
+
+
+        <p class="hidden-phone">
+          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <p></p>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="row-fluid hidden-desktop hidden-phone">
+        <div class="span12">
+          <h4 class="title">关联信息</h4>
+
+          <div class="squiggly-border"></div>
+          <table class="table table-striped table-bordered table-radmin">
+            <thead>
+            <tr style="text-align:center;">
+              <th style="text-align:center;">出口名称</th>
+              <th style="text-align:center;">用户名称</th>
+              <th style="text-align:center;">Email</th>
+              <th style="text-align:center;">联系电话</th>
+              <th style="text-align:center;">操作选项</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @en.each do |x| %>
+              <tr>
+                <td style="text-align:center;"><%= x.name %></td>
+                <% if x.user.blank? %>
+                  <td style="text-align:center;"></td>
+                  <td style="text-align:center;"></td>
+                  <td style="text-align:center;"></td>
+                  <td style="text-align:center;"></td>
+
+                <% else %>
+                  <td style="text-align:center;"><%= x.user.alias %></td>
+                  <td style="text-align:center;"><%= x.user.email %></td>
+                  <td style="text-align:center;"><%= x.user.contact %></td>
+                  <td style="text-align:center;">
+                    <a class="btn btn-small btn-danger" href="del_interaction?id=<%= x.id %>">
+                      <i class="icon-trash icon-white"></i>
+                      删除
+                    </a>
+                <% end %>
+
+                </td>
+              </tr>
+            <% end %>
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h4 class="title">名言警句</h4>
+
+      <div class="squiggly-border"></div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span12">
+      <blockquote>
+        <p>
+          当一切似乎毫无希望时，我看着切石工人在他的石头上，敲击了上百次，而不见任何裂痕出现。
+          但在第一百零一次时，石头被劈成两半。我体会到，并非那一击，而是前面的敲打使它裂开。
+        </p>
+        <small class="pull-right">贾柯·瑞斯</small>
+      </blockquote>
+    </div>
+  </div>
+</div>

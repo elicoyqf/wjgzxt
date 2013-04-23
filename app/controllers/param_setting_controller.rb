@@ -5,6 +5,52 @@ class ParamSettingController < ApplicationController
 
   end
 
+  def u_user
+    uid   = params[:id]
+    @user = User.find(uid.to_s.to_i)
+  end
+
+  def p_u_user
+    loginname = params[:loginname]
+    passwd    = params[:passwd]
+    passwd1   = params[:passwd1]
+    level     = params[:level]
+    realname  = params[:realname]
+    email     = params[:email]
+    contact   = params[:contect]
+    uid       = params[:u_id]
+
+    if loginname.blank? || passwd.blank? || passwd1.blank? || level.blank? || realname.blank? || email.blank? || contact.blank?
+      flash[:error] = '所有资料都必须要输入，请检查。'
+      redirect_to action: 'adduser'
+    elsif passwd != passwd1
+      flash[:error] = '两次密码验证失败，请检查。'
+      redirect_to action: 'adduser'
+    else
+      User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
+      flash[:success] = '更新用户成功，如下示。'
+      redirect_to action: 'mng_user'
+    end
+  end
+
+  def s_user
+    uid  = params[:id]
+    user = User.find(uid.to_s.to_i)
+
+    if user.status == 1
+      user.update_attribute('status', 0)
+    else
+      user.update_attribute('status', 1)
+    end
+    redirect_to action: 'mng_user'
+  end
+
+  def d_user
+    uid = params[:id]
+    User.destroy(uid.to_s.to_i)
+    redirect_to action: 'mng_user'
+  end
+
   def p_adduser
     loginname = params[:loginname]
     passwd    = params[:passwd]
@@ -14,8 +60,6 @@ class ParamSettingController < ApplicationController
     email     = params[:email]
     contact   = params[:contect]
 
-    puts
-
     if loginname.blank? || passwd.blank? || passwd1.blank? || level.blank? || realname.blank? || email.blank? || contact.blank?
       flash[:error] = '所有资料都必须要输入，请检查。'
       redirect_to action: 'adduser'
@@ -23,7 +67,7 @@ class ParamSettingController < ApplicationController
       flash[:error] = '两次密码验证失败，请检查。'
       redirect_to action: 'adduser'
     else
-      User.create(uname: loginname,status: 0,level: level, alias: realname,email: email,contact: contact)
+      User.create(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
       flash[:success] = '添加用户成功，如下示。'
       redirect_to action: 'mng_user'
     end

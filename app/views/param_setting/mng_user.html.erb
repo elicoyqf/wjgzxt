@@ -62,24 +62,28 @@
                   <% if u.status== 0 %>
                     正常
                   <% else %>
-                    停用
+                    <span class="label label-warning">停用</span>
                   <% end %>
                 </td>
 
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-info" href="#">
+                  <a class="btn btn-small btn-info" href="u_user?id=<%= u.id %>">
                     <i class="icon-edit icon-white"></i>
                     更新
                   </a>
                 </td>
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-info" href="#">
+                  <a class="btn btn-small btn-info" href="s_user?id=<%= u.id %>">
                     <i class="icon-edit icon-white"></i>
-                    停用
+                    <% if u.status== 0 %>
+                      停用
+                    <% else %>
+                      正常
+                    <% end %>
                   </a>
                 </td>
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-danger" href="#">
+                  <a class="btn btn-small btn-danger" href="d_user?id=<%= u.id %>">
                     <i class="icon-trash icon-white"></i>
                     删除
                   </a>

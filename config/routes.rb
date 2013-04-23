@@ -37,7 +37,8 @@ Wjgzxt::Application.routes.draw do
   resources :param_setting, only: [] do
       collection do
         get 'http','ping','route','video','adduser','mng_user','interaction','view_interaction','del_interaction','p_adduser'
-        post 'p_interaction','p_adduser'
+        get 'u_user','s_user','d_user'
+        post 'p_interaction','p_adduser','p_u_user'
       end
     end
 

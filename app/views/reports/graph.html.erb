@@ -1,0 +1,64 @@
+<%= provide(:body_id, 'graphs') %>
+<%= provide(:result, '系统说明') %>
+
+
+
+<div class="container-fluid content-wrapper">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="hero-unit">
+        <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
+        <h1>图表&数据</h1>
+
+        <p>
+          系统通过提取每日各测试点数据生成以下图表，如对结果有异议，可申请进行核对。
+        </p>
+
+        <p class="hidden-phone">
+          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h3 class="welcome">
+        <div id="myGrphsJson" style="width:100%; height:100%;overflow-x:auto;overflow-y:auto">
+
+        </div>
+      </h3>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h4 class="title">名言警句</h4>
+
+      <div class="squiggly-border"></div>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span10">
+      <blockquote>
+        <p>
+          Etiam varius erat in nisl egestas id auctor lacus consectetur.
+          Ut dui risus, auctor a malesuada volutpat, tempus sit amet arcu.
+        </p>
+        <small>Jane Doe via Mobile</small>
+      </blockquote>
+    </div>
+    <div class="span2">
+      <div class="controls pull-right">
+        <button class="btn btn-mini btn-info">Edit</button>
+        <button class="btn btn-mini btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    var myChart1 = new FusionCharts('/FusionCharts/Scatter.swf', 'myChartSome', '4000', '300','0','1');
+    myChart1.setJSONUrl("/reports/get_data.json?en=<%= @en %>");
+    myChart1.render('myGrphsJson');
+</script>

@@ -296,12 +296,12 @@ module ReportsHelper
     #c_day = Time.now.day - 1
     #此处还需要对月末的日期做分析
     #todo:此处还需要修给成实际使用的数据
-    c_day   = Time.now.day - 17
+    c_day   = Time.now.day - 1
     e_day   = Time.now.day
 
     c_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + c_day.to_s
     e_date = c_year.to_s + '-' + c_month.to_s + '-' + e_day.to_s + ' ' + '0'
-    hts    = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_day - 17.day, Time.now.at_beginning_of_day, en)
+    hts    = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_day - 1.day, Time.now.at_beginning_of_day, en)
     ename  = Set.new
     hts.each do |ts|
       ename << ts.dest_url

@@ -156,75 +156,217 @@ module ReportsHelper
     [positive_items, positive_i_scores, negative_items, negative_i_scores, equal_items, equal_items_scores]
   end
 
-  def cal_export_ranking(time_begin,time_end)
-     #查询当月的月表数据
-     hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', time_begin, time_end)
-     e_name = Set.new
-     hts.each do |line|
-       e_name << line.export_name
-     end
-     #将对比标杆出口去掉
-     e_name.delete(BACKBONE)
+  def cal_export_ranking(time_begin, time_end)
+    #查询当月的月表数据
+    hts    = HttpTestStatis.where('start_time >= ? and start_time < ?', time_begin, time_end)
+    e_name = Set.new
+    hts.each do |line|
+      e_name << line.export_name
+    end
+    #将对比标杆出口去掉
+    e_name.delete(BACKBONE)
 
-     dx = TestDestNode.where('locale = ?', '电信').count
-     lt = TestDestNode.where('locale = ?', '联通').count
-     oe = TestDestNode.all.count - dx - lt
+    dx = TestDestNode.where('locale = ?', '电信').count
+    lt = TestDestNode.where('locale = ?', '联通').count
+    oe = TestDestNode.all.count - dx - lt
 
-     total_pos = 0
-     total_neg = 0
-     total_eql = 0
-     match_web  = Set.new
-     negat_web  = Set.new
-     dx_array  = []
-     lt_array  = []
-     e_name.each do |ename|
-       negative_total = 0
-       all_total      = 0
-       negative_web   = 0
-       #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
-       t_array        = []
-       t_array << ename
-       match_web.clear
-       negat_web.clear
-       tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
-                                                                  time_begin, time_end, ename)
-       tmp.each do |t|
-         match_web << t.dest_url
-         if t.total_scores < 0
-           negat_web << t.dest_url
-         end
-       end
-       negative_total = hts.where('export_name = ? ', ename).sum(:negative_statis)
-       all_total      = hts.where('export_name = ? ', ename).sum(:total_statis)
-       negative_web   = negat_web.size
-       if all_total > 0
-         total_pos += 1
-       elsif all_total < 0
-         total_neg += 1
-       else
-         total_eql += 1
-       end
-       t_array << negative_total
-       t_array << all_total
-       t_array << negative_web
-       t_array << match_web.size
-       mws = match_web.size
-       if match_web.size != 0
-         t_array << (((mws.to_f - negative_web.to_f) / mws.to_f) * 100)
-       else
-         t_array << 0
-       end
+    total_pos = 0
+    total_neg = 0
+    total_eql = 0
+    match_web = Set.new
+    negat_web = Set.new
+    dx_array  = []
+    lt_array  = []
+    e_name.each do |ename|
+      negative_total = 0
+      all_total      = 0
+      negative_web   = 0
+      #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
+      t_array        = []
+      t_array << ename
+      match_web.clear
+      negat_web.clear
+      tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
+                                                                 time_begin, time_end, ename)
+      tmp.each do |t|
+        match_web << t.dest_url
+        if t.total_scores < 0
+          negat_web << t.dest_url
+        end
+      end
+      negative_total = hts.where('export_name = ? ', ename).sum(:negative_statis)
+      all_total      = hts.where('export_name = ? ', ename).sum(:total_statis)
+      negative_web   = negat_web.size
+      if all_total > 0
+        total_pos += 1
+      elsif all_total < 0
+        total_neg += 1
+      else
+        total_eql += 1
+      end
+      t_array << negative_total
+      t_array << all_total
+      t_array << negative_web
+      t_array << match_web.size
+      mws = match_web.size
+      if match_web.size != 0
+        t_array << (((mws.to_f - negative_web.to_f) / mws.to_f) * 100)
+      else
+        t_array << 0
+      end
 
-       if t_array[0][-4..-3] == '电信'
-         dx_array << t_array
-       else
-         lt_array << t_array
-       end
-     end
-     dx_array.sort_by! { |x| x[1] }
-     lt_array.sort_by! { |x| x[1] }
-    [dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
-   end
+      if t_array[0][-4..-3] == '电信'
+        dx_array << t_array
+      else
+        lt_array << t_array
+      end
+    end
+    dx_array.sort_by! { |x| x[1] }
+    lt_array.sort_by! { |x| x[1] }
+    [dx, lt, oe, total_pos, total_neg, total_eql, dx_array, lt_array]
+  end
+
+  def gen_json
+    total_h          = {}
+    chart_h          = { "palette"         => "2",
+                         "caption"         => "网站测试日得分统计表",
+                         "yaxisname"       => "测试分值",
+                         "xaxisname"       => "时间点（以24为一周期）",
+                         "xaxismaxvalue"   => "1000",
+                         "xaxisminvalue"   => "0",
+                         "animation"       => "1",
+                         "yaxisminvalue"   => "-6",
+                         "yaxismaxvalue"   => "6",
+                         "yAxisValuesStep" => "1",
+                         "xAxisValuesStep" => "1",
+                         "showBorder"      => "0"
+    }
+    total_h["chart"] = chart_h
+
+    categories_h = {
+        "verticallinecolor"     => "0000FF",
+        "verticallinethickness" => "1",
+    }
+
+    #此处需要进行循环,生成以24间隔的竖隔线
+    category_a   = []
+    #category_a[0]            = category_h
+    #按一天一个出口1400条有效数据来算
+    vline        = []
+    (0..140).each do |point|
+      tmp_h                     = {}
+      tmp_v                     = {}
+      tmp_h["x"]                = (23 + 24*point).to_s
+      tmp_h["showverticalline"] = "1"
+      if point > 0
+        tmp_v["startvalue"] = (point*24 - 1).to_s
+      else
+        tmp_v["startvalue"] = (point*24).to_s
+      end
+      tmp_v["endvalue"] = (23 + 24*point).to_s
+      tmp_v["alpha"]    = "15"
+      color             = ''
+      case point % 6
+        when 0
+          color = "0000FF"
+        when 1
+          color = "FFFF00"
+        when 2
+          color = "FF0000"
+        when 3
+          color = "00FFFF"
+        when 4
+          color = "00FF00"
+        when 5
+          color = "FF00FF"
+        else
+          color = "FFFFFF"
+      end
+      tmp_v["color"] = color
+      vline << tmp_v
+      category_a << tmp_h
+    end
+
+    categories_h["category"] = category_a
+    total_h["categories"]    = [categories_h]
+
+    en      = params[:en]
+    c_year  = Time.now.year
+    c_month = Time.now.month
+    #c_day = Time.now.day - 1
+    #此处还需要对月末的日期做分析
+    #todo:此处还需要修给成实际使用的数据
+    c_day   = Time.now.day - 17
+    e_day   = Time.now.day
+
+    c_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + c_day.to_s
+    e_date = c_year.to_s + '-' + c_month.to_s + '-' + e_day.to_s + ' ' + '0'
+    hts    = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', Time.now.at_beginning_of_day - 17.day, Time.now.at_beginning_of_day, en)
+    ename  = Set.new
+    hts.each do |ts|
+      ename << ts.dest_url
+    end
+    dataset_test = []
+    rt           = 0
+    ename.each do |line|
+      #此处需要进行循环,生成一个网站的所有数据
+      dataset_h = {
+          "seriesname"        => line,
+          "color"             => "0000FF",
+          "anchorsides"       => (rand(6)+1).to_s,
+          "anchorradius"      => "2",
+          "anchorbgcolor"     => "C6C6FF",
+          "anchorbordercolor" => "009900"
+      }
+      data_h    = []
+      #此处需要进行循环
+      #提取指定出口其中有效匹配的网站进行查询，并按时间点将数据存放起来
+      #rt记录当前记录指针位置
+
+      #要按网站进行循环
+      (0..23).each do |pi|
+        tmp_h = {}
+        #取真实的测试数据值
+        if pi == 23
+
+        else
+          t_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + pi.to_s
+          e_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + (pi+1).to_s
+          c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), Time.parse(e_date), line)
+          if c_hts.size == 0
+            tmp_h.clear
+            tmp_h["x"] = rt
+            tmp_h["y"] = 0
+            data_h << tmp_h
+          elsif c_hts.size == 1
+            tmp_h.clear
+            tmp_h["x"] = rt
+            tmp_h["y"] = c_hts.first.total_scores
+            data_h << tmp_h
+          else
+            tmp_h.clear
+            c_hts.each do |ch|
+              tmp_h["x"] = rt
+              tmp_h["y"] = ch.total_scores
+              data_h << tmp_h
+            end
+          end
+        end
+        rt += 1
+      end
+
+      dataset_h["data"] = data_h
+
+      dataset_test << dataset_h
+    end
+    total_h["dataset"] = [dataset_test]
 
 
+    vtrendlines ={
+        "line" => vline
+    }
+
+    total_h["vtrendlines"] = vtrendlines
+    total_h
+  end
 end

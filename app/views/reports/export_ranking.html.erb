@@ -114,7 +114,7 @@
             <tbody>
             <% @lt_array.each_with_index do |line, i| %>
               <tr>
-                <td style="text-align:center;"><%= line[0] %></td>
+                <td style="text-align:center;"><%= link_to line[0],action:'r_graph',:en => line[0] %></td>
                 <td style="text-align:center;">
                   <% if line[1].to_s.to_f < 0 %>
                     <span class="label label-important"><%= number_with_precision line[1].to_s.to_f %></span>

@@ -1,6 +1,18 @@
 Wjgzxt::Application.routes.draw do
-  get "login/login"
 
+  resources :export, only: [] do
+    member do
+      get "modify"
+    end
+    collection do
+      get 'index', 'flag'
+      post 'mdf'
+    end
+  end
+
+  match 'login' => 'login#index'
+  get 'login/index'
+  post "login/login"
   get "login/logout"
 
   match 'workorders' => 'workorders#index'
@@ -13,7 +25,7 @@ Wjgzxt::Application.routes.draw do
   match 'graphs' => 'graphs#index'
   resources :graphs, only: [] do
     collection do
-      get 'index','data_json'
+      get 'index', 'data_json'
     end
   end
 
@@ -39,17 +51,17 @@ Wjgzxt::Application.routes.draw do
   match 'whr/' => 'web_hit_rate#index'
 
   resources :param_setting, only: [] do
-      collection do
-        get 'http','ping','route','video','adduser','mng_user','interaction','view_interaction','del_interaction','p_adduser'
-        get 'u_user','s_user','d_user'
-        post 'p_interaction','p_adduser','p_u_user'
-      end
+    collection do
+      get 'http', 'ping', 'route', 'video', 'adduser', 'mng_user', 'interaction', 'view_interaction', 'del_interaction', 'p_adduser'
+      get 'u_user', 's_user', 'd_user'
+      post 'p_interaction', 'p_adduser', 'p_u_user'
     end
+  end
 
-match 'reports/get_data(.:format)'  => 'reports#get_data'
+  match 'reports/get_data(.:format)' => 'reports#get_data'
   resources :reports, only: [] do
     collection do
-      get 'export_rep','get_data','r_graph','locale_detail'
+      get 'export_rep', 'get_data', 'r_graph', 'locale_detail'
       post 'day_report', 'week_report', 'month_report'
     end
   end
@@ -75,6 +87,7 @@ match 'reports/get_data(.:format)'  => 'reports#get_data'
   get 'welcome/index'
 
   match 'reports/' => 'reports#index'
+  match 'welcome/' => 'welcome#index'
 
   #match 'reports/export_ranking/:id' => 'reports#export_ranking'
 
@@ -127,7 +140,7 @@ match 'reports/get_data(.:format)'  => 'reports#get_data'
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'welcome#index'
+  root :to => 'login#index'
 
   # See how all your routes lay out with "rake routes"
 

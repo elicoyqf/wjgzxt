@@ -1,6 +1,12 @@
 /* Radmin from Square Turtle Studios */
 
 /* Color Switcher */
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.25;
+    margin-bottom: 0;
+}
 
 div.color-switcher {
 	position: absolute !important;

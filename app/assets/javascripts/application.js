@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
-//= require login/bootstrap
+//= require login/login
 //= require_tree .

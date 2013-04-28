@@ -3,20 +3,14 @@
 <head>
   <title>出口质量感知评测系统</title>
   <%= stylesheet_link_tag 'application', :media => "all" %>
-  <%= stylesheet_link_tag '/css/icon-style', :media => "all" %>
-  <%= stylesheet_link_tag '/css/molle', :media => "all" %>
-  <%= stylesheet_link_tag '/css/radmin', :media => "all" %>
-  <%= stylesheet_link_tag '/css/radmin-plugins', :media => "all" %>
-  <%= stylesheet_link_tag '/css/radmin-responsive', :media => "all" %>
+  <%= stylesheet_link_tag '/css/font-awesome.min', :media => "all" %>
+  <%= stylesheet_link_tag '/css/ace.min', :media => "all" %>
+  <%= stylesheet_link_tag '/css/ace-responsive.min', :media => "all" %>
   <%= javascript_include_tag 'application' %>
-  <%= javascript_include_tag '/javascripts/highcharts' %>
-  <%= javascript_include_tag '/javascripts/exporting' %>
-  <%= javascript_include_tag '/javascripts/gray' %>
   <%= csrf_meta_tags %>
-  <%= render 'layouts/shim' %>
+
 </head>
-<body id="body-<%= yield(:body_id) %>">
-<%= render 'layouts/header' %>
+<body class="login-layout">
 
 <div class="container" style="width: 1200px">
   <div class="container-fluid main-container">
@@ -30,17 +24,14 @@
     <div class="row-fluid">
       <div class="span12">
 
-        <%= render 'layouts/navslide' %>
         <%= yield %>
         <div class="row-fluid">
           <div class="span12">&nbsp;</div>
         </div>
-        <%= debug(params) if Rails.env.development? %>
       </div>
     </div>
   </div>
 </div>
-
-<%= render 'layouts/footer' %>
+<%= render 'layouts/login_footer' %>
 </body>
 </html>

@@ -1,4 +1,8 @@
 Wjgzxt::Application.routes.draw do
+  get "login/login"
+
+  get "login/logout"
+
   match 'workorders' => 'workorders#index'
   resources :workorders, only: [] do
     collection do

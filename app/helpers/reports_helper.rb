@@ -156,15 +156,23 @@ module ReportsHelper
     [positive_items, positive_i_scores, negative_items, negative_i_scores, equal_items, equal_items_scores]
   end
 
-  def cal_export_ranking(time_begin, time_end)
-    #查询当月的月表数据
-    hts    = HttpTestStatis.where('start_time >= ? and start_time < ?', time_begin, time_end)
-    e_name = Set.new
-    hts.each do |line|
-      e_name << line.export_name
+  def cal_export_ranking(time_begin, time_end, ef = [])
+    etn = Set.new
+    hts = HttpTestStatis.create
+    if ef.blank?
+      #查询当月的月表数据
+      en = ExportName.all
+      en.each do |line|
+        etn << line.name
+      end
+    else
+      ef.each do |t|
+        etn << t.name
+      end
     end
     #将对比标杆出口去掉
-    e_name.delete(BACKBONE)
+    etn.delete(BACKBONE)
+    hts = HttpTestStatis.where('start_time >= ? and start_time < ?', time_begin, time_end)
 
     dx = TestDestNode.where('locale = ?', '电信').count
     lt = TestDestNode.where('locale = ?', '联通').count
@@ -177,7 +185,7 @@ module ReportsHelper
     negat_web = Set.new
     dx_array  = []
     lt_array  = []
-    e_name.each do |ename|
+    etn.each do |ename|
       negative_total = 0
       all_total      = 0
       negative_web   = 0

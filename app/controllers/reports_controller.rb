@@ -42,77 +42,6 @@ class ReportsController < ApplicationController
 
   end
 
-=begin
-  def export_ranking
-    #查询当月的月表数据
-    hts     = HttpTestStatis.where('start_time >= ? and start_time < ?', Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month)
-    @e_name = Set.new
-    hts.each do |line|
-      @e_name << line.export_name
-    end
-    #将对比标杆出口去掉
-    @e_name.delete(BACKBONE)
-
-    @dx = TestDestNode.where('locale = ?', '电信').count
-    @lt = TestDestNode.where('locale = ?', '联通').count
-    @oe = TestDestNode.all.count - @dx - @lt
-
-    @total_pos = 0
-    @total_neg = 0
-    @total_eql = 0
-    match_web  = Set.new
-    negat_web  = Set.new
-    @dx_array  = []
-    @lt_array  = []
-    @e_name.each do |ename|
-      negative_total = 0
-      all_total      = 0
-      negative_web   = 0
-      #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
-      t_array        = []
-      t_array << ename
-      match_web.clear
-      negat_web.clear
-      tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
-                                                                 Time.now.at_beginning_of_month, Time.now.at_beginning_of_month + 1.month, ename)
-      tmp.each do |t|
-        match_web << t.dest_url
-        if t.total_scores < 0
-          negat_web << t.dest_url
-        end
-      end
-      negative_total = hts.where('export_name = ? ', ename).sum(:negative_statis)
-      all_total      = hts.where('export_name = ? ', ename).sum(:total_statis)
-      negative_web   = negat_web.size
-      if all_total > 0
-        @total_pos += 1
-      elsif all_total < 0
-        @total_neg += 1
-      else
-        @total_eql += 1
-      end
-      t_array << negative_total
-      t_array << all_total
-      t_array << negative_web
-      t_array << match_web.size
-      mws = match_web.size
-      if match_web.size != 0
-        t_array << (((mws.to_f - negative_web.to_f) / mws.to_f) * 100)
-      else
-        t_array << 0
-      end
-
-      if t_array[0][-4..-3] == '电信'
-        @dx_array << t_array
-      else
-        @lt_array << t_array
-      end
-    end
-    @dx_array.sort_by! { |x| x[1] }
-    @lt_array.sort_by! { |x| x[1] }
-  end
-=end
-
   def website_select
     @tdn    = TestDestNode.all
     #查询当月的月表数据
@@ -182,33 +111,36 @@ negative_items_scores equal_items_scores total_scores)
 
   def day_report
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
+    ef          = ExportName.find_all_by_user_id(current_user.id)
     s_day       = params[:s_day]
     @time_begin = Time.parse(s_day).at_beginning_of_day
     @time_end   = @time_begin + 1.day
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
     render :template => 'reports/export_ranking'
   end
 
   def week_report
     #开始时间是从选择时间的0点开始，结束时间是从选择的时间+1天的开始。
+    ef          = ExportName.find_all_by_user_id(current_user.id)
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
     @time_begin = Time.parse(params[:day_begin]).at_beginning_of_day
     @time_end   = Time.parse(params[:day_end]).at_beginning_of_day + 1.day
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
     render :template => 'reports/export_ranking'
   end
 
   def month_report
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
+    ef          = ExportName.find_all_by_user_id(current_user.id)
     ms          = params[:ms]
     tmp_str     = Time.now.year.to_s
     new_str     = tmp_str + '-' + ms + '-01'
     @time_begin = Time.parse(new_str).at_beginning_of_month
     @time_end   = @time_begin + 1.month
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
     render :template => 'reports/export_ranking'
   end
 

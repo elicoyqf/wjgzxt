@@ -1,4 +1,5 @@
-require_relative '../../lib/fusioncharts_helper'
 module ApplicationHelper
-  include FusionChartsHelper
+  def current_user
+    user = User.find(session[:user_id])
+  end
 end

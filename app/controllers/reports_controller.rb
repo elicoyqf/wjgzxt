@@ -116,7 +116,7 @@ negative_items_scores equal_items_scores total_scores)
     @time_begin = Time.parse(s_day).at_beginning_of_day
     @time_end   = @time_begin + 1.day
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end, ef
     render :template => 'reports/export_ranking'
   end
 
@@ -127,7 +127,7 @@ negative_items_scores equal_items_scores total_scores)
     @time_begin = Time.parse(params[:day_begin]).at_beginning_of_day
     @time_end   = Time.parse(params[:day_end]).at_beginning_of_day + 1.day
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end, ef
     render :template => 'reports/export_ranking'
   end
 
@@ -140,7 +140,7 @@ negative_items_scores equal_items_scores total_scores)
     @time_begin = Time.parse(new_str).at_beginning_of_month
     @time_end   = @time_begin + 1.month
 
-    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end,ef
+    @dx, @lt, @oe, @total_pos, @total_neg, @total_eql, @dx_array, @lt_array = cal_export_ranking @time_begin, @time_end, ef
     render :template => 'reports/export_ranking'
   end
 
@@ -149,7 +149,8 @@ negative_items_scores equal_items_scores total_scores)
   end
 
   def r_graph
-    @en = params[:en]
+    @en    = params[:en]
+    @value = cal_data @en
   end
 
   def get_data

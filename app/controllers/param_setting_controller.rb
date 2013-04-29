@@ -27,9 +27,18 @@ class ParamSettingController < ApplicationController
       flash[:error] = '两次密码验证失败，请检查。'
       redirect_to action: 'adduser'
     else
-      User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
-      flash[:success] = '更新用户成功，如下示。'
-      redirect_to action: 'mng_user'
+      if passwd.to_s.size == 32
+        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
+        flash[:success] = '更新用户成功，如下示。'
+        redirect_to action: 'mng_user'
+      elsif passwd.to_s.size < 6 || passwd.to_s.size > 18 && passwd.to_s.size < 32
+        flash[:error] = '密码长度必须要在6-18，请检查。'
+        redirect_to action: 'adduser'
+      else
+        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
+        redirect_to action: 'mng_user'
+      end
+
     end
   end
 
@@ -48,6 +57,14 @@ class ParamSettingController < ApplicationController
   def d_user
     uid = params[:id]
     User.destroy(uid.to_s.to_i)
+    de = ExportName.find_all_by_user_id(uid.to_s.to_i)
+    if de.size == 1
+      de.first.update_attribute('user_id', 0)
+    elsif de.size > 1
+      de.each do |m|
+        m.update_attribute('user_id', 0)
+      end
+    end
     redirect_to action: 'mng_user'
   end
 
@@ -66,8 +83,11 @@ class ParamSettingController < ApplicationController
     elsif passwd != passwd1
       flash[:error] = '两次密码验证失败，请检查。'
       redirect_to action: 'adduser'
+    elsif passwd.to_s.size < 6 || passwd.to_s.size > 18
+      flash[:error] = '密码必须要符号6-18位，请检查。'
+      redirect_to action: 'adduser'
     else
-      User.create(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
+      User.create(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
       flash[:success] = '添加用户成功，如下示。'
       redirect_to action: 'mng_user'
     end
@@ -76,10 +96,9 @@ class ParamSettingController < ApplicationController
 
   def interaction
     #查询出所有未关联的出口
-    @en    = ExportName.where('user_id = 0')
+    @en    = ExportName.find_all_by_user_id(0)
     #查询出所有用户
-    @users = User.all
-
+    @users = User.where('uname != ?','admin')
   end
 
   def p_interaction

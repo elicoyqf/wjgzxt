@@ -67,28 +67,52 @@
                 </td>
 
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-info" href="u_user?id=<%= u.id %>">
-                    <i class="icon-edit icon-white"></i>
-                    更新
-                  </a>
+                  <% if u.uname == 'admin' %>
+                    <a class="disabled btn btn-small btn-info" href="#">
+                      <i class="icon-edit icon-white"></i>
+                      更新
+                    </a>
+                  <% else %>
+                    <a class="btn btn-small btn-info" href="u_user?id=<%= u.id %>">
+                      <i class="icon-edit icon-white"></i>
+                      更新
+                    </a>
+                  <% end %>
                 </td>
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-danger" href="s_user?id=<%= u.id %>">
-                    <i class="icon-edit icon-white"></i>
-                    <% if u.status== 0 %>
-                      停用
-                    <% else %>
-                      正常
-                    <% end %>
-                  </a>
+                  <% if u.uname == 'admin' %>
+                    <a class="disabled btn btn-small btn-danger" href="#">
+                      <i class="icon-edit icon-white"></i>
+                      <% if u.status== 0 %>
+                        停用
+                      <% else %>
+                        正常
+                      <% end %>
+                    </a>
+                  <% else %>
+                    <a class="btn btn-small btn-danger" href="s_user?id=<%= u.id %>">
+                      <i class="icon-edit icon-white"></i>
+                      <% if u.status== 0 %>
+                        停用
+                      <% else %>
+                        正常
+                      <% end %>
+                    </a>
+                  <% end %>
                 </td>
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-danger" href="d_user?id=<%= u.id %>">
-                    <i class="icon-trash icon-white"></i>
-                    删除
-                  </a>
+                  <% if u.uname == 'admin' %>
+                    <a class="disabled btn btn-small btn-danger" href="#">
+                      <i class="icon-trash icon-white"></i>
+                      删除
+                    </a>
+                  <% else %>
+                    <a class="btn btn-small btn-danger" href="d_user?id=<%= u.id %>">
+                      <i class="icon-trash icon-white"></i>
+                      删除
+                    </a>
+                  <% end %>
                 </td>
-
               </tr>
             <% end %>
 

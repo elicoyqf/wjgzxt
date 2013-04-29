@@ -1,4 +1,6 @@
 class ExportController < ApplicationController
+  before_filter :user_level, except: [:perm_deni]
+
   def flag
     @en = ExportName.all
   end
@@ -15,5 +17,17 @@ class ExportController < ApplicationController
   end
 
   def block
+  end
+
+  def perm_deni
+
+  end
+
+  private
+  def user_level
+    if current_user.level < 3
+      redirect_to action: 'perm_deni'
+    end
+
   end
 end

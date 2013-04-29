@@ -1,6 +1,8 @@
 #encoding : utf-8
 
 class ParamSettingController < ApplicationController
+  before_filter :user_level
+
   def adduser
 
   end
@@ -14,7 +16,7 @@ class ParamSettingController < ApplicationController
     loginname = params[:loginname]
     passwd    = params[:passwd]
     passwd1   = params[:passwd1]
-    level     = params[:level]
+    level     = params[:perm_deni]
     realname  = params[:realname]
     email     = params[:email]
     contact   = params[:contect]
@@ -28,14 +30,14 @@ class ParamSettingController < ApplicationController
       redirect_to action: 'adduser'
     else
       if passwd.to_s.size == 32
-        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: passwd)
+        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, perm_deni: level, alias: realname, email: email, contact: contact, password: passwd)
         flash[:success] = '更新用户成功，如下示。'
         redirect_to action: 'mng_user'
       elsif passwd.to_s.size < 6 || passwd.to_s.size > 18 && passwd.to_s.size < 32
         flash[:error] = '密码长度必须要在6-18，请检查。'
         redirect_to action: 'adduser'
       else
-        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
+        User.find(uid.to_s.to_i).update_attributes(uname: loginname, status: 0, perm_deni: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
         redirect_to action: 'mng_user'
       end
 
@@ -72,7 +74,7 @@ class ParamSettingController < ApplicationController
     loginname = params[:loginname]
     passwd    = params[:passwd]
     passwd1   = params[:passwd1]
-    level     = params[:level]
+    level     = params[:perm_deni]
     realname  = params[:realname]
     email     = params[:email]
     contact   = params[:contect]
@@ -87,7 +89,7 @@ class ParamSettingController < ApplicationController
       flash[:error] = '密码必须要符号6-18位，请检查。'
       redirect_to action: 'adduser'
     else
-      User.create(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
+      User.create(uname: loginname, status: 0, perm_deni: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
       flash[:success] = '添加用户成功，如下示。'
       redirect_to action: 'mng_user'
     end
@@ -157,5 +159,13 @@ class ParamSettingController < ApplicationController
     respond_to do |format|
       format.html { render layout: 'application' }
     end
+  end
+
+  private
+  def user_level
+    if current_user.level < 3
+      redirect_to controller: 'export', action: 'perm_deni'
+    end
+
   end
 end

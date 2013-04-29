@@ -5,7 +5,7 @@ Wjgzxt::Application.routes.draw do
       get "modify"
     end
     collection do
-      get 'index', 'flag'
+      get 'index', 'flag','perm_deni'
       post 'mdf'
     end
   end

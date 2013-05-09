@@ -265,7 +265,9 @@ module ReportsHelper
            e_date = Time.parse(t_date).at_beginning_of_day + 1.day
            c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), e_date, line)
            if c_hts.size == 0
-             th << rt << 0
+             #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
+             #th << rt << 0
+             th << rt
              tmp_arr << th
            elsif c_hts.size == 1
              th << rt << c_hts.first.total_scores
@@ -282,7 +284,9 @@ module ReportsHelper
            e_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + (pi+1).to_s
            c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), Time.parse(e_date), line)
            if c_hts.size == 0
-             th << rt << 0
+             #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
+             #th << rt << 0
+             th << rt
              tmp_arr << th
            elsif c_hts.size == 1
              th << rt << c_hts.first.total_scores
@@ -303,6 +307,7 @@ module ReportsHelper
      out_d.to_s.gsub!(/=>/,':')
    end
 
+=begin
   def gen_json
     total_h          = {}
     chart_h          = { "palette"         => "2",
@@ -446,4 +451,6 @@ module ReportsHelper
     total_h["vtrendlines"] = vtrendlines
     total_h
   end
+
+=end
 end

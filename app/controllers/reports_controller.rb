@@ -153,6 +153,7 @@ negative_items_scores equal_items_scores total_scores)
     @value = cal_data @en
   end
 
+=begin
   def get_data
     @test_j = gen_json
 
@@ -160,6 +161,7 @@ negative_items_scores equal_items_scores total_scores)
       f.json { render json: @test_j }
     end
   end
+=end
 
   def locale_detail
     @lc = params[:lc]

@@ -37,18 +37,18 @@
             <table class="table table-striped table-bordered table-radmin">
               <thead>
               <tr>
+                <th style="text-align:center;">出口编号</th>
                 <th style="text-align:center;">出口名称</th>
-                <th style="text-align:center;">标识</th>
                 <th style="text-align:center;">操作选项</th>
               </tr>
               </thead>
               <tbody>
               <tr>
-                <td style="text-align:center;"><%= @en.name %></td>
                 <td style="text-align:center;">
                   <input type="hidden" name="id" value="<%= @en.id %>">
                   <%= text_field_tag :alias, @en.alias, :class => 'input-xlarge' %>
                 </td>
+                <td style="text-align:center;"><%= @en.name %></td>
                 <td style="text-align:center;">
                   <button class="btn btn-info" type="submit">
                     更 新

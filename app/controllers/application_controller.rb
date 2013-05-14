@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include WebHitRateHelper
   include WorkordersHelper
   include ApplicationHelper
+  include DomainHelper
 
   def authenticate
     unless session[:user_id]

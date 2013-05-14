@@ -1,12 +1,15 @@
 Wjgzxt::Application.routes.draw do
 
+  get "domain/validate"
+  get "domain/test"
+
   resources :export, only: [] do
     member do
-      get "modify"
+      get 'modify','chg_status','del'
     end
     collection do
       get 'index', 'flag','perm_deni'
-      get 'mdf','add_flag'
+      get 'mdf','add_flag','p_add_flag'
     end
   end
 

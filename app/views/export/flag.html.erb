@@ -16,7 +16,7 @@
               1、电信出口以数字1开头，再加上三位数字，形式为：1XXX。从1001开始顺序编号。<br>
               2、联通出口以数字2开头，再加上三位数字，形式为：2XXX。从2001开始顺序编号。<br>
               3、出口编号属于一次性使用资源：当出口关停后，该出口对应的编号也作废，不再循环使用。如出口只是更改名称（例如接入运营商调整等），则可使用回原来的编号。
-                编号与实际出口对应关系要在出口评分统计系统中录入。当新增一个出口，要及时在对应表中为该出口分配新的编号。当出口更改名称时，要在对应表中该出口编号下修改出口名称。 <br/>
+              编号与实际出口对应关系要在出口评分统计系统中录入。当新增一个出口，要及时在对应表中为该出口分配新的编号。当出口更改名称时，要在对应表中该出口编号下修改出口名称。 <br/>
               出口原始信息是由飞思达所提供的测试数据中提取，为了方便同后台维护部门核对，可添加相应的出口名称进行关联。<br/>
             </p>
           </div>
@@ -30,7 +30,7 @@
     </div>
   </div>
 
-  <a href="add_flag" class="btn btn-info btn-large">添加新的出口编号信息</a>
+  <a href="add_flag" class="btn btn-info btn-large">添加出口编号信息</a>
 
   <p></p>
 
@@ -47,7 +47,7 @@
               <th style="text-align:center;">出口编号</th>
               <th style="text-align:center;">出口名称</th>
               <th style="text-align:center;">状态</th>
-              <th style="text-align:center;" colspan="2">操作选项</th>
+              <th style="text-align:center;" colspan="3">操作选项</th>
             </tr>
             </thead>
             <tbody>
@@ -69,14 +69,22 @@
                     更新
                   </a>
                 </td>
+
                 <td style="text-align:center;">
-                  <a class="btn btn-small btn-danger" href="#">
+                  <a class="btn btn-small btn-info" href="<%= chg_status_export_path(u) %>">
                     <i class="icon-edit icon-white"></i>
                     <% if u.status== 0 %>
                       停用
                     <% else %>
                       正常
                     <% end %>
+                  </a>
+                </td>
+
+                <td style="text-align:center;">
+                  <a class="btn btn-small btn-danger" href="<%= del_export_path(u) %>">
+                    <i class="icon-edit icon-white"></i>
+                    删除
                   </a>
                 </td>
               </tr>

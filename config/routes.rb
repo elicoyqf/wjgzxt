@@ -6,7 +6,7 @@ Wjgzxt::Application.routes.draw do
     end
     collection do
       get 'index', 'flag','perm_deni'
-      get 'mdf'
+      get 'mdf','add_flag'
     end
   end
 

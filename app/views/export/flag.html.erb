@@ -6,12 +6,18 @@
     <div class="span12">
       <div class="hero-unit">
         <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
-        <h1>出口标识信息</h1>
+        <h1>出口编号信息</h1>
 
         <div class="row-fluid hidden-desktop hidden-phone">
           <div class="span12">
             <p>
-              出口原始信息是由飞思达所提供的测试数据中提取，为了方便同后台维护部门核对，可添加相应的备注信息进行关联。<br/>
+              关于实施出口编号和管理的通知<br>
+              为了便于系统统计，规定所有纳入到出口感知质量测试的出口名称全部采用编号命名方式，具体编号规则如下：<br>
+              1、电信出口以数字1开头，再加上三位数字，形式为：1XXX。从1001开始顺序编号。<br>
+              2、联通出口以数字2开头，再加上三位数字，形式为：2XXX。从2001开始顺序编号。<br>
+              3、出口编号属于一次性使用资源：当出口关停后，该出口对应的编号也作废，不再循环使用。如出口只是更改名称（例如接入运营商调整等），则可使用回原来的编号。
+                编号与实际出口对应关系要在出口评分统计系统中录入。当新增一个出口，要及时在对应表中为该出口分配新的编号。当出口更改名称时，要在对应表中该出口编号下修改出口名称。 <br/>
+              出口原始信息是由飞思达所提供的测试数据中提取，为了方便同后台维护部门核对，可添加相应的出口名称进行关联。<br/>
             </p>
           </div>
         </div>
@@ -24,13 +30,15 @@
     </div>
   </div>
 
+  <a href="add_flag" class="btn btn-info btn-large">添加新的出口编号信息</a>
+
   <p></p>
 
   <div class="row-fluid">
     <div class="span12">
       <div class="row-fluid hidden-desktop hidden-phone">
         <div class="span12">
-          <h4 class="title">所有出口标识资料</h4>
+          <h4 class="title">所有出口编号相关资料</h4>
 
           <div class="squiggly-border"></div>
           <table class="table table-striped table-bordered table-radmin">

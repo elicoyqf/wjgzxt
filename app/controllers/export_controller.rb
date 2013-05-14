@@ -5,6 +5,10 @@ class ExportController < ApplicationController
     @en = ExportName.all
   end
 
+  def add_flag
+
+  end
+
   def modify
     @en = ExportName.find(params[:id])
   end

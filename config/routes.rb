@@ -1,7 +1,9 @@
 Wjgzxt::Application.routes.draw do
 
-  get "domain/validate"
-  get "domain/test"
+  get 'domain/validate'
+  get 'domain/test'
+  get 'domain/dfileupload'
+  post 'domain/upload'
 
   resources :export, only: [] do
     member do

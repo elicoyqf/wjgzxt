@@ -27,6 +27,17 @@ class DomainController < ApplicationController
     redirect_to action: 'validate'
   end
 
+  def dfileupload
 
+  end
+
+  def upload
+    uploaded_io = params[:dfile]
+    File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'w') do |file|
+      file.write(uploaded_io.read.force_encoding('utf-8'))
+    end
+    flash[:success] = '上传文件成功，可以通过导出文件查看分析结果。'
+    redirect_to action: 'validate'
+  end
 end
 

@@ -1,0 +1,67 @@
+<%= provide(:body_id, 'components') %>
+<%= provide(:result, '系统说明') %>
+
+<div class="container-fluid content-wrapper">
+<div class="row-fluid">
+  <div class="span12">
+    <div class="hero-unit">
+      <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
+      <h1>测试域名查重</h1>
+
+      <div class="row-fluid hidden-desktop hidden-phone">
+        <div class="span12">
+          <p>
+            为了减少测试域名重复测试的机率，可通过以下域名查重功能来进行检测<br>
+
+          </p>
+        </div>
+      </div>
+      <p></p>
+
+      <p class="hidden-phone">
+        <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<a href="dfileupload" class="btn btn-info btn-large">测试域名批量导入</a>
+<a href="#" class="btn btn-info btn-large">测试域名批量导出</a>
+
+<div class="row-fluid">
+  <div class="span12">
+    <div class="row-fluid hidden-desktop hidden-phone">
+      <div class="span12">
+        <h4 class="title">域名查重</h4>
+
+        <div class="squiggly-border"></div>
+        <%= form_tag({:action => :upload}, :multipart => true) do %>
+          <%= label_tag 'dfile','先择文件上传:' %>
+          <%= file_field_tag 'dfile'%>
+          <%= submit_tag '开始上传', class: 'btn btn-info' %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="span12">
+    <h4 class="title">名言警句</h4>
+
+    <div class="squiggly-border"></div>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    <blockquote>
+      <p>
+        当一切似乎毫无希望时，我看着切石工人在他的石头上，敲击了上百次，而不见任何裂痕出现。
+        但在第一百零一次时，石头被劈成两半。我体会到，并非那一击，而是前面的敲打使它裂开。
+      </p>
+      <small class="pull-right">贾柯·瑞斯</small>
+    </blockquote>
+  </div>
+</div>
+</div>

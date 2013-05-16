@@ -10,8 +10,8 @@ class ExportController < ApplicationController
   end
 
   def p_add_flag
-    e_no   = params[:e_no]
-    e_name = params[:e_name]
+    e_no   = params[:e_no].to_s.strip
+    e_name = params[:e_name].to_s.strip
     en     = ExportName.new(name: e_name, status: 0, user_id: session[:user_id], alias: e_no)
     if en.save
       flash[:success] = '添加出口编号成功。'
@@ -26,8 +26,8 @@ class ExportController < ApplicationController
   end
 
   def mdf
-    id     = params[:id]
-    e_name = params[:name]
+    id     = params[:id].to_s.strip
+    e_name = params[:name].to_s.strip
     ExportName.find(id).update_attribute('name', e_name)
     redirect_to action: 'flag'
   end

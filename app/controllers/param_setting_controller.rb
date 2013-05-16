@@ -74,7 +74,7 @@ class ParamSettingController < ApplicationController
     loginname = params[:loginname]
     passwd    = params[:passwd]
     passwd1   = params[:passwd1]
-    level     = params[:perm_deni]
+    level     = params[:level]
     realname  = params[:realname]
     email     = params[:email]
     contact   = params[:contect]
@@ -89,7 +89,8 @@ class ParamSettingController < ApplicationController
       flash[:error] = '密码必须要符号6-18位，请检查。'
       redirect_to action: 'adduser'
     else
-      User.create(uname: loginname, status: 0, perm_deni: level, alias: realname, email: email, contact: contact, password: Digest::MD5.hexdigest(passwd))
+      User.create(uname: loginname, status: 0, level: level, alias: realname, email: email, contact: contact,
+                  password: Digest::MD5.hexdigest(passwd))
       flash[:success] = '添加用户成功，如下示。'
       redirect_to action: 'mng_user'
     end

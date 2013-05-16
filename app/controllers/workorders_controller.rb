@@ -6,9 +6,8 @@ class WorkordersController < ApplicationController
   end
 
   def wo_table
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
 
@@ -70,9 +69,8 @@ class WorkordersController < ApplicationController
   end
 
   def day_wo
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
 
@@ -89,7 +87,6 @@ class WorkordersController < ApplicationController
 
 =begin
   def day_wo1
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
     user      = User.first
     e_name    = user.export_names
@@ -149,9 +146,8 @@ class WorkordersController < ApplicationController
   end
 
   def week_table
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
 
@@ -195,9 +191,8 @@ class WorkordersController < ApplicationController
   end
 
   def week_wo
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
     r_date    = Time.parse params[:date]
@@ -208,9 +203,8 @@ class WorkordersController < ApplicationController
   end
 
   def month_table
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
 
@@ -253,9 +247,8 @@ class WorkordersController < ApplicationController
   end
 
   def month_wo
-    #todo:此处的用户Id在使用了session后需要进行修改成session里面的用户id值
     #通过用户获得其所管辖的出口
-    user      = User.first
+    user      = User.find(session[:user_id])
     e_name    = user.export_names
     @dls_name = user.alias
     r_date    = Time.parse params[:date]

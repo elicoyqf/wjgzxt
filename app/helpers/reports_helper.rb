@@ -377,7 +377,6 @@ module ReportsHelper
     c_month = Time.now.month
     #c_day = Time.now.day - 1
     #此处还需要对月末的日期做分析
-    #todo:此处还需要修给成实际使用的数据
     c_day   = Time.now.day - 1
     e_day   = Time.now.day
 

@@ -2,6 +2,8 @@
 require 'set'
 
 class DomainController < ApplicationController
+  before_filter :user_level
+
   def validate
     @dx = rand_domain '电信'
     @lt = rand_domain '联通'
@@ -12,8 +14,8 @@ class DomainController < ApplicationController
 
   def test
     v_domain = params[:v_domain]
-    tdn = TestDestNode.all
-    v_data = []
+    tdn      = TestDestNode.all
+    v_data   = []
     tdn.each do |line|
       v_data << line.dest_url
     end
@@ -39,5 +41,13 @@ class DomainController < ApplicationController
     flash[:success] = '上传文件成功，可以通过导出文件查看分析结果。'
     redirect_to action: 'validate'
   end
+
+  private
+  def user_level
+    if current_user.level < 3
+      redirect_to controller: 'export', action: 'perm_deni'
+    end
+  end
+
 end
 

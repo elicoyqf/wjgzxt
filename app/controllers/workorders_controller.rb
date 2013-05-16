@@ -142,7 +142,7 @@ class WorkordersController < ApplicationController
     b_time    = Time.parse(params[:bdate])
     e_time    = Time.parse(params[:edate])
     #只查询出来那些测试为负的数据。
-    @q_data   = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ? and negative_items_scores < ?', @q_export, b_time, e_time, 0).order('negative_items_scores')
+    @q_data   = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ? and negative_items_scores < ?', @q_export, b_time, e_time, 0).order('negative_items_scores').paginate page: params[:page], per_page: 10
   end
 
   def week_table

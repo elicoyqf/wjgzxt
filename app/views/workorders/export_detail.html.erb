@@ -90,6 +90,25 @@
 
   <div class="row-fluid">
     <div class="span12">
+      <div class="well center">
+        <div class="pagination pagination-small center offset4">
+          <%= will_paginate @q_data, :inner_window => 2 %>
+        </div>
+        <div class="offset4">
+          统计信息：一共有 <%= @q_data.total_entries %>  条,当前第 <%= @q_data.current_page %> 页, 共
+          <% if (@q_data.total_entries % @q_data.per_page) ==0 %>
+            <%= (@q_data.total_entries / @q_data.per_page) %> 页.
+          <% else %>
+            <%= (@q_data.total_entries / @q_data.per_page) +1 %> 页
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
       <h4 class="title">名言警句</h4>
 
       <div class="squiggly-border"></div>

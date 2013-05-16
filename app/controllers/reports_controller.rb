@@ -21,11 +21,20 @@ class ReportsController < ApplicationController
   end
 
   def date2time_report
-    d_str       = params[:date]
-    ds          = params[:ds]
-    time_str    = d_str + ' ' + ds
-    time_begin  = Time.parse(time_str)
-    time_end    = time_begin + 1.hour
+    time_begin = nil
+    time_end   = nil
+    if params[:date].blank?
+      time_begin = session[:date2time_tb]
+      time_end   = session[:date2time_te]
+    else
+      d_str                  = params[:date]
+      ds                     = params[:ds]
+      time_str               = d_str + ' ' + ds
+      time_begin             = Time.parse(time_str)
+      time_end               = time_begin + 1.hour
+      session[:date2time_tb] = time_begin
+      session[:date2time_te] = time_end
+    end
     psc         = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
     @title_name = []
     key1        = %w( source_node_name dest_node_name)
@@ -38,7 +47,7 @@ class ReportsController < ApplicationController
     end
     key = key1 + key3 + key2
 
-    @odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC')
+    @odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
 
   end
 

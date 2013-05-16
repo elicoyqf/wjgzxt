@@ -95,7 +95,7 @@
                     <% @users.each do |u| %>
                       <label class="radio">
                         <input type="radio" value="<%= u.id %>" name="uid">
-                        <%= u.uname %>
+                        <%= u.uname %>(<%= u.alias %>)
                       </label>
                     <% end %>
                   </div>

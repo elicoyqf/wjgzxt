@@ -5,48 +5,50 @@
 <div class="row-fluid hidden-phone hidden-tablet">
   <div class="span12 top-stats">
     <ul class="top-nav-boxes">
-      <li>
+      <!--<li>
         <a href="#">
           <i class="radmin-comments-2"></i>
           <span>系统交流</span>
         </a>
-      </li>
+      </li>-->
       <li>
         <a href="/workorders">
           <i class="radmin-clipboard-2"></i>
           <span>工单查看</span>
         </a>
       </li>
-      <li>
-        <a href="/reports">
-          <i class="radmin-stats-up"></i>
-          <span>测试评分报表</span>
-        </a>
-      </li>
-      <li>
-        <a href="/reports/export_rep">
-          <i class="radmin-dashboard"></i>
-          <span>出口得分排名</span>
-        </a>
-      </li>
-      <li>
-        <a href="/reports/locale_ranking">
-          <i class="radmin-bookmark"></i>
-          <span>查看归属地</span>
-        </a>
-      </li>
-      <li>
-        <a href="/reports/website_select">
-          <i class="radmin-dribbble"></i>
-          <span>网站得分排名</span>
-        </a>
-      </li>
-      <li id="color-switcher-control">
-        <a href="/whr">
-          <i class="radmin-target-2"></i>
-          <span>网站命中率</span>
-        </a>
-      </li>
+      <% if user_level >= 3 %>
+        <li>
+          <a href="/reports">
+            <i class="radmin-stats-up"></i>
+            <span>测试评分报表</span>
+          </a>
+        </li>
+        <li>
+          <a href="/reports/export_rep">
+            <i class="radmin-dashboard"></i>
+            <span>出口得分排名</span>
+          </a>
+        </li>
+        <li>
+          <a href="/reports/locale_ranking">
+            <i class="radmin-bookmark"></i>
+            <span>查看归属地</span>
+          </a>
+        </li>
+        <li>
+          <a href="/reports/website_select">
+            <i class="radmin-dribbble"></i>
+            <span>网站得分排名</span>
+          </a>
+        </li>
+        <li id="color-switcher-control">
+          <a href="/whr">
+            <i class="radmin-target-2"></i>
+            <span>网站命中率</span>
+          </a>
+        </li>
+      <% end %>
       <li>
         <a href="/login/logout">
           <i class="radmin-exit"></i>

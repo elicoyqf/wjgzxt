@@ -24,14 +24,19 @@ env :PATH, ENV['PATH']
 set :output, "#{path}/log/whenever.log" #设置日志输出文件
 
 #每个小时的第5分钟开始导入数据
-every '5 * * * *' do
+every '1 * * * *' do
   rake 'database:csv2db'
 end
 
 #每个小时的第10分钟开始分析数据
 #目前只对http数据分析
-every '10 * * * *' do
+every '15 * * * *' do
   rake 'database:analyse_data'
+end
+
+#在每天的23点57分重新新建表
+every '57 23 * * *' do
+  rake 'database:newtable'
 end
 #每天的晚班时间内做检查，从2点开始做到5点
 #every '20 2-6 * * *' do

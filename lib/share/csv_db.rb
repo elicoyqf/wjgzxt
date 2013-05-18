@@ -10,8 +10,8 @@ module CsvDb
     end
 
     def csv_to_db(filename)
-      #file = Rails.root.join('public', 'HTTP_201303012100.csv')
-
+      #file = Rails.root.join('public', 'HTTP_201305180800.csv')
+      #每天生成一张表，将原来的表进行rename
       filename.each do |fname|
         case fname
           when /HTTP/
@@ -35,9 +35,9 @@ module CsvDb
                 e_name << row[1].to_s.strip
                 i += 1
               end
-              #将出口名称添加到数据库中
+              #将出口名称添加到数据库中，现在是使用编号来进行测试，对应的名称将后期进行修改。
               e_name.each do |en|
-                ExportName.create(name: en, status: 0, user_id: 0)
+                ExportName.create(alias: en, status: 0, user_id: 0)
               end
               puts "http_data_file(#{fname}) have ------>" + i.to_s + ' lines.'
             end
@@ -129,11 +129,21 @@ module CsvDb
 
     #统计单次的http数据
     def statis_data_to_db(time_begin, time_end)
+      #可以优化，直接提取ExportName表中的数据即可。
+=begin
       hts    = HttpTestData.where('test_time >= ? and test_time < ?', time_begin, time_end)
       export = Set.new
       match  = Set.new
       hts.each do |line|
         export.add line.source_node_name
+      end
+=end
+
+      export = Set.new
+      match  = Set.new
+      en     = ExportName.all
+      en.each do |line|
+        export << line.alias
       end
 
       export.each do |e_name|
@@ -264,6 +274,131 @@ module CsvDb
           hts_record         = HttpTestScore.new(hts)
           hts_record.save
         end
+      end
+    end
+
+    def change_htd_table
+      date_str = 'http_test_data_' + Time.now.strftime('%Y%m%d').to_s
+      ActiveRecord::Migration.rename_table :http_test_data, date_str.to_sym
+      ActiveRecord::Migration.create_table :http_test_data
+      ActiveRecord::Migration.add_column :http_test_data, :test_time, :datetime
+      ActiveRecord::Migration.add_column :http_test_data, :source_node_name, :string
+      ActiveRecord::Migration.add_column :http_test_data, :source_ip_address, :string
+      ActiveRecord::Migration.add_column :http_test_data, :source_group, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_node_name, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_url, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_group, :string
+      ActiveRecord::Migration.add_column :http_test_data, :resolution_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :connection_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :time_to_first_byte, :string
+      ActiveRecord::Migration.add_column :http_test_data, :time_to_index, :string
+      ActiveRecord::Migration.add_column :http_test_data, :page_download_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :page_loading_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :total_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :throughput_time, :string
+      ActiveRecord::Migration.add_column :http_test_data, :overall_quality, :string
+      ActiveRecord::Migration.add_column :http_test_data, :resolution_sr, :string
+      ActiveRecord::Migration.add_column :http_test_data, :connection_sr, :string
+      ActiveRecord::Migration.add_column :http_test_data, :index_page_loading_sr, :string
+      ActiveRecord::Migration.add_column :http_test_data, :page_loading_r, :string
+      ActiveRecord::Migration.add_column :http_test_data, :loading_sr, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_ip_address, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_nationality, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_province, :string
+      ActiveRecord::Migration.add_column :http_test_data, :dest_locale, :string
+      ActiveRecord::Migration.add_column :http_test_data, :download_size, :string
+      ActiveRecord::Migration.add_column :http_test_data, :contents_size, :string
+      ActiveRecord::Migration.add_column :http_test_data, :return_code, :string
+      ActiveRecord::Migration.add_column :http_test_data, :add_ons, :string
+      ActiveRecord::Migration.add_column :http_test_data, :element_number, :string
+      ActiveRecord::Migration.add_timestamps :http_test_data
+      #Object.const_set(tbl_real.to_sym,Class.new(ActiveRecord::Base)) # => Object.class_eval { const_set(:Post,Class.new(ActiveRecord::Base)) }
+      # p Post.columns
+      #p Http20130519.class
+      #Http20130519.create(id:1,title: 'good')
+      #p tbl_real.column_names # ["id", "title"]
+    end
+
+    #动态创建数据库表
+    def create_new_table(table_name)
+      begin
+        ActiveRecord::Schema.define do
+          create_table "#{table_name}" do |t|
+            t.datetime :test_time
+            t.string :source_node_name
+            t.string :source_ip_address
+            t.string :source_group
+            t.string :dest_node_name
+            t.string :dest_url
+            t.string :dest_group
+            t.string :resolution_time
+            t.string :connection_time
+            t.string :time_to_first_byte
+            t.string :time_to_index
+            t.string :page_download_time
+            t.string :page_loading_time
+            t.string :total_time
+            t.string :throughput_time
+            t.string :overall_quality
+            t.string :resolution_sr
+            t.string :connection_sr
+            t.string :index_page_loading_sr
+            t.string :page_loading_r
+            t.string :loading_sr
+            t.string :dest_ip_address
+            t.string :dest_nationality
+            t.string :dest_province
+            t.string :dest_locale
+            t.string :download_size
+            t.string :contents_size
+            t.string :return_code
+            t.string :add_ons
+            t.string :element_number
+            t.timestamps
+          end
+        end
+        tbl_name = table_name.capitalize
+        Object.const_set(:tbl_name, Class.new(ActiveRecord::Base))
+        p tbl_name.column_names
+        model_file = File.join("app", "models", table_name.singularize+".rb")
+        model_name = table_name.singularize.camelize
+        File.open(model_file, "w+") do |f|
+          f << "class #{model_name} < ActiveRecord::Base\n"
+          f << 'attr_accessible :test_time,
+            :source_node_name,
+            :source_ip_address,
+            :source_group,
+            :dest_node_name,
+            :dest_url,
+            :dest_group,
+            :resolution_time,
+            :connection_time,
+            :time_to_first_byte,
+            :time_to_index,
+            :page_download_time,
+            :page_loading_time,
+            :total_time,
+            :throughput_time,
+            :overall_quality,
+            :resolution_sr,
+            :connection_sr,
+            :index_page_loading_sr,
+            :page_loading_r,
+            :loading_sr,
+            :dest_ip_address,
+            :dest_nationality,
+            :dest_province,
+            :dest_locale,
+            :download_size,
+            :contents_size,
+            :return_code,
+            :add_ons,
+            :element_number'
+          f << "\nend"
+        end
+        return true
+      rescue Exception => err
+        return err.message
       end
     end
   end

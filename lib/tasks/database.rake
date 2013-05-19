@@ -18,7 +18,7 @@ namespace :database do
     #video_filename       = '/home/wgdata/Video_' + postfix
     #ping_filename        = '/home/wgdata/PING_' + postfix
     filename             = []
-    filename << file
+    #filename << file
     filename << http_filename
     filename << trace_route_filename
     filename << video_filename

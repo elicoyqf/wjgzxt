@@ -33,7 +33,10 @@ module UtiltilyTools
     other_data = HttpTestData.where('source_node_name != ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
     new_data   =[]
     other_data.each do |line|
-      source_node_arr = line.source_node_name.to_s.strip[-4..-3]
+      #编号要去出口对应关系里面找对应关系
+      eno             = line.source_node_name.to_s
+      e_name          = ExportName.find_by_alias(eno).name
+      #source_node_arr = line.source_node_name.to_s.strip[-4..-3]
       host_locale     =''
       if !line.dest_locale.blank? && line.dest_locale.to_s.strip != 'NULL'
         host_locale = line.dest_locale.to_s.strip
@@ -41,12 +44,20 @@ module UtiltilyTools
 
       #判断自租出口数据是否有效的条件
       #出口与归属地必须要一致才有效
-      if !source_node_arr.blank? && !host_locale.blank? && (source_node_arr == host_locale)
+      if !e_name.blank? && !host_locale.blank? && contrast_locale(e_name,host_locale)
         new_data << line
         #puts 'other'+'-'*100+line.id.to_s
       end
     end
     new_data
+  end
+
+  def contrast_locale(ename, locale)
+    if ename =~ /#{locale}/
+      true
+    else
+      false
+    end
   end
 
   def cal_score(cons_data, odata, pc)

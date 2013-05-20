@@ -247,7 +247,8 @@ module ReportsHelper
     e_day   = Time.now.day
     y_date  = Time.now.at_beginning_of_day - 1.day
     c_date  = Time.now.at_beginning_of_day
-    hts     = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', y_date, c_date, en)
+    e_no = ExportName.where('name = ?',en).first.alias
+    hts     = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', y_date, c_date, e_no)
     ename   = Set.new
     hts.each do |ts|
       ename << ts.dest_url

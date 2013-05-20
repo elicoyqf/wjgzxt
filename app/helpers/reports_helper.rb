@@ -163,11 +163,11 @@ module ReportsHelper
       #查询当月的月表数据
       en = ExportName.all
       en.each do |line|
-        etn << line.name
+        etn << line.alias
       end
     else
       ef.each do |t|
-        etn << t.name
+        etn << t.alias
       end
     end
     #将对比标杆出口去掉
@@ -191,7 +191,7 @@ module ReportsHelper
       negative_web   = 0
       #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
       t_array        = []
-      t_array << ename
+      t_array << ExportName.where('alias = ?', ename).first.name
       match_web.clear
       negat_web.clear
       tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
@@ -235,77 +235,77 @@ module ReportsHelper
   end
 
   def cal_data(en)
-     #[
-     # {name: '新浪网', color: 'rgba(223, 83, 83, .5)',data:[[0, 2],[0, 2],[0, 2]]},
-     # {name: '新浪网', color: 'rgba(223, 83, 83, .5)',data:[[0, 2],[0, 2],[0, 2]]}
-     # ]
-     out_d   = []
-     c_year  = Time.now.year
-     c_month = Time.now.month
-     rt      = 0
-     c_day   = Time.now.day - 1
-     e_day   = Time.now.day
-     y_date  = Time.now.at_beginning_of_day - 1.day
-     c_date  = Time.now.at_beginning_of_day
-     hts     = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', y_date, c_date, en)
-     ename   = Set.new
-     hts.each do |ts|
-       ename << ts.dest_url
-     end
-     ename.each do |line|
-       tmp_h          = {}
-       tmp_h['name']  = line.to_s
-       tmp_h['color'] = 'rgba('+rand(255).to_s + ',' + rand(255).to_s + ',' + rand(255).to_s + ', .5)'
-       tmp_arr        = []
-       (0..23).each do |pi|
-         #取真实的测试数据值
-         th = []
-         if pi == 23
-           t_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + pi.to_s
-           e_date = Time.parse(t_date).at_beginning_of_day + 1.day
-           c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), e_date, line)
-           if c_hts.size == 0
-             #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
-             #th << rt << 0
-             th << rt
-             tmp_arr << th
-           elsif c_hts.size == 1
-             th << rt << c_hts.first.total_scores
-             tmp_arr << th
-           else
-             c_hts.each do |ch|
-               th.clear
-               th << rt << ch.total_scores
-               tmp_arr << th
-             end
-           end
-         else
-           t_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + pi.to_s
-           e_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + (pi+1).to_s
-           c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), Time.parse(e_date), line)
-           if c_hts.size == 0
-             #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
-             #th << rt << 0
-             th << rt
-             tmp_arr << th
-           elsif c_hts.size == 1
-             th << rt << c_hts.first.total_scores
-             tmp_arr << th
-           else
-             c_hts.each do |ch|
-               th.clear
-               th << rt << ch.total_scores
-               tmp_arr << th
-             end
-           end
-         end
-         rt += 1
-       end
-       tmp_h['data'] = tmp_arr
-       out_d << tmp_h
-     end
-     out_d.to_s.gsub!(/=>/,':')
-   end
+    #[
+    # {name: '新浪网', color: 'rgba(223, 83, 83, .5)',data:[[0, 2],[0, 2],[0, 2]]},
+    # {name: '新浪网', color: 'rgba(223, 83, 83, .5)',data:[[0, 2],[0, 2],[0, 2]]}
+    # ]
+    out_d   = []
+    c_year  = Time.now.year
+    c_month = Time.now.month
+    rt      = 0
+    c_day   = Time.now.day - 1
+    e_day   = Time.now.day
+    y_date  = Time.now.at_beginning_of_day - 1.day
+    c_date  = Time.now.at_beginning_of_day
+    hts     = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', y_date, c_date, en)
+    ename   = Set.new
+    hts.each do |ts|
+      ename << ts.dest_url
+    end
+    ename.each do |line|
+      tmp_h          = {}
+      tmp_h['name']  = line.to_s
+      tmp_h['color'] = 'rgba('+rand(255).to_s + ',' + rand(255).to_s + ',' + rand(255).to_s + ', .5)'
+      tmp_arr        = []
+      (0..23).each do |pi|
+        #取真实的测试数据值
+        th = []
+        if pi == 23
+          t_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + pi.to_s
+          e_date = Time.parse(t_date).at_beginning_of_day + 1.day
+          c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), e_date, line)
+          if c_hts.size == 0
+            #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
+            #th << rt << 0
+            th << rt
+            tmp_arr << th
+          elsif c_hts.size == 1
+            th << rt << c_hts.first.total_scores
+            tmp_arr << th
+          else
+            c_hts.each do |ch|
+              th.clear
+              th << rt << ch.total_scores
+              tmp_arr << th
+            end
+          end
+        else
+          t_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + pi.to_s
+          e_date = c_year.to_s + '-' + c_month.to_s + '-' + c_day.to_s + ' ' + (pi+1).to_s
+          c_hts  = hts.where('test_time >= ? and test_time < ? and dest_url = ?', Time.parse(t_date), Time.parse(e_date), line)
+          if c_hts.size == 0
+            #此处修改了，如果没有分值则为空，不能为0，0是有效测试数据。
+            #th << rt << 0
+            th << rt
+            tmp_arr << th
+          elsif c_hts.size == 1
+            th << rt << c_hts.first.total_scores
+            tmp_arr << th
+          else
+            c_hts.each do |ch|
+              th.clear
+              th << rt << ch.total_scores
+              tmp_arr << th
+            end
+          end
+        end
+        rt += 1
+      end
+      tmp_h['data'] = tmp_arr
+      out_d << tmp_h
+    end
+    out_d.to_s.gsub!(/=>/, ':')
+  end
 
 =begin
   def gen_json

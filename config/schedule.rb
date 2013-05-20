@@ -30,7 +30,7 @@ end
 
 #每个小时的第10分钟开始分析数据
 #目前只对http数据分析
-every '15 * * * *' do
+every '20 * * * *' do
   rake 'database:analyse_data'
 end
 

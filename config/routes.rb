@@ -1,17 +1,24 @@
 Wjgzxt::Application.routes.draw do
+  resources :pwd_modify, only: [] do
+    collection do
+      get 'modify', 'p_modify'
+    end
+  end
 
-  get 'domain/validate'
-  get 'domain/test'
-  get 'domain/dfileupload'
-  post 'domain/upload'
+  resources :domain, only: [] do
+    collection do
+      get 'validate', 'test', 'dfileupload'
+      post 'upload'
+    end
+  end
 
   resources :export, only: [] do
     member do
-      get 'modify','chg_status','del'
+      get 'modify', 'chg_status', 'del'
     end
     collection do
-      get 'index', 'flag','perm_deni'
-      get 'mdf','add_flag','p_add_flag'
+      get 'index', 'flag', 'perm_deni'
+      get 'mdf', 'add_flag', 'p_add_flag'
     end
   end
 
@@ -34,18 +41,6 @@ Wjgzxt::Application.routes.draw do
     end
   end
 
-  #get 'web_hit_rate/time_r'
-  #get 'web_hit_rate/select_day_report'
-  #get 'web_hit_rate/select_month_report'
-  #
-  #post 'web_hit_rate/day_r'
-  #get 'web_hit_rate/day_r'
-  #
-  #post 'web_hit_rate/month_r'
-  #get 'web_hit_rate/month_r'
-  #
-  #get 'web_hit_rate/index'
-
   resources :web_hit_rate, only: [] do
     collection do
       get 'time_r', 'select_day_report', 'select_month_report', 'index', 'day_r', 'month_r', 'list_day', 'list_time', 'list_locale'
@@ -58,7 +53,7 @@ Wjgzxt::Application.routes.draw do
   resources :param_setting, only: [] do
     collection do
       get 'http', 'ping', 'route', 'video', 'adduser', 'mng_user', 'interaction', 'view_interaction', 'del_interaction', 'p_adduser'
-      get 'u_user', 's_user', 'd_user', 'p_u_user','p_interaction'
+      get 'u_user', 's_user', 'd_user', 'p_u_user', 'p_interaction'
       post 'p_adduser'
     end
   end
@@ -66,7 +61,7 @@ Wjgzxt::Application.routes.draw do
   match 'reports/get_data(.:format)' => 'reports#get_data'
   resources :reports, only: [] do
     collection do
-      get 'export_rep', 'get_data', 'r_graph', 'locale_detail','date2time_report'
+      get 'export_rep', 'get_data', 'r_graph', 'locale_detail', 'date2time_report'
       post 'day_report', 'week_report', 'month_report'
     end
   end

@@ -16,7 +16,7 @@ module WorkordersHelper
 
     e_name.each do |en|
       tmp_arr   = []
-      p_records = HttpTestStatis.where('start_time >= ?  and end_time < ? and export_name = ?', p_b_date, p_e_date, en.name)
+      p_records = HttpTestStatis.where('start_time >= ?  and end_time < ? and export_name = ?', p_b_date, p_e_date, en.alias)
       nega_val  = p_records.sum(:negative_statis)
       tota_val  = p_records.sum(:total_statis)
       tmp_arr << en.name << nega_val << tota_val << p_b_date << p_e_date
@@ -34,7 +34,7 @@ module WorkordersHelper
     p_e_date = p_b_date + 1.day
     e_name.each do |en|
       tmp_arr   = []
-      p_records = HttpTestStatis.where('start_time >= ?  and end_time < ? and export_name = ?', p_b_date, p_e_date, en.name)
+      p_records = HttpTestStatis.where('start_time >= ?  and end_time < ? and export_name = ?', p_b_date, p_e_date, en.alias)
       nega_val  = p_records.sum(:negative_statis)
       tota_val  = p_records.sum(:total_statis)
       tmp_arr << en.name << nega_val << tota_val << p_b_date

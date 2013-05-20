@@ -26,95 +26,107 @@
     </li>
     <li class="accordion" id="navigation-components">
       <a class="accordion-toggle" data-toggle="collapse" data-parent="navigation-components" href="#collapse2">
-<span class="box">
-<i class="radmin-icon radmin-tree-view"></i>
-</span>
+        <span class="box">
+        <i class="radmin-icon radmin-tree-view"></i>
+        </span>
         <span class="hidden-tablet hidden-phone">出口信息</span>
         <span class="label label-info pull-right hidden-tablet hidden-phone"><i class="icon-chevron-down icon-white"></i>3</span>
       </a>
 
       <div id="collapse2" class="accordion-body collapse">
         <ul class="nav nav-stacked submenu">
-          <li>
-            <a href="/export/flag">
-<span class="box">
-<i class="radmin-icon radmin-grid-view"></i>
-</span>
-              <span class="hidden-tablet hidden-phone">出口标识</span>
-            </a>
-          </li>
-          <li>
-            <a href="/domain/validate">
-<span class="box">
-<i class="radmin-icon radmin-picture"></i>
-</span>
-              <span class="hidden-tablet hidden-phone">域名查重</span>
-            </a>
-          </li>
+          <% if user_level >= 3 %>
+            <li>
+              <a href="/export/flag">
+                <span class="box">
+                <i class="radmin-icon radmin-grid-view"></i>
+                </span>
+                <span class="hidden-tablet hidden-phone">出口标识</span>
+              </a>
+            </li>
+            <li>
+              <a href="/domain/validate">
+                <span class="box">
+                <i class="radmin-icon radmin-picture"></i>
+                </span>
+                <span class="hidden-tablet hidden-phone">域名查重</span>
+              </a>
+            </li>
+            <li class="submenu-last">
+              <a href="#">
+                <span class="box">
+                <i class="radmin-icon radmin-star"></i>
+                </span>
+                <span class="hidden-tablet hidden-phone">其它参数</span>
+              </a>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </li>
+    <li class="accordion" id="navigation-param-setting">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#navigation-sample-pages" href="#collapse1">
+        <span class="box">
+        <i class="radmin-icon radmin-cog"></i>
+        </span>
+        <span class="hidden-tablet hidden-phone">设置系统参数</span>
+        <span class="label label-info pull-right hidden-tablet hidden-phone"><i class="icon-chevron-down icon-white"></i>3</span>
+      </a>
+
+      <div id="collapse1" class="accordion-body collapse">
+        <ul class="nav nav-stacked submenu">
+          <% if user_level >= 3 %>
+            <li>
+              <a href="/param_setting/mng_user">
+                  <span class="box">
+                    <i class="radmin-icon radmin-user"></i>
+                  </span>
+                <span class="hidden-tablet hidden-phone">管理系统用户</span>
+              </a>
+            </li>
+            <li>
+              <a href="/param_setting/http">
+                  <span class="box">
+                    <i class="radmin-icon radmin-share-3"></i>
+                  </span>
+                <span class="hidden-tablet hidden-phone">HTTP测试参数</span>
+              </a>
+            </li>
+            <!--<li>
+              <a href="/param_setting/ping">
+                <span class="box">
+                <i class="radmin-icon radmin-target"></i>
+                </span>
+                <span class="hidden-tablet hidden-phone">PING测试参数</span>
+              </a>
+            </li>-->
+            <!--<li>
+              <a href="/param_setting/route">
+              <span class="box">
+              <i class="radmin-icon radmin-share-2"></i>
+              </span>
+                <span class="hidden-tablet hidden-phone">路由测试参数</span>
+              </a>
+            </li>-->
+            <!--<li>
+              <a href="/param_setting/video">
+                <span class="box">
+                <i class="radmin-icon radmin-vimeo"></i>
+                </span>
+                <span class="hidden-tablet hidden-phone">视频测试参数</span>
+              </a>
+            </li>-->
+          <% end %>
           <li class="submenu-last">
-            <a href="#">
-<span class="box">
-<i class="radmin-icon radmin-star"></i>
-</span>
-              <span class="hidden-tablet hidden-phone">其它参数</span>
+            <a href="/pwd_modify/modify">
+              <span class="box">
+                <i class="radmin-icon radmin-user"></i>
+              </span>
+              <span class="hidden-tablet hidden-phone">修改登录密码</span>
             </a>
           </li>
         </ul>
       </div>
     </li>
-    <li class="accordion" id="navigation-param-setting">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#navigation-sample-pages" href="#collapse1">
-            <span class="box">
-            <i class="radmin-icon radmin-cog"></i>
-            </span>
-            <span class="hidden-tablet hidden-phone">设置系统参数</span>
-            <span class="label label-info pull-right hidden-tablet hidden-phone"><i class="icon-chevron-down icon-white"></i>4</span>
-          </a>
-
-          <div id="collapse1" class="accordion-body collapse">
-            <ul class="nav nav-stacked submenu">
-              <li>
-                <a href="/param_setting/mng_user">
-                  <span class="box">
-                    <i class="radmin-icon radmin-user"></i>
-                  </span>
-                  <span class="hidden-tablet hidden-phone">管理系统用户</span>
-                </a>
-              </li>
-              <li>
-                <a href="/param_setting/http">
-                  <span class="box">
-                    <i class="radmin-icon radmin-share-3"></i>
-                  </span>
-                  <span class="hidden-tablet hidden-phone">HTTP测试参数</span>
-                </a>
-              </li>
-              <li>
-                <a href="/param_setting/ping">
-    <span class="box">
-    <i class="radmin-icon radmin-target"></i>
-    </span>
-                  <span class="hidden-tablet hidden-phone">PING测试参数</span>
-                </a>
-              </li>
-              <li>
-                <a href="/param_setting/route">
-              <span class="box">
-              <i class="radmin-icon radmin-share-2"></i>
-              </span>
-                  <span class="hidden-tablet hidden-phone">路由测试参数</span>
-                </a>
-              </li>
-              <li class="submenu-last">
-                <a href="/param_setting/video">
-    <span class="box">
-    <i class="radmin-icon radmin-vimeo"></i>
-    </span>
-                  <span class="hidden-tablet hidden-phone">视频测试参数</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
   </ul>
 </div>

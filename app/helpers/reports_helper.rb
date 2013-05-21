@@ -159,6 +159,7 @@ module ReportsHelper
   def cal_export_ranking(time_begin, time_end, ef = [])
     etn = Set.new
     hts = HttpTestStatis.create
+=begin
     if ef.blank?
       #查询当月的月表数据
       en = ExportName.all
@@ -166,6 +167,12 @@ module ReportsHelper
         etn << line.alias
       end
     else
+      ef.each do |t|
+        etn << t.alias
+      end
+    end
+=end
+    unless ef.blank?
       ef.each do |t|
         etn << t.alias
       end
@@ -247,7 +254,7 @@ module ReportsHelper
     e_day   = Time.now.day
     y_date  = Time.now.at_beginning_of_day - 1.day
     c_date  = Time.now.at_beginning_of_day
-    e_no = ExportName.where('name = ?',en).first.alias
+    e_no    = ExportName.where('name = ?', en).first.alias
     hts     = HttpTestScore.where('test_time >= ? and test_time < ? and source_node_name = ?', y_date, c_date, e_no)
     ename   = Set.new
     hts.each do |ts|

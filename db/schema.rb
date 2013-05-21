@@ -11,7 +11,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130428051711) do
+ActiveRecord::Schema.define(:version => 20130521144732) do
+
+  create_table "email_degradation_logs", :force => true do |t|
+    t.string   "export_name"
+    t.datetime "time_begin"
+    t.datetime "time_end"
+    t.float    "nega_r"
+    t.float    "last_time_r"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "email_notifier_logs", :force => true do |t|
+    t.string   "export_name"
+    t.datetime "time_begin"
+    t.datetime "time_end"
+    t.integer  "nega_num"
+    t.integer  "total_match_num"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "export_names", :force => true do |t|
     t.string   "name"
@@ -23,6 +43,41 @@ ActiveRecord::Schema.define(:version => 20130428051711) do
   end
 
   create_table "http_test_data", :force => true do |t|
+    t.datetime "test_time"
+    t.string   "source_node_name"
+    t.string   "source_ip_address"
+    t.string   "source_group"
+    t.string   "dest_node_name"
+    t.string   "dest_url"
+    t.string   "dest_group"
+    t.string   "resolution_time"
+    t.string   "connection_time"
+    t.string   "time_to_first_byte"
+    t.string   "time_to_index"
+    t.string   "page_download_time"
+    t.string   "page_loading_time"
+    t.string   "total_time"
+    t.string   "throughput_time"
+    t.string   "overall_quality"
+    t.string   "resolution_sr"
+    t.string   "connection_sr"
+    t.string   "index_page_loading_sr"
+    t.string   "page_loading_r"
+    t.string   "loading_sr"
+    t.string   "dest_ip_address"
+    t.string   "dest_nationality"
+    t.string   "dest_province"
+    t.string   "dest_locale"
+    t.string   "download_size"
+    t.string   "contents_size"
+    t.string   "return_code"
+    t.string   "add_ons"
+    t.string   "element_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "http_test_data_20130518", :force => true do |t|
     t.datetime "test_time"
     t.string   "source_node_name"
     t.string   "source_ip_address"
@@ -107,6 +162,8 @@ ActiveRecord::Schema.define(:version => 20130428051711) do
     t.float    "total_statis"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.integer  "negative_num"
+    t.integer  "all_match_num"
   end
 
   create_table "locale_data", :force => true do |t|

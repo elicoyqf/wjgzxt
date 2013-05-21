@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>出口质量劣化信息</h1>
+    <p>本次测试时间段为:<%= @time_begin.strftime('%Y年-%m月%d日 %H:%M:%S') %> - <%= @time_end.strftime('%Y年-%m月%d日 %H:%M:%S') %></p>
+    <p>本次测试结果如下示：</p>
+    <p>本次测试得负分的网站率为: <%= @negative_r %></p>
+    <p>上一个小时的负分网站率为: <%= @ahan_r %></p>
+    <p>本次测试的负分网站率已超出上一次测试的20%，出口质量急速劣化，请检查</p>
+    <%= link_to '出口质量感知评测系统登录','http://61.235.94.119:8080' %>
+    <p></p>
+  </body>
+</html>

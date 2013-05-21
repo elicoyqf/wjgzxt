@@ -130,15 +130,6 @@ module CsvDb
     #统计单次的http数据
     def statis_data_to_db(time_begin, time_end)
       #可以优化，直接提取ExportName表中的数据即可。
-=begin
-      hts    = HttpTestData.where('test_time >= ? and test_time < ?', time_begin, time_end)
-      export = Set.new
-      match  = Set.new
-      hts.each do |line|
-        export.add line.source_node_name
-      end
-=end
-
       export = Set.new
       match  = Set.new
       en     = ExportName.all
@@ -148,19 +139,50 @@ module CsvDb
 
       export.each do |e_name|
         nega_val  = 0
+        nega_num  = 0
         total_val = 0
         export_s  = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ?', e_name, time_begin, time_end)
         export_s.each do |es|
           total_val += es.total_scores
           if es.total_scores < 0
             nega_val += es.total_scores
+            nega_num += 1
           end
           match << es.dest_url
         end
         negative_statis = nega_val.to_f / match.size.to_f
         total_statis    = total_val.to_f / match.size.to_f
         HttpTestStatis.create(export_name:  e_name, start_time: time_begin, end_time: time_end, negative_statis: negative_statis,
-                              total_statis: total_statis)
+                              total_statis: total_statis, negative_num: nega_num, all_match_num: match.size)
+
+        #如果其得负分的浏览网站数量/总测试浏览网站数量*100%≥60%（相同归属运营商的比较）；则发送邮件
+        nega_r = nega_num.to_f / match.size.to_f
+        if nega_r >= 0.6
+          unless ExportName.find_by_alias(e_name).user.blank?
+            email = ExportName.find_by_alias(e_name).user.email
+            Notifier.notifier_mail(email, nega_num, match.size, time_begin, time_end).deliver
+          end
+          EmailNotifierLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_num: nega_num, total_match_num: match.size)
+        end
+
+        #得负分的浏览网站数量环比上一测试周期增加20%；（相同归属运营商的比较）
+        an_hour_ago_begin = time_begin - 1.hour
+        an_hour_age_end   = time_end - 1.hour
+        an_hour_age_hts   = HttpTestStatis.where('export_name = ? and start_time = ? and end_time = ?', e_name, an_hour_ago_begin, an_hour_age_end)
+
+        unless an_hour_age_hts.blank?
+          unless an_hour_age_hts.negative_num.blank? && an_hour_age_hts.all_match_num.blank?
+            an_hour_age_nega_r = an_hour_age_hts.negative_num.to_f / an_hour_age_hts.all_match_num.to_f
+
+            if nega_r >= an_hour_age_nega_r + 0.2
+              unless ExportName.find_by_alias(e_name).user.blank?
+                email = ExportName.find_by_alias(e_name).user.email
+                Notifier.notifier_degradation_mail(email, nega_r, an_hour_age_nega_r, time_begin, time_end).deliver
+              end
+              EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_r, last_time_r: an_hour_age_nega_r)
+            end
+          end
+        end
       end
     end
 

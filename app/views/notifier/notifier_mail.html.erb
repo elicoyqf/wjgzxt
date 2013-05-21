@@ -4,8 +4,13 @@
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
   </head>
   <body>
-    <h1>There is a new comment on your blog</h1>
-    <p> <%= @comment %></p>
-    <p> url: <%= @url %> <p>
+    <h1>出口质量劣化信息</h1>
+    <p>本次测试时间段为:<%= @time_begin.strftime('%Y年-%m月%d日 %H:%M:%S') %> - <%= @time_end.strftime('%Y年-%m月%d日 %H:%M:%S') %></p>
+    <p>本次测试结果如下示：</p>
+    <p>得负分的网站数为: <%= @negative_num %></p>
+    <p>总的测试网站数为: <%= @all_match_num %></p>
+    <p>负分率为<%= number_with_precision (@negative_num.to_f / @all_match_num) * 100, :precision => 2 %> %</p>
+    <%= link_to '出口质量感知评测系统登录','http://61.235.94.119:8080' %>
+    <p></p>
   </body>
 </html>

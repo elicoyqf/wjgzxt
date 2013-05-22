@@ -175,7 +175,7 @@ module CsvDb
         unless an_hour_age_hts.blank?
           unless an_hour_age_hts.negative_num.blank?
 
-            if nega_num.to_f >= 1.2 * an_hour_age_hts.negative_num.to_f
+            if nega_num.to_f > 1.2 * an_hour_age_hts.negative_num.to_f
               unless ExportName.find_by_alias(e_name).user.blank?
                 email = ExportName.find_by_alias(e_name).user.email
                 en    = ExportName.find_by_alias(e_name).name

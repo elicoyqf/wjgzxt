@@ -68,7 +68,7 @@
                     <% @en.each do |n| %>
                       <label class="checkbox">
                         <input type="checkbox" value="<%= n.id %>" name="excblist[]">
-                        <%= n.name %>
+                        <%= n.alias %> - <%= n.name %>
                       </label>
                     <% end %>
                     <p class="help-block">

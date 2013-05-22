@@ -158,23 +158,20 @@ module ReportsHelper
 
   def cal_export_ranking(time_begin, time_end, ef = [])
     etn = Set.new
-    hts = HttpTestStatis.create
-=begin
+
     if ef.blank?
       #查询当月的月表数据
       en = ExportName.all
       en.each do |line|
-        etn << line.alias
+        unless line.alias.blank?
+          etn << line.alias
+        end
       end
     else
       ef.each do |t|
-        etn << t.alias
-      end
-    end
-=end
-    unless ef.blank?
-      ef.each do |t|
-        etn << t.alias
+        unless t.alias.blank?
+          etn << t.alias
+        end
       end
     end
     #将对比标杆出口去掉

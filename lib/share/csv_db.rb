@@ -168,7 +168,8 @@ module CsvDb
         #得负分的浏览网站数量环比上一测试周期增加20%；（相同归属运营商的比较）
         an_hour_ago_begin = time_begin - 1.hour
         an_hour_age_end   = time_end - 1.hour
-        an_hour_age_hts   = HttpTestStatis.where('export_name = ? and start_time = ? and end_time = ?', e_name, an_hour_ago_begin, an_hour_age_end)
+        an_hour_age_hts   = HttpTestStatis.where('export_name = ? and start_time = ? and end_time = ?', e_name, an_hour_ago_begin,
+                                                 an_hour_age_end).first
 
         unless an_hour_age_hts.blank?
           unless an_hour_age_hts.negative_num.blank?

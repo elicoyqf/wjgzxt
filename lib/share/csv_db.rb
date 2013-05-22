@@ -179,7 +179,7 @@ module CsvDb
                 email = ExportName.find_by_alias(e_name).user.email
                 Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end).deliver
               end
-              EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_r, last_time_r: an_hour_age_nega_r)
+              EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_r, last_time_r: an_hour_age_hts.negative_num)
             end
           end
         end

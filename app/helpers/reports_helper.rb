@@ -195,47 +195,59 @@ module ReportsHelper
       negative_web   = 0
       #用于封装所有数据的数组[出口名称，负值，总分，负值网站次数，有效总匹配网站数]
       t_array        = []
-      t_array << ExportName.where('alias = ?', ename).first.name
-      match_web.clear
-      negat_web.clear
-      tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
-                                                                 time_begin, time_end, ename)
-      tmp.each do |t|
-        match_web << t.dest_url
-        if t.total_scores < 0
-          negat_web << t.dest_url
+      en_tmp         = ExportName.where('alias = ?', ename).first
+      unless en_tmp.name.blank?
+        t_array << en_tmp.name
+        match_web.clear
+        negat_web.clear
+        tmp = HttpTestScore.select('dest_url, total_scores').where('test_time >= ? and test_time < ? and source_node_name = ?',
+                                                                   time_begin, time_end, ename)
+        tmp.each do |t|
+          match_web << t.dest_url
+          if t.total_scores < 0
+            negat_web << t.dest_url
+          end
+        end
+        negative_total = hts.where('export_name = ? ', ename).sum(:negative_statis)
+        all_total      = hts.where('export_name = ? ', ename).sum(:total_statis)
+        negative_web   = negat_web.size
+        if all_total > 0
+          total_pos += 1
+        elsif all_total < 0
+          total_neg += 1
+        else
+          total_eql += 1
+        end
+        t_array << negative_total
+        t_array << all_total
+        t_array << negative_web
+        t_array << match_web.size
+        mws = match_web.size
+        if match_web.size != 0
+          t_array << (((mws.to_f - negative_web.to_f) / mws.to_f) * 100)
+        else
+          t_array << 0
+        end
+
+        if contrast_locale t_array[0].to_s ,'电信'
+          dx_array << t_array
+        elsif contrast_locale t_array[0].to_s ,'联通'
+          lt_array << t_array
         end
       end
-      negative_total = hts.where('export_name = ? ', ename).sum(:negative_statis)
-      all_total      = hts.where('export_name = ? ', ename).sum(:total_statis)
-      negative_web   = negat_web.size
-      if all_total > 0
-        total_pos += 1
-      elsif all_total < 0
-        total_neg += 1
-      else
-        total_eql += 1
-      end
-      t_array << negative_total
-      t_array << all_total
-      t_array << negative_web
-      t_array << match_web.size
-      mws = match_web.size
-      if match_web.size != 0
-        t_array << (((mws.to_f - negative_web.to_f) / mws.to_f) * 100)
-      else
-        t_array << 0
-      end
 
-      if t_array[0][-4..-3] == '电信'
-        dx_array << t_array
-      else
-        lt_array << t_array
-      end
     end
     dx_array.sort_by! { |x| x[1] }
     lt_array.sort_by! { |x| x[1] }
     [dx, lt, oe, total_pos, total_neg, total_eql, dx_array, lt_array]
+  end
+
+  def contrast_locale(ename, locale)
+    if ename =~ /#{locale}/
+      true
+    else
+      false
+    end
   end
 
   def cal_data(en)

@@ -61,20 +61,13 @@ Wjgzxt::Application.routes.draw do
   match 'reports/get_data(.:format)' => 'reports#get_data'
   resources :reports, only: [] do
     collection do
-      get 'export_rep', 'get_data', 'r_graph', 'locale_detail', 'date2time_report'
+      get 'export_rep', 'get_data', 'r_graph', 'locale_detail'
+      get 'select_date_report', 'select_day_report', 'select_week_report', 'select_month_report'
+      get 'time_report', 'day_report', 'week_report', 'month_report', 'day_report_csv', 'week_report_csv', 'month_report_csv'
+      get 'date2time_report', 'date2day_report', 'date2week_report', 'date2month_report'
       post 'day_report', 'week_report', 'month_report'
     end
   end
-
-  get 'reports/time_report'
-
-  get 'reports/select_date_report'
-
-  post 'reports/date2time_report'
-
-  get 'reports/day_report'
-
-  get 'reports/week_report'
 
   get 'reports/export_ranking'
 

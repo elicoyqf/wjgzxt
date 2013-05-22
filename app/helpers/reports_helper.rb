@@ -51,6 +51,41 @@ module ReportsHelper
     new_data
   end
 
+  def gen_report_data(time_begin, time_end)
+    psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
+    title_name = []
+    key1       = %w( source_node_name dest_node_name)
+    key2       =%w(positive_items_scores negative_items_scores total_scores)
+
+    key3 = []
+    psc.each do |config|
+      title_name << config.alias
+      key3 << config.param_name
+    end
+    key = key1 + key3 + key2
+
+    odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
+    [title_name, odata]
+  end
+
+  def gen_report_csv(time_begin, time_end)
+    psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
+    title_name = []
+    key1       = %w(test_time source_node_name source_ip_address source_group dest_node_name dest_url dest_group)
+    key2       =%w(dest_ip_address dest_nationality dest_province dest_locale positive_items negative_items equal_items positive_items_scores
+negative_items_scores equal_items_scores total_scores)
+
+    key3 = []
+    psc.each do |config|
+      title_name << config.alias
+      key3 << config.param_name
+    end
+    key = key1 + key3 + key2
+
+    odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('source_node_name')
+    return key, odata, title_name
+  end
+
   def data_to_csv(title, key, data, option={})
     puts '-'*30+key.to_s
     CSV.generate(option) do |csv|
@@ -74,7 +109,6 @@ module ReportsHelper
             when 'time_to_first_byte'
               tmp3 << tdata.time_to_first_byte
             when 'time_to_index'
-              puts 'time_to_index'
               tmp3 << tdata.time_to_index
             when 'page_download_time'
               tmp3 << tdata.page_download_time
@@ -229,9 +263,9 @@ module ReportsHelper
           t_array << 0
         end
 
-        if contrast_locale t_array[0].to_s ,'电信'
+        if contrast_locale t_array[0].to_s, '电信'
           dx_array << t_array
-        elsif contrast_locale t_array[0].to_s ,'联通'
+        elsif contrast_locale t_array[0].to_s, '联通'
           lt_array << t_array
         end
       end

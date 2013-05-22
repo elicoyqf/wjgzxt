@@ -20,6 +20,76 @@ class ReportsController < ApplicationController
     end
   end
 
+  def select_day_report
+
+  end
+
+  def select_week_report
+
+  end
+
+  def select_month_report
+    @ms = []
+    (1..12).each do |n|
+      @ms << [n, n.to_s+'月']
+    end
+  end
+
+  def date2month_report
+    time_begin = nil
+    time_end   = nil
+    if params[:ms].blank?
+      time_begin = session[:date2month_tb]
+      time_end   = session[:date2month_te]
+    else
+      ms                      = params[:ms]
+      tmp_str                 = Time.now.year.to_s
+      new_str                 = tmp_str + '-' + ms + '-01'
+      time_begin              = Time.parse(new_str).at_beginning_of_month
+      time_end                = time_begin + 1.month
+      session[:date2month_tb] = time_begin
+      session[:date2month_te] = time_end
+    end
+    @title_name, @odata = gen_report_data(time_begin, time_end)
+    render template: 'reports/date2time_report'
+  end
+
+  def date2week_report
+    time_begin = nil
+    time_end   = nil
+    if params[:day_begin].blank? || params[:day_end].blank?
+      time_begin = session[:date2week_tb]
+      time_end   = session[:date2week_te]
+    else
+      db_str                 = params[:day_begin]
+      de_str                 = params[:day_end]
+      time_begin             = Time.parse(db_str)
+      time_end               = Time.parse(de_str)
+      session[:date2week_tb] = time_begin
+      session[:date2week_te] = time_end
+    end
+    @title_name, @odata = gen_report_data(time_begin, time_end)
+    render template: 'reports/date2time_report'
+  end
+
+  def date2day_report
+    time_begin = nil
+    time_end   = nil
+    if params[:date].blank?
+      time_begin = session[:date2day_tb]
+      time_end   = session[:date2day_te]
+    else
+      d_str                 = params[:date]
+      time_str              = d_str
+      time_begin            = Time.parse(time_str)
+      time_end              = time_begin + 1.day
+      session[:date2day_tb] = time_begin
+      session[:date2day_te] = time_end
+    end
+    @title_name, @odata = gen_report_data(time_begin, time_end)
+    render template: 'reports/date2time_report'
+  end
+
   def date2time_report
     time_begin = nil
     time_end   = nil
@@ -35,20 +105,7 @@ class ReportsController < ApplicationController
       session[:date2time_tb] = time_begin
       session[:date2time_te] = time_end
     end
-    psc         = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
-    @title_name = []
-    key1        = %w( source_node_name dest_node_name)
-    key2        =%w(positive_items_scores negative_items_scores total_scores)
-
-    key3 = []
-    psc.each do |config|
-      @title_name << config.alias
-      key3 << config.param_name
-    end
-    key = key1 + key3 + key2
-
-    @odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
-
+    @title_name, @odata = gen_report_data(time_begin, time_end)
   end
 
   def website_select
@@ -97,24 +154,56 @@ class ReportsController < ApplicationController
   end
 
   def time_report
-    #todo:需要考虑不同的类型的数据报表，此处未实现
-    psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
-    title_name = []
-    key1       = %w(test_time source_node_name source_ip_address source_group dest_node_name dest_url dest_group)
-    key2       =%w(dest_ip_address dest_nationality dest_province dest_locale positive_items negative_items equal_items positive_items_scores
-negative_items_scores equal_items_scores total_scores)
+    d_str      = params[:date]
+    ds         = params[:ds]
+    time_str   = d_str + ' ' + ds
+    time_begin = Time.parse(time_str)
+    time_end   = time_begin + 1.hour
 
-    key3 = []
-    psc.each do |config|
-      title_name << config.alias
-      key3 << config.param_name
-    end
-    key = key1 + key3 + key2
-
-    odata = HttpTestScore.select(key).order('source_node_name')
+    key, odata, title_name = gen_report_csv(time_begin, time_end)
 
     respond_to do |format|
-      format.csv { send_data data_to_csv(title_name, key, odata), :filename => '次报表.csv', :disposition => 'attachment' }
+      format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d-%H')}次报表.csv", :disposition => 'attachment' }
+    end
+  end
+
+  def day_report_csv
+    d_str      = params[:date]
+    time_str   = d_str
+    time_begin = Time.parse(time_str)
+    time_end   = time_begin + 1.day
+
+    key, odata, title_name = gen_report_csv(time_begin, time_end)
+
+    respond_to do |format|
+      format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d')}日报表.csv", :disposition => 'attachment' }
+    end
+  end
+
+  def week_report_csv
+    db_str     = params[:day_begin]
+    de_str     = params[:day_end]
+    time_begin = Time.parse(db_str)
+    time_end   = Time.parse(de_str)
+
+    key, odata, title_name = gen_report_csv(time_begin, time_end)
+
+    respond_to do |format|
+      format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d')}周报表.csv", :disposition => 'attachment' }
+    end
+  end
+
+  def month_report_csv
+    ms         = params[:ms]
+    tmp_str    = Time.now.year.to_s
+    new_str    = tmp_str + '-' + ms + '-01'
+    time_begin = Time.parse(new_str).at_beginning_of_month
+    time_end   = time_begin + 1.month
+
+    key, odata, title_name = gen_report_csv(time_begin, time_end)
+
+    respond_to do |format|
+      format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m')}月报表.csv", :disposition => 'attachment' }
     end
   end
 

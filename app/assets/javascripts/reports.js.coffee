@@ -4,6 +4,9 @@
 
 $ ->
   $('#dp1').datepicker(changeMonth: true)
+  $('#dp2').datepicker(changeMonth: true)
   $('#export_dp1').datepicker(changeMonth: true)
   $('#export_dp2').datepicker(changeMonth: true)
   $('#export_dp3').datepicker(changeMonth: true)
+  $('#export_dp4').datepicker(changeMonth: true)
+  $('#export_dp5').datepicker(changeMonth: true)

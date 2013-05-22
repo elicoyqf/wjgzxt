@@ -171,13 +171,12 @@ module CsvDb
         an_hour_age_hts   = HttpTestStatis.where('export_name = ? and start_time = ? and end_time = ?', e_name, an_hour_ago_begin, an_hour_age_end)
 
         unless an_hour_age_hts.blank?
-          unless an_hour_age_hts.negative_num.blank? && an_hour_age_hts.all_match_num.blank?
-            an_hour_age_nega_r = an_hour_age_hts.negative_num.to_f / an_hour_age_hts.all_match_num.to_f
+          unless an_hour_age_hts.negative_num.blank?
 
-            if nega_r >= an_hour_age_nega_r + 0.2
+            if nega_num.to_f >= 1.2 * an_hour_age_hts.negative_num.to_f
               unless ExportName.find_by_alias(e_name).user.blank?
                 email = ExportName.find_by_alias(e_name).user.email
-                Notifier.notifier_degradation_mail(email, nega_r, an_hour_age_nega_r, time_begin, time_end).deliver
+                Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end).deliver
               end
               EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_r, last_time_r: an_hour_age_nega_r)
             end

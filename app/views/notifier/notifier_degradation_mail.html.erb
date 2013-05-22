@@ -5,6 +5,7 @@
   </head>
   <body>
     <h1>出口质量劣化信息</h1>
+    <p>测试的出口名称为：<%= @ename %></p>
     <p>本次测试时间段为:<%= @time_begin.strftime('%Y年-%m月%d日 %H:%M:%S') %> - <%= @time_end.strftime('%Y年-%m月%d日 %H:%M:%S') %></p>
     <p>本次测试结果如下示：</p>
     <p>本次测试得负分的网站数为: <%= @negative_n.to_i %></p>

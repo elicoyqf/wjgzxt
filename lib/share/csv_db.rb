@@ -160,7 +160,8 @@ module CsvDb
         if nega_r >= 0.6
           unless ExportName.find_by_alias(e_name).user.blank?
             email = ExportName.find_by_alias(e_name).user.email
-            Notifier.notifier_mail(email, nega_num, match.size, time_begin, time_end).deliver
+            en    = ExportName.find_by_alias(e_name).name
+            Notifier.notifier_mail(email, nega_num, match.size, time_begin, time_end, en).deliver
           end
           EmailNotifierLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_num: nega_num, total_match_num: match.size)
         end
@@ -177,9 +178,10 @@ module CsvDb
             if nega_num.to_f >= 1.2 * an_hour_age_hts.negative_num.to_f
               unless ExportName.find_by_alias(e_name).user.blank?
                 email = ExportName.find_by_alias(e_name).user.email
-                Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end).deliver
+                en    = ExportName.find_by_alias(e_name).name
+                Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end, en).deliver
               end
-              EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_r, last_time_r: an_hour_age_hts.negative_num)
+              EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_num, last_time_r: an_hour_age_hts.negative_num)
             end
           end
         end

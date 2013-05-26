@@ -44,4 +44,13 @@ Wjgzxt::Application.configure do
     :password             => '99012325sgcss',
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    #Bullet.growl = true
+    Bullet.rails_logger = true
+    Bullet.airbrake = true
+  end
 end

@@ -22,6 +22,12 @@ Wjgzxt::Application.routes.draw do
     end
   end
 
+  resources :rdata, only: [] do
+    collection do
+      get 'index','q_rdata_report'
+    end
+  end
+
   match 'login' => 'login#index'
   get 'login/index'
   post "login/login"

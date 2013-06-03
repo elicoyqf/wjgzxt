@@ -72,6 +72,7 @@ module CsvDb
     end
 
     #统计网站命中率函数
+    #todo:命中率中的判断是否属电信或联通的规则需要修改。
     def statis_web_hit_rate(time_begin, time_end)
       dx_web = TestDestNode.where('locale = ?', '电信')
       lt_web = TestDestNode.where('locale = ?', '联通')

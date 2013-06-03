@@ -29,7 +29,9 @@ class RdataController < ApplicationController
         unless p_records.blank?
           p_records.each do |line|
             q_data = HttpTestData.where('test_time = ? and dest_node_name = ? and  dest_url = ?', line.test_time, line.dest_node_name, line.dest_url).first
-            tmp_arr << q_data.test_time << en.name << q_data.dest_url << q_data.time_to_index << q_data.total_time << q_data.throughput_time << q_data.connection_sr << q_data.index_page_loading_sr
+            unless q_data.blank?
+              tmp_arr << q_data.test_time << en.name << q_data.dest_url << q_data.time_to_index << q_data.total_time << q_data.throughput_time << q_data.connection_sr << q_data.index_page_loading_sr
+            end
           end
         end
 
@@ -42,14 +44,15 @@ class RdataController < ApplicationController
         unless p_records.blank?
           p_records.each do |line|
             q_data = HttpTestData.where('test_time = ? and dest_node_name = ? and  dest_url = ?', line.test_time, line.dest_node_name, line.dest_url).first
-            tmp_arr << q_data.test_time << en.name << q_data.dest_url << q_data.time_to_index << q_data.total_time << q_data.throughput_time << q_data.connection_sr << q_data.index_page_loading_sr
+            unless q_data.blank?
+              tmp_arr << q_data.test_time << en.name << q_data.dest_url << q_data.time_to_index << q_data.total_time << q_data.throughput_time << q_data.connection_sr << q_data.index_page_loading_sr
+            end
           end
         end
 
         @out << tmp_arr
       end
     end
-
 
     #查询骨干网数据
     @bbdata = HttpTestData.where('test_time >= ? and test_time < ? and source_node_name = ?', time_begin, time_end, BACKBONE)

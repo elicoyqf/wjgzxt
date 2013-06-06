@@ -60,7 +60,7 @@
             <% @bbdata.each do |bb| %>
               <tr>
                 <td style="text-align:center;"><%= bb.test_time.strftime('%Y-%m-%d %H:%M:%S') %></td>
-                <td style="text-align:center;">骨干出口(对照)</td>
+                <td style="text-align:center;"><%= bb.source_node_name %></td>
                 <td style="text-align:center;"><%= bb.dest_url %></td>
                 <td style="text-align:center;"><%= bb.time_to_index %></td>
                 <td style="text-align:center;"><%= bb.total_time %></td>

@@ -36,6 +36,7 @@ class ReportsController < ApplicationController
   end
 
   def date2month_report
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     time_begin = nil
     time_end   = nil
     if params[:ms].blank?
@@ -50,11 +51,12 @@ class ReportsController < ApplicationController
       session[:date2month_tb] = time_begin
       session[:date2month_te] = time_end
     end
-    @title_name, @odata = gen_report_data(time_begin, time_end)
+    @title_name, @odata = gen_report_data(time_begin, time_end, ef)
     render template: 'reports/date2time_report'
   end
 
   def date2week_report
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     time_begin = nil
     time_end   = nil
     if params[:day_begin].blank? || params[:day_end].blank?
@@ -68,11 +70,12 @@ class ReportsController < ApplicationController
       session[:date2week_tb] = time_begin
       session[:date2week_te] = time_end
     end
-    @title_name, @odata = gen_report_data(time_begin, time_end)
+    @title_name, @odata = gen_report_data(time_begin, time_end, ef)
     render template: 'reports/date2time_report'
   end
 
   def date2day_report
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     time_begin = nil
     time_end   = nil
     if params[:date].blank?
@@ -86,11 +89,12 @@ class ReportsController < ApplicationController
       session[:date2day_tb] = time_begin
       session[:date2day_te] = time_end
     end
-    @title_name, @odata = gen_report_data(time_begin, time_end)
+    @title_name, @odata = gen_report_data(time_begin, time_end, ef)
     render template: 'reports/date2time_report'
   end
 
   def date2time_report
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     time_begin = nil
     time_end   = nil
     if params[:date].blank?
@@ -105,7 +109,7 @@ class ReportsController < ApplicationController
       session[:date2time_tb] = time_begin
       session[:date2time_te] = time_end
     end
-    @title_name, @odata = gen_report_data(time_begin, time_end)
+    @title_name, @odata = gen_report_data(time_begin, time_end, ef)
   end
 
   def website_select
@@ -154,13 +158,14 @@ class ReportsController < ApplicationController
   end
 
   def time_report
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     d_str      = params[:date]
     ds         = params[:ds]
     time_str   = d_str + ' ' + ds
     time_begin = Time.parse(time_str)
     time_end   = time_begin + 1.hour
 
-    key, odata, title_name = gen_report_csv(time_begin, time_end)
+    key, odata, title_name = gen_report_csv(time_begin, time_end, ef)
 
     respond_to do |format|
       format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d-%H')}次报表.csv", :disposition => 'attachment' }
@@ -168,12 +173,13 @@ class ReportsController < ApplicationController
   end
 
   def day_report_csv
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     d_str      = params[:date]
     time_str   = d_str
     time_begin = Time.parse(time_str)
     time_end   = time_begin + 1.day
 
-    key, odata, title_name = gen_report_csv(time_begin, time_end)
+    key, odata, title_name = gen_report_csv(time_begin, time_end, ef)
 
     respond_to do |format|
       format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d')}日报表.csv", :disposition => 'attachment' }
@@ -181,12 +187,13 @@ class ReportsController < ApplicationController
   end
 
   def week_report_csv
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     db_str     = params[:day_begin]
     de_str     = params[:day_end]
     time_begin = Time.parse(db_str)
     time_end   = Time.parse(de_str)
 
-    key, odata, title_name = gen_report_csv(time_begin, time_end)
+    key, odata, title_name = gen_report_csv(time_begin, time_end, ef)
 
     respond_to do |format|
       format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m%d')}周报表.csv", :disposition => 'attachment' }
@@ -194,13 +201,14 @@ class ReportsController < ApplicationController
   end
 
   def month_report_csv
+    ef         = ExportName.find_all_by_user_id(current_user.id)
     ms         = params[:ms]
     tmp_str    = Time.now.year.to_s
     new_str    = tmp_str + '-' + ms + '-01'
     time_begin = Time.parse(new_str).at_beginning_of_month
     time_end   = time_begin + 1.month
 
-    key, odata, title_name = gen_report_csv(time_begin, time_end)
+    key, odata, title_name = gen_report_csv(time_begin, time_end, ef)
 
     respond_to do |format|
       format.csv { send_data data_to_csv(title_name, key, odata), :filename => "#{time_begin.strftime('%Y%m')}月报表.csv", :disposition => 'attachment' }

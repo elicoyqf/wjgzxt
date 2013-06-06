@@ -1,6 +1,7 @@
 #encoding : utf-8
 
 require 'csv'
+require 'will_paginate/array'
 module ReportsHelper
   BACKBONE  = '广东铁通6-gddx(bgp)联通出口'
   #骨干为null，自租出口非null
@@ -51,7 +52,9 @@ module ReportsHelper
     new_data
   end
 
-  def gen_report_data(time_begin, time_end)
+  def gen_report_data(time_begin, time_end, ef)
+    etn = user_perm_ename_list(ef)
+
     psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
     title_name = []
     key1       = %w( source_node_name dest_node_name)
@@ -64,11 +67,28 @@ module ReportsHelper
     end
     key = key1 + key3 + key2
 
-    odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
-    [title_name, odata]
+    odata = []
+    etn.each do |ename|
+      tmp_arr = []
+      tmp_arr << ExportName.where('alias = ? ', ename).name
+      #tmp_data = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
+      tmp_data = HttpTestScore.select(key).where('test_time >= ? and test_time < ? and source_node_name = ?', time_begin, time_end, ename)
+      unless tmp_data.blank?
+        tmp_data.each do |line|
+          tmp_arr << line.dest_node_name
+          tmp_arr << line.time_to_index << line.total_time << line.throughput_time << line.connection_sr << line.index_page_loading_sr
+          tmp_arr << line.positive_items_scores << line.negative_items_scores << line.total_scores
+        end
+      end
+      odata << tmp_arr
+    end
+    odata.sort_by! { |x| x[9] }
+    [title_name, odata.paginate(page: params[:page], per_page: 10)]
   end
 
-  def gen_report_csv(time_begin, time_end)
+  def gen_report_csv(time_begin, time_end, ef)
+    etn = user_perm_ename_list(ef)
+
     psc        = ParamScoreConfig.where('param_type = ? and weight > ? ', 'htd', 0)
     title_name = []
     key1       = %w(test_time source_node_name source_ip_address source_group dest_node_name dest_url dest_group)
@@ -82,8 +102,38 @@ negative_items_scores equal_items_scores total_scores)
     end
     key = key1 + key3 + key2
 
-    odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('source_node_name')
+    odata = []
+    etn.each do |ename|
+      tmp_data = HttpTestScore.select(key).where('test_time >= ? and test_time < ? and source_node_name = ?', time_begin, time_end, ename)
+      odata += tmp_data
+    end
+    #odata.sort_by! { |x| x[9] }
+
+    #odata = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('source_node_name')
     return key, odata, title_name
+  end
+
+  def user_perm_ename_list(ef)
+    etn = Set.new
+
+    if ef.blank?
+      #查询当月的月表数据
+      en = ExportName.all
+      en.each do |line|
+        unless line.alias.blank?
+          etn << line.alias
+        end
+      end
+    else
+      ef.each do |t|
+        unless t.alias.blank?
+          etn << t.alias
+        end
+      end
+    end
+    #将对比标杆出口去掉
+    etn.delete(BACKBONE)
+    etn
   end
 
   def data_to_csv(title, key, data, option={})

@@ -60,6 +60,7 @@
           <table class="table table-striped table-bordered table-radmin">
             <thead>
             <tr style="text-align:center;">
+              <th style="text-align:center;">出口编号</th>
               <th style="text-align:center;">出口名称</th>
               <th style="text-align:center;">用户名称</th>
               <th style="text-align:center;">Email</th>
@@ -70,6 +71,7 @@
             <tbody>
             <% @en.each do |x| %>
               <tr>
+                <td style="text-align:center;"><%= x.alias %></td>
                 <td style="text-align:center;"><%= x.name %></td>
                 <% if x.user.blank? %>
                   <td style="text-align:center;"></td>

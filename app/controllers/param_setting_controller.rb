@@ -117,7 +117,7 @@ class ParamSettingController < ApplicationController
   end
 
   def view_interaction
-    @en = ExportName.all
+    @en = ExportName.all :include => [:user]
   end
 
   def del_interaction

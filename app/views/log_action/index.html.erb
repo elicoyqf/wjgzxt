@@ -1,0 +1,106 @@
+<%= provide(:body_id, 'calendar') %>
+<%= provide(:result, '报表查看') %>
+
+<div class="container-fluid content-wrapper">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="hero-unit">
+        <button type="button" class="close hidden-phone" data-dismiss="alert">&times;</button>
+        <h1>日志 & 邮件</h1>
+
+        <p>
+          查看系统在分析后台数据时所生成的性能劣化报表及相关邮件数据。<br/>
+          如修改了相应的评分标准，不影响已生成的报表数据，只对往后的报表数据有影响，如对结果有异议，可申请核对。
+        </p>
+        <br/>
+
+        <p class="hidden-phone">
+          <a class="btn btn-info btn-large pull-right">详细指南请猛击此处 &raquo;...</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  <a href="log/neg_r" class="btn btn-info btn-large">负分网站率性能劣化</a>
+  <a href="log/neg_ru" class="btn btn-info btn-large">负分网站环比性能劣化</a>
+
+  <p></p>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="row-fluid hidden-desktop hidden-phone">
+        <div class="span12">
+          <h4 class="title">负分网站率性能劣化如下示（最近10次）：</h4>
+
+          <div class="squiggly-border"></div>
+          <table class="table table-striped table-bordered table-radmin">
+            <thead>
+            <tr>
+              <th style="text-align:center;">出口名称</th>
+              <th style="text-align:center;">测试时间段</th>
+              <th style="text-align:center;">负分网站数</th>
+              <th style="text-align:center;">总匹配网站数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @enl.each do |line| %>
+              <tr>
+                <td style="text-align:center;"><%= ExportName.find_by_alias(line.export_name).name %></td>
+                <td style="text-align:center;"><%= line.time_begin.strftime('%Y年%m月%d日 %H:%M:%S') %> - <%= line.time_end.strftime('%H:%M:%S') %></td>
+                <td style="text-align:center;"><%= line.nega_num %></td>
+                <td style="text-align:center;"><%= line.total_match_num %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="span12">
+          <h4 class="title">负分网站环比性能劣化如下示（最近10次）：</h4>
+
+          <div class="squiggly-border"></div>
+          <table class="table table-striped table-bordered table-radmin">
+            <thead>
+            <tr>
+              <th style="text-align:center;">出口名称</th>
+              <th style="text-align:center;">测试时间段</th>
+              <th style="text-align:center;">负分网站数</th>
+              <th style="text-align:center;">上一次负分网站数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @edl.each do |line| %>
+              <tr>
+                <td style="text-align:center;"><%= ExportName.find_by_alias(line.export_name).name %></td>
+                <td style="text-align:center;"><%= line.time_begin.strftime('%Y年%m月%d日 %H:%M:%S') %> - <%= line.time_end.strftime('%H:%M:%S') %></td>
+                <td style="text-align:center;"><%= line.nega_r %></td>
+                <td style="text-align:center;"><%= line.last_time_r %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p></p>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <h4 class="title">名言警句</h4>
+
+      <div class="squiggly-border"></div>
+    </div>
+  </div>
+
+  <div class="row-fluid">
+    <div class="span12">
+      <blockquote>
+        <p>
+          Etiam varius erat in nisl egestas id auctor lacus consectetur.
+          Ut dui risus, auctor a malesuada volutpat, tempus sit amet arcu.
+        </p>
+        <small class="pull-right">Jane Doe via Mobile</small>
+      </blockquote>
+    </div>
+  </div>
+</div>

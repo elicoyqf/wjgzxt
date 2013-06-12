@@ -1,3 +1,6 @@
+#encoding : utf-8
+
+require 'will_paginate/array'
 class RdataController < ApplicationController
   def index
     @ds = []
@@ -19,8 +22,8 @@ class RdataController < ApplicationController
     #通过用户获得其所管辖的出口
     user       = User.find(session[:user_id])
     e_name     = user.export_names
+    oth_arr    = []
     @out       = []
-
     if e_name.blank?
       ena = ExportName.all
       ena.each do |en|
@@ -35,7 +38,7 @@ class RdataController < ApplicationController
           end
         end
 
-        @out << tmp_arr
+        oth_arr << tmp_arr
       end
     else
       e_name.each do |en|
@@ -50,12 +53,28 @@ class RdataController < ApplicationController
           end
         end
 
-        @out << tmp_arr
+        oth_arr << tmp_arr
       end
     end
 
-    #查询骨干网数据
-    @bbdata = HttpTestData.where('test_time >= ? and test_time < ? and source_node_name = ?', time_begin, time_end, BACKBONE)
+    #查询骨干网数据,还要进行对比
+    oth_arr.each do |line|
+      tmp_arr = []
+      tmp_arr << line
+      bbdata = HttpTestData.where('test_time >= ? and test_time < ? and source_node_name = ?  and  dest_url = ? ', time_begin, time_end, BACKBONE, line[2])
+      unless bbdata.blank?
+        if bbdata.size == 1
+          tmp_arr << [bbdata.first.test_time, BACKBONE, bbdata.first.dest_url, bbdata.first.time_to_index, bbdata.first.total_time, bbdata.first.throughput_time, bbdata.first.connection_sr, bbdata.first.index_page_loading_sr]
+          @out << tmp_arr
+        else
+          bbdata.each do |bb|
+            tmp_arr << [bb.test_time, BACKBONE, bb.dest_url, bb.time_to_index, bb.total_time, bb.throughput_time, bb.connection_sr, bb.index_page_loading_sr]
+          end
+          @out << tmp_arr
+        end
+      end
+    end
 
+  @out = @out.paginate(page: params[:page], per_page: 5)
   end
 end

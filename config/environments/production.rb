@@ -68,10 +68,10 @@ Wjgzxt::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.139cm.com",
+    :address              => 'smtp.126.com',
     :port                 => 25,
-    :user_name            => 'yiqf@sg.cttgd.com',
-    :password             => '99012325sgcss',
+    :user_name            => 'elico_yqf@126.com',
+    :password             => '99012325',
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
 end

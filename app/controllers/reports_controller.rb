@@ -255,8 +255,13 @@ class ReportsController < ApplicationController
   end
 
   def r_graph
-    @en    = params[:en]
-    @value = cal_data @en
+    @en = params[:en]
+    val = cal_data @en
+    if val.blank?
+      @value = []
+    else
+      @value = val
+    end
   end
 
 =begin

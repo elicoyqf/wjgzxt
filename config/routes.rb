@@ -1,4 +1,12 @@
 Wjgzxt::Application.routes.draw do
+  match 'log' => 'log_action#index'
+  match 'log(/:action)' => 'log_action#(:action)'
+  resources :log_action,only:[:index] do
+    collection do
+      get 'index','neg_r','neg_ru'
+    end
+  end
+
   resources :pwd_modify, only: [] do
     collection do
       get 'modify', 'p_modify'

@@ -167,7 +167,7 @@ module CsvDb
           EmailNotifierLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_num: nega_num, total_match_num: match.size)
         end
 
-        #得负分的浏览网站数量环比上一测试周期增加20%；（相同归属运营商的比较）
+        #得负分的浏览网站数量环比上一测试周期增加50%；（相同归属运营商的比较）
         an_hour_ago_begin = time_begin - 1.hour
         an_hour_age_end   = time_end - 1.hour
         an_hour_age_hts   = HttpTestStatis.where('export_name = ? and start_time = ? and end_time = ?', e_name, an_hour_ago_begin,
@@ -337,6 +337,10 @@ module CsvDb
       ActiveRecord::Migration.add_column :http_test_data, :add_ons, :string
       ActiveRecord::Migration.add_column :http_test_data, :element_number, :string
       ActiveRecord::Migration.add_timestamps :http_test_data
+      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :dest_url]
+      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :source_node_name]
+      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :dest_node_name, :dest_url], name: 'htd_tdd'
+      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :source_node_name, :dest_url], name: 'htd_tsd'
       #Object.const_set(tbl_real.to_sym,Class.new(ActiveRecord::Base)) # => Object.class_eval { const_set(:Post,Class.new(ActiveRecord::Base)) }
       # p Post.columns
       #p Http20130519.class

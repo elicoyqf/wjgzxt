@@ -1,6 +1,6 @@
 #encoding : utf-8
 class Notifier < ActionMailer::Base
-  default from: "yiqf@sg.cttgd.com"
+  default from: 'elico_yqf@126.com'
 
   def notifier_mail(email, nega, all_match, tb, te, en)
     @negative_num  = nega

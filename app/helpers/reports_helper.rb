@@ -70,7 +70,7 @@ module ReportsHelper
     odata = []
     etn.each do |ename|
       tmp_arr = []
-      tmp_arr << ExportName.where('alias = ? ', ename).name
+      tmp_arr << ExportName.where('alias = ? ', ename).first.name
       #tmp_data = HttpTestScore.select(key).where('test_time >= ? and test_time < ?', time_begin, time_end).order('total_scores DESC').paginate page: params[:page], per_page: 10
       tmp_data = HttpTestScore.select(key).where('test_time >= ? and test_time < ? and source_node_name = ?', time_begin, time_end, ename)
       unless tmp_data.blank?
@@ -118,7 +118,7 @@ negative_items_scores equal_items_scores total_scores)
 
     if ef.blank?
       #查询当月的月表数据
-      en = ExportName.all
+      en = ExportName.where('user_id != 0')
       en.each do |line|
         unless line.alias.blank?
           etn << line.alias

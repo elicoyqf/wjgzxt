@@ -81,7 +81,7 @@ module UtiltilyTools
             t_score = cal_method_3(cons_data, odata, ll, ul)
           when 2
             #越小越好
-            t_score = cal_method_3(cons_data, odata, ll, ul)
+            t_score = cal_method_4(cons_data, odata, ll, ul)
           else
         end
       end

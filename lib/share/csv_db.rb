@@ -190,11 +190,18 @@ module CsvDb
     end
 
     #目前只对http数据分析
-    def analyse_data_to_db(time_begin, time_end)
+    def analyse_data_to_db(time_begin, time_end, ds = nil)
       t_b            = time_begin
       t_e            = time_end
-      blackbone_data = blackbone_data_valid(t_b, t_e)
-      other_data     = other_data_valid(t_b, t_e)
+      puts t_b
+      puts t_e
+
+      blackbone_data = blackbone_data_valid(t_b, t_e, ds)
+      other_data     = other_data_valid(t_b, t_e, ds)
+
+      puts blackbone_data.size
+      puts other_data.size
+      puts '-'*50
 
       other_data.each do |odata|
         flag_data = []
@@ -205,6 +212,7 @@ module CsvDb
         end
         #此处只取第一条对比数据出来进行对比
         cons_data = flag_data.first
+        puts cons_data.inspect
 
         unless cons_data.blank?
           hts                         = {}
@@ -337,10 +345,10 @@ module CsvDb
       ActiveRecord::Migration.add_column :http_test_data, :add_ons, :string
       ActiveRecord::Migration.add_column :http_test_data, :element_number, :string
       ActiveRecord::Migration.add_timestamps :http_test_data
-      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :dest_url]
-      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :source_node_name]
-      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :dest_node_name, :dest_url], name: 'htd_tdd'
-      ActiveRecord::Migration.add_index :http_test_data,[:test_time, :source_node_name, :dest_url], name: 'htd_tsd'
+      ActiveRecord::Migration.add_index :http_test_data, [:test_time, :dest_url]
+      ActiveRecord::Migration.add_index :http_test_data, [:test_time, :source_node_name]
+      ActiveRecord::Migration.add_index :http_test_data, [:test_time, :dest_node_name, :dest_url], name: 'htd_tdd'
+      ActiveRecord::Migration.add_index :http_test_data, [:test_time, :source_node_name, :dest_url], name: 'htd_tsd'
       #Object.const_set(tbl_real.to_sym,Class.new(ActiveRecord::Base)) # => Object.class_eval { const_set(:Post,Class.new(ActiveRecord::Base)) }
       # p Post.columns
       #p Http20130519.class

@@ -34,10 +34,16 @@ every '20 * * * *' do
   rake 'database:analyse_data'
 end
 
-#在每天的23点57分重新新建表
-every '57 23 * * *' do
+#在每天的1点57分重新新建表,刚好一天所有的数据在一张表里面
+every '57 1 * * *' do
   rake 'database:newtable'
 end
+
+#在7月14日的1点40分启动重新数据评测机制
+every '40 1 14 7 *' do
+  rake 'database:analyse_old_data'
+end
+
 #每天的晚班时间内做检查，从2点开始做到5点
 #every '20 2-6 * * *' do
 #  rake 'database:wocheck'

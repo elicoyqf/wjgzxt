@@ -7,10 +7,14 @@ module UtiltilyTools
   ZZNULL    = -1
 
   #骨干出口有效数据
-  def blackbone_data_valid(time_begin, time_end)
+  def blackbone_data_valid(time_begin, time_end, ds = nil)
     #backbone_data     = HttpTestData.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, Time.parse('2013-03-1 21:00:00'),
     #                                       Time.parse('2013-03-1 22:00:00'))
-    backbone_data     = HttpTestData.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
+    if ds == nil
+      backbone_data = HttpTestData.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
+    else
+      backbone_data = ds.where('source_node_name = ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
+    end
     new_backbone_data = []
     backbone_data.each do |bline|
       host_locale =''
@@ -29,22 +33,28 @@ module UtiltilyTools
   end
 
   #对自租出口提取有效数据
-  def other_data_valid(time_begin, time_end)
-    other_data = HttpTestData.where('source_node_name != ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
-    new_data   =[]
+  def other_data_valid(time_begin, time_end, ds = nil)
+    if ds == nil
+      other_data = HttpTestData.where('source_node_name != ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
+    else
+      other_data = ds.where('source_node_name != ? and test_time >= ? and test_time < ?', BACKBONE, time_begin, time_end)
+    end
+    new_data =[]
     other_data.each do |line|
       #编号要去出口对应关系里面找对应关系
-      eno             = line.source_node_name.to_s
-      e_name          = ExportName.find_by_alias(eno).name
+      eno         = line.source_node_name.to_s
+      e_name      = ExportName.find_by_alias(eno).name
+      puts eno
+      puts e_name
       #source_node_arr = line.source_node_name.to_s.strip[-4..-3]
-      host_locale     =''
+      host_locale =''
       if !line.dest_locale.blank? && line.dest_locale.to_s.strip != 'NULL'
         host_locale = line.dest_locale.to_s.strip
       end
 
       #判断自租出口数据是否有效的条件
       #出口与归属地必须要一致才有效
-      if !e_name.blank? && !host_locale.blank? && contrast_locale(e_name,host_locale)
+      if !e_name.blank? && !host_locale.blank? && contrast_locale(e_name, host_locale)
         new_data << line
         #puts 'other'+'-'*100+line.id.to_s
       end

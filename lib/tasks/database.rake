@@ -67,19 +67,34 @@ namespace :database do
     te.testrake
   end
 
-  desc '重新分析上一个月的数据'
+  desc '重新分析一些需要调整的数据'
   task :analyse_old_data => :environment do
-    #取前一个小时的数据进行自动分析
-    tb         = Time.now
-    time_begin = Time.now.at_beginning_of_hour - 2.hour
-    time_end   = Time.now.at_beginning_of_hour - 1.hour
 
-    #通过数据进行分析
-    a_data     = CsvDb::CsvProcedure.new
-    a_data.analyse_data_to_db(time_begin, time_end)
-    a_data.statis_data_to_db(time_begin, time_end)
-    #a_data.statis_web_hit_rate(time_begin,time_end)
-    te = Time.now
-    puts 'analyse_data total time is ====> ' + (te-tb).to_s + ' second.'
+    #需要重新处理的表默认状态为1，更新完成后改为2
+    p_tb_name = HtdLoging.where('status = 1')
+
+    p_tb_name.each do |t_name|
+      tb       = Time.now
+      data_set = Dynamic.klass t_name.name
+      p_date   = t_name.name[15, 21]
+      t_str    = p_date[0, 4] + '-' + p_date[4, 2] + '-' + p_date[6, 2]
+      p_tb     = Time.parse(t_str)
+      p_te     = p_tb + 1.day
+      #通过数据进行分析
+      a_data   = CsvDb::CsvProcedure.new
+
+      while p_tb < p_te
+        a_data.analyse_data_to_db(p_tb, p_tb + 1.hour, data_set)
+        a_data.statis_data_to_db(p_tb, p_tb + 1.hour)
+
+        p_tb += 1.hour
+      end
+
+      te = Time.now
+      t_name.update_attribute(:status, 2)
+      puts "Process ** #{t_name.name} ** total time is ====> " + (te-tb).to_s + ' second.'
+    end
+
+
   end
 end

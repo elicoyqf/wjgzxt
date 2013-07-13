@@ -66,4 +66,20 @@ namespace :database do
     te = CsvDb::CsvProcedure.new
     te.testrake
   end
+
+  desc '重新分析上一个月的数据'
+  task :analyse_old_data => :environment do
+    #取前一个小时的数据进行自动分析
+    tb         = Time.now
+    time_begin = Time.now.at_beginning_of_hour - 2.hour
+    time_end   = Time.now.at_beginning_of_hour - 1.hour
+
+    #通过数据进行分析
+    a_data     = CsvDb::CsvProcedure.new
+    a_data.analyse_data_to_db(time_begin, time_end)
+    a_data.statis_data_to_db(time_begin, time_end)
+    #a_data.statis_web_hit_rate(time_begin,time_end)
+    te = Time.now
+    puts 'analyse_data total time is ====> ' + (te-tb).to_s + ' second.'
+  end
 end

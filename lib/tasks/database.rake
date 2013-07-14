@@ -86,6 +86,9 @@ namespace :database do
       while p_tb < p_te
         a_data.analyse_data_to_db(p_tb, p_tb + 1.hour, data_set)
         a_data.statis_data_to_db(p_tb, p_tb + 1.hour)
+        puts 'process time is :'+'='*50
+        puts p_tb
+        puts p_te
 
         p_tb += 1.hour
       end

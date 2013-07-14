@@ -193,15 +193,9 @@ module CsvDb
     def analyse_data_to_db(time_begin, time_end, ds = nil)
       t_b            = time_begin
       t_e            = time_end
-      puts t_b
-      puts t_e
 
       blackbone_data = blackbone_data_valid(t_b, t_e, ds)
       other_data     = other_data_valid(t_b, t_e, ds)
-
-      puts blackbone_data.size
-      puts other_data.size
-      puts '-'*50
 
       other_data.each do |odata|
         flag_data = []

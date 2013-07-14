@@ -44,8 +44,7 @@ module UtiltilyTools
       #编号要去出口对应关系里面找对应关系
       eno         = line.source_node_name.to_s
       e_name      = ExportName.find_by_alias(eno).name
-      puts eno
-      puts e_name
+
       #source_node_arr = line.source_node_name.to_s.strip[-4..-3]
       host_locale =''
       if !line.dest_locale.blank? && line.dest_locale.to_s.strip != 'NULL'

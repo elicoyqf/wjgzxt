@@ -79,7 +79,9 @@ namespace :database do
       p_date   = t_name.name[15, 21]
       t_str    = p_date[0, 4] + '-' + p_date[4, 2] + '-' + p_date[6, 2]
       p_tb     = Time.parse(t_str)
-      p_te     = p_tb + 1.day
+      p_te     = p_tb + 22.hour
+      #todo:由于分表造成了每天最后两个小时的数据到了另一张表里面，所以现在只算每天22小时的数据，调整完成后，再开放一整天的数据
+      #p_te     = p_tb + 1.day
       #通过数据进行分析
       a_data   = CsvDb::CsvProcedure.new
 

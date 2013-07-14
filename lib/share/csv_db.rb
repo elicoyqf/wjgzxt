@@ -162,7 +162,11 @@ module CsvDb
           unless ExportName.find_by_alias(e_name).user.blank?
             email = ExportName.find_by_alias(e_name).user.email
             en    = ExportName.find_by_alias(e_name).name
-            Notifier.notifier_mail(email, nega_num, match.size, time_begin, time_end, en).deliver
+            begin
+              Notifier.notifier_mail(email, nega_num, match.size, time_begin, time_end, en).deliver
+            rescue
+              next
+            end
           end
           EmailNotifierLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_num: nega_num, total_match_num: match.size)
         end
@@ -180,7 +184,11 @@ module CsvDb
               unless ExportName.find_by_alias(e_name).user.blank?
                 email = ExportName.find_by_alias(e_name).user.email
                 en    = ExportName.find_by_alias(e_name).name
-                Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end, en).deliver
+                begin
+                  Notifier.notifier_degradation_mail(email, nega_num, an_hour_age_hts.negative_num, time_begin, time_end, en).deliver
+                rescue
+                  next
+                end
               end
               EmailDegradationLog.create(export_name: e_name, time_begin: time_begin, time_end: time_end, nega_r: nega_num, last_time_r: an_hour_age_hts.negative_num)
             end
@@ -191,8 +199,8 @@ module CsvDb
 
     #目前只对http数据分析
     def analyse_data_to_db(time_begin, time_end, ds = nil)
-      t_b            = time_begin
-      t_e            = time_end
+      t_b = time_begin
+      t_e = time_end
 
       blackbone_data = blackbone_data_valid(t_b, t_e, ds)
       other_data     = other_data_valid(t_b, t_e, ds)

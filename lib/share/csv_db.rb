@@ -206,7 +206,6 @@ module CsvDb
         end
         #此处只取第一条对比数据出来进行对比
         cons_data = flag_data.first
-        puts cons_data.inspect
 
         unless cons_data.blank?
           hts                         = {}

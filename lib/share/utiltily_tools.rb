@@ -24,7 +24,7 @@ module UtiltilyTools
 
       #判断自租出口数据是否有效的条件
       #目前只监测联通和电信出口
-      if  !host_locale.blank? && host_locale == '联通' || host_locale == '电信'
+      if  !host_locale.blank? && host_locale =~ /联通/ || host_locale =~ /电信/
         new_backbone_data << bline
         #puts 'blackbone'+'-'*100+bline.id.to_s
       end
@@ -62,7 +62,15 @@ module UtiltilyTools
   end
 
   def contrast_locale(ename, locale)
-    if ename =~ /#{locale}/
+    if locale =~ /电信/
+      ll = '电信'
+    elsif locale =~ /联通/
+      ll = '联通'
+    else
+      ll = '其它'
+    end
+
+    if ename =~ /#{ll}/
       true
     else
       false

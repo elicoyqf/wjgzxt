@@ -217,7 +217,9 @@ class ReportsController < ApplicationController
 
   def day_report
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
-    ef          = ExportName.find_all_by_user_id(current_user.id)
+    #ef          = ExportName.find_all_by_user_id(current_user.id)
+    #将停用的出口数据在月报表中屏蔽掉。
+    ef          = ExportName.where('user_id = ? and status = 0', current_user.id)
     s_day       = params[:s_day]
     @time_begin = Time.parse(s_day).at_beginning_of_day
     @time_end   = @time_begin + 1.day
@@ -228,7 +230,9 @@ class ReportsController < ApplicationController
 
   def week_report
     #开始时间是从选择时间的0点开始，结束时间是从选择的时间+1天的开始。
-    ef          = ExportName.find_all_by_user_id(current_user.id)
+    #ef          = ExportName.find_all_by_user_id(current_user.id)
+    #将停用的出口数据在月报表中屏蔽掉。
+    ef          = ExportName.where('user_id = ? and status = 0', current_user.id)
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
     @time_begin = Time.parse(params[:day_begin]).at_beginning_of_day
     @time_end   = Time.parse(params[:day_end]).at_beginning_of_day + 1.day
@@ -239,7 +243,8 @@ class ReportsController < ApplicationController
 
   def month_report
     #[dx,lt,oe,total_pos,total_neg,total_eql,dx_array,lt_array]
-    ef          = ExportName.find_all_by_user_id(current_user.id)
+    #将停用的出口数据在月报表中屏蔽掉。
+    ef          = ExportName.where('user_id = ? and status = 0', current_user.id)
     ms          = params[:ms]
     tmp_str     = Time.now.year.to_s
     new_str     = tmp_str + '-' + ms + '-01'

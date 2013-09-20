@@ -133,8 +133,9 @@ module CsvDb
       #可以优化，直接提取ExportName表中的数据即可。
       export = Set.new
       match  = Set.new
-      #en     = ExportName.where('status = 0')
-      en     = ExportName.all
+      #只统计未信用的出口数据。
+      en     = ExportName.where('status = 0')
+      #en     = ExportName.all
       en.each do |line|
         export << line.alias
       end

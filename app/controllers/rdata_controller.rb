@@ -61,7 +61,7 @@ class RdataController < ApplicationController
     oth_arr.each do |line|
       tmp_arr = []
       tmp_arr << line
-      bbdata = HttpTestData.where('test_time >= ? and test_time < ? and source_node_name = ?  and  dest_url = ? and dest_locale in (?)', time_begin, time_end, BACKBONE, line[2], [' 电信', ' 联通'])
+      bbdata = HttpTestData.where('test_time >= ? and test_time < ? and source_node_name = ?  and  dest_url = ? ', time_begin, time_end, BACKBONE, line[2])
       unless bbdata.blank?
         if bbdata.size == 1
           tmp_arr << [bbdata.first.test_time, BACKBONE, bbdata.first.dest_url, bbdata.first.time_to_index, bbdata.first.total_time, bbdata.first.throughput_time, bbdata.first.connection_sr, bbdata.first.index_page_loading_sr]
@@ -75,6 +75,6 @@ class RdataController < ApplicationController
       end
     end
 
-  @out = @out.paginate(page: params[:page], per_page: 5)
+    @out = @out.paginate(page: params[:page], per_page: 5)
   end
 end

@@ -74,12 +74,13 @@ class RdataController < ApplicationController
               tmp_arr << [bb.test_time, BACKBONE, bb.dest_url, bb.time_to_index, bb.total_time, bb.throughput_time, bb.connection_sr, bb.index_page_loading_sr]
               @out << tmp_arr
             end
-            @out << tmp_arr
           end
         end
       end
-
-      @out = @out.paginate(page: params[:page], per_page: 5)
     end
+    puts '*'*100
+    puts @out.inspect
+    puts '*'*100
+    @out = @out.paginate(page: params[:page], per_page: 5)
   end
 end

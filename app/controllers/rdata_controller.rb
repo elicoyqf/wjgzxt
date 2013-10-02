@@ -78,9 +78,6 @@ class RdataController < ApplicationController
         end
       end
     end
-    puts '*'*100
-    puts @out.inspect
-    puts '*'*100
     @out = @out.paginate(page: params[:page], per_page: 5)
   end
 end

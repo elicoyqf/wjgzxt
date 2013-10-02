@@ -8,8 +8,8 @@ namespace :database do
     tb                   = Time.now
     time                 = Time.now.at_beginning_of_hour - 2.hour
     postfix              = time.strftime('%Y%m%d%H%M') + '.csv'
-    http_filename        = 'E:/HTTP_201310021300.csv'
-    #http_filename        = '/home/wgdata/HTTP_' + postfix
+    #http_filename        = 'E:/HTTP_201310021300.csv'
+    http_filename        = '/home/wgdata/HTTP_' + postfix
     trace_route_filename = '/home/wgdata/TEST'
     video_filename       = '/home/wgdata/TEST'
     ping_filename        = '/home/wgdata/TEST'

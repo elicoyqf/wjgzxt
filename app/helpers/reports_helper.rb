@@ -263,9 +263,19 @@ negative_items_scores equal_items_scores total_scores)
     etn.delete(BACKBONE)
     hts = HttpTestStatis.where('start_time >= ? and start_time < ?', time_begin, time_end)
 
-    dx = TestDestNode.where('locale = ?', '电信').count
-    lt = TestDestNode.where('locale = ?', '联通').count
-    oe = TestDestNode.all.count - dx - lt
+    #dx = TestDestNode.where('locale = ?', '电信').count
+    #lt = TestDestNode.where('locale = ?', '联通').count
+    dx = lt = oe = 0
+    TestDestNode.all.each do |tdn|
+      if tdn.locale =~ /电信/
+        dx += 1
+      elsif tdn.locale =~ /联通/
+        lt += 1
+      else
+        oe += 1
+      end
+    end
+    #oe = TestDestNode.all.count - dx - lt
 
     total_pos = 0
     total_neg = 0

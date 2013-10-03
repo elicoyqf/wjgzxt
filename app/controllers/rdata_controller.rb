@@ -72,9 +72,9 @@ class RdataController < ApplicationController
           bbdata.each do |bb|
             if bb.dest_locale =~/电信/ || bb.dest_locale =~ /联通/
               tmp_arr << [bb.test_time, BACKBONE, bb.dest_url, bb.time_to_index, bb.total_time, bb.throughput_time, bb.connection_sr, bb.index_page_loading_sr]
-              @out << tmp_arr
             end
           end
+          @out << tmp_arr
         end
       end
     end

@@ -77,6 +77,16 @@ module UtiltilyTools
     end
   end
 
+  def contrast_b_o_locale(bb, other)
+    if bb =~ /电信/ && other =~ /电信/
+      true
+    elsif bb =~ /联通/ && other =~ /联通/
+      true
+    else
+      false
+    end
+  end
+
   def cal_score(cons_data, odata, pc)
     t_score = 0
     weight  = pc.weight

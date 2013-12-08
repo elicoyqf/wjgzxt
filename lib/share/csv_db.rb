@@ -144,6 +144,7 @@ module CsvDb
         nega_val  = 0
         nega_num  = 0
         total_val = 0
+        match.clear
         export_s  = HttpTestScore.where('source_node_name = ? and test_time >= ? and test_time < ?', e_name, time_begin, time_end)
         export_s.each do |es|
           total_val += es.total_scores
@@ -212,7 +213,7 @@ module CsvDb
       other_data.each do |odata|
         flag_data = []
         blackbone_data.each do |bdata|
-          if  odata.dest_url == bdata.dest_url
+          if  odata.dest_url == bdata.dest_url && contrast_b_o_locale(bdata.dest_locale, odata.dest_locale)
             flag_data << bdata
           end
         end
